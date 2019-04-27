@@ -1,14 +1,47 @@
-Das ist ein Test ob das Skript funktioniert
+Small overview about the functions of git and the most used commands.
+\begin{center}
+	\underline{\underline{All covered commands start with \texttt{git}}}\\
+\end{center}
+
+\section*{Getting Started}
 
 
-\section{eine section}
+\subsection*{init} 
+initialize a repository\\
+optional flag: \texttt{---bare} causing to have 
+a repository without a working tree where you push from other repositories \\ 
 
-\blindtext 
-\hline
-\subsection{eine subsection}
-\blindtext
-\blindtext 
-\blindtext
-\blindtext 
-\blindtext
-\blindtext 
+\subsection*{clone 'url'}
+calls \texttt{init} but copies an existing repository\\
+
+\subsection*{remote add origin 'url'}
+specify a remote repository electively on a website like \texttt{github.com} or \texttt{gitlab.com}\\
+
+\subsection*{config --global user.name "Name"}
+sets an username for all local git repositories\\
+
+\subsection*{config --global user.email E-mail}
+sets an E-Mail-address for all local git repositories\\
+
+\subsection*{config --list}
+shows all set configurations for the called repository \\
+
+\subsection*{The ".gitignore" \ file}
+file to exclude specific file types from being tracked\\
+
+\section*{Basic commands}
+
+\subsection*{add 'filename'/'path'}
+add a file to index\\
+optional: by '\texttt{*}' adding all tracked files
+
+\subsection*{commit}
+commit current contends of index. You will be asked for a commit-message in which you describe changes\\
+common way: \texttt{-m "\ 'commit message' "} - one line commit
+\subsection*{}
+\subsection*{}
+
+\section*{Advanced/Specific commands}
+Some commands you probably only need in a very distinct situation
+\subsection*{update-index –assume-unchanged 'filename'}
+in case to untrack a file which already has been added to the git repository
