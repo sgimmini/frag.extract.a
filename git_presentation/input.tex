@@ -26,49 +26,72 @@ sets an E-Mail-address for all local git repositories\\
 \subsection*{config ---list}
 shows all set configurations for the called repository \\
 
-\subsection*{The ".gitignore" \ file}
-file to exclude specific file types from being tracked\\
 
 \section*{Basic commands}
 
 \subsection*{status}
-gives informations about the current working tree, as un-/staged files and branch
+gives informations about the current working tree, as un-/staged files and branch\\
 
 \subsection*{add 'filename'/'path'}
 add a file to index\\
-optional: by '\texttt{*}' adding all tracked files
+optional: by '\texttt{*}' adding all tracked files\\
 
 \subsection*{commit}
 commit current contends of index. You will be asked for a commit-message in which you describe changes\\
-common way: \texttt{-m "\ 'commit message' "} - one line commit
+common way: \texttt{-m "\ 'commit message' "} - one line commit\\
 
 \subsection*{fetch}
-downloads from remote without any merges on local files
+downloads from remote without any merges on local files\\
 
 \subsection*{pull}
-download the newest commit from remote and tries to merge conflicts automatically 
+download the newest commit from remote and tries to merge conflicts automatically \\
 
 \subsection*{push}
-upload the newest commit to remote
+upload the newest commit to remote\\
 
 \subsection*{checkout}
 switches branches if appended by 'branchname'\\
-or: removes a staged file from commit if appended by 'filename'
+or: removes a staged file from commit if appended by 'filename'\\
 
 \subsection*{branch}
 creates a new branch pointing on the same commit as the master\\
-used for having a independent working tree, i.e. for an experimental build
+used for having a independent working tree, i.e. for an experimental build\\
 
 \subsection*{log}
 information about the last commits \\
-optional: \texttt{---stat} gives detailed information of commits as changed lines per file 
+optional: \texttt{---stat} gives detailed information of commits as changed lines per file \\
 
 \subsection*{merge}
+updates a branch to the state of an different one, by default with recursive auto-merging\\
 
-
-\subsection*{}
 
 \section*{Advanced/Specific commands}
-Some commands you probably only need in a very distinct situation
+Some commands you probably only need in a very distinct situation\\
 \subsection*{update-index –assume-unchanged 'filename'}
-in case to untrack a file which already has been added to the git repository
+in case to untrack a file which already has been added to the git repository\\
+
+\subsection*{SSH management}
+it is possible to use ssh to log in into your chosen remote website. Create a new ssh key by \texttt{ssh-keygen -t rsa -b 4096 -C "your\_email@example.com"}, copy it to clipboard and paste it in settings $\rightarrow$ SSH and GPG keys.\\
+
+\subsection*{cherry-pick}
+apply chosen commits to branch instead of all (like with merge)\\
+
+\subsection*{blame}
+used to see which contributor changed which line \\
+
+
+\section*{Useful knowledge}
+Useful features of git and knowledge about common problems
+\subsection*{The ".gitignore" \ file}
+file to exclude specific file types from being tracked.\\
+i.e. "*.log" not to have LaTeX log files in the repository\\
+
+\subsection*{Merge Conflict}
+\texttt{<<<<<<< HEAD} - start of conflict\\
+your changes\\
+\texttt{=======} - separator \\
+changes in other branch \\
+\texttt{>>>>>>> BRANCH-NAME} - end of conflict\\
+To resolve the conflict delete the three added lines and decide with lines to keep, delete the others. After that commit.
+
+
