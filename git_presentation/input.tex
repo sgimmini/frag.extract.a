@@ -73,6 +73,9 @@ in case to untrack a file which already has been added to the git repository\\
 \subsection*{SSH management}
 it is possible to use ssh to log in into your chosen remote website. Create a new ssh key by \texttt{ssh-keygen -t rsa -b 4096 -C "your\_email@example.com"}, copy it to clipboard and paste it in settings $\rightarrow$ SSH and GPG keys.\\
 
+\subsection*{config -{}-global credential.helper cache}
+if you're using https to clone your repositories it might be useful to cache your credentials saving you from having to enter them every time
+
 \subsection*{cherry-pick}
 apply chosen commits to branch instead of all (like with merge)\\
 
