@@ -17,19 +17,22 @@ calls \texttt{init} but copies an existing repository\\
 \subsection*{remote add origin 'url'}
 specify a remote repository electively on a website like \texttt{github.com} or \texttt{gitlab.com}\\
 
-\subsection*{config --global user.name "Name"}
+\subsection*{config ---global user.name "Name"}
 sets an username for all local git repositories\\
 
-\subsection*{config --global user.email E-mail}
+\subsection*{config ---global user.email E-mail}
 sets an E-Mail-address for all local git repositories\\
 
-\subsection*{config --list}
+\subsection*{config ---list}
 shows all set configurations for the called repository \\
 
 \subsection*{The ".gitignore" \ file}
 file to exclude specific file types from being tracked\\
 
 \section*{Basic commands}
+
+\subsection*{status}
+gives informations about the current working tree, as un-/staged files and branch
 
 \subsection*{add 'filename'/'path'}
 add a file to index\\
@@ -38,7 +41,31 @@ optional: by '\texttt{*}' adding all tracked files
 \subsection*{commit}
 commit current contends of index. You will be asked for a commit-message in which you describe changes\\
 common way: \texttt{-m "\ 'commit message' "} - one line commit
-\subsection*{}
+
+\subsection*{fetch}
+downloads from remote without any merges on local files
+
+\subsection*{pull}
+download the newest commit from remote and tries to merge conflicts automatically 
+
+\subsection*{push}
+upload the newest commit to remote
+
+\subsection*{checkout}
+switches branches if appended by 'branchname'\\
+or: removes a staged file from commit if appended by 'filename'
+
+\subsection*{branch}
+creates a new branch pointing on the same commit as the master\\
+used for having a independent working tree, i.e. for an experimental build
+
+\subsection*{log}
+information about the last commits \\
+optional: \texttt{---stat} gives detailed information of commits as changed lines per file 
+
+\subsection*{merge}
+
+
 \subsection*{}
 
 \section*{Advanced/Specific commands}
