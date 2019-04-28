@@ -17,13 +17,13 @@ calls \texttt{init} but copies an existing repository\\
 \subsection*{remote add origin 'url'}
 specify a remote repository electively on a website like \texttt{github.com} or \texttt{gitlab.com}\\
 
-\subsection*{config ---global user.name "Name"}
+\subsection*{config -{}-global user.name "Name"}
 sets an username for all local git repositories\\
 
-\subsection*{config ---global user.email E-mail}
+\subsection*{config -{}-global user.email E-mail}
 sets an E-Mail-address for all local git repositories\\
 
-\subsection*{config ---list}
+\subsection*{config -{}-list}
 shows all set configurations for the called repository \\
 
 
@@ -87,11 +87,11 @@ file to exclude specific file types from being tracked.\\
 i.e. "*.log" not to have LaTeX log files in the repository\\
 
 \subsection*{Merge Conflict}
-\texttt{<<<<<<< HEAD} - start of conflict\\
+\texttt{<{}<{}<{}<{}<{}<{}< HEAD} - start of conflict\\
 your changes\\
 \texttt{=======} - separator \\
 changes in other branch \\
-\texttt{>>>>>>> BRANCH-NAME} - end of conflict\\
+\texttt{>{}>{}>{}>{}>{}>{}> BRANCH-NAME} - end of conflict\\
 To resolve the conflict delete the three added lines and decide with lines to keep, delete the others. After that commit.
 
 
