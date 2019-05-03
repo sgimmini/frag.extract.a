@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "frag_extractor",
+  "version": "0.1",
+  "description": "An extractor to get code from websites like stack overflow into desired IDE",
+  "icons": {
+    "128": "icon128.png",
+    "96": "icon96.png",
+    "48": "icon48.png",
+    "16": "icon16.png"
+  },
+  "browser_action": {
+    "default_icon": "icon16.png",
+    "default_popup": "popup.html"
+  }
+}
+
+
