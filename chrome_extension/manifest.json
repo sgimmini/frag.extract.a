@@ -1,16 +1,37 @@
 {
   "manifest_version": 2,
-  "name": "frag_extractor",
+  "name": "Frag Extract",
   "version": "0.1",
-  "description": "An extractor to get code from websites like stack overflow into desired IDE",
+  "description": "Easily extract code fragments from Stack Overflow answers and add them as Snippets in Visual Studio Code.",
+  "author": "Simon Gimmini, Florian Rauls, Tobias Neuschäfer",
   "icons": {
-    "128": "icon128.png",
-    "96": "icon96.png",
-    "48": "icon48.png",
-    "16": "syringe16.png"
+    "128": "images/icon128.png",
+    "96": "images/icon96.png", // not mentioned as required in documentation
+    "48": "images/icon48.png",
+    // "32": "images/icon32.png" 
+    "16": "images/syringe16.png"
   },
+
+  "permissions": [
+    "https://stackoverflow.com/*",
+    "http://stackoverflow.com/*",
+    "storage",
+    "file://*/*"
+  ],
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+
   "browser_action": {
-    "default_icon": "syringe16.png",
+    "default_icon": {
+      "128": "images/icon128.png",
+      "48": "images/icon48.png",
+      // "32": "images/icon32.png" 
+      "16": "images/syringe16.png"
+    },
+    "default_title": "Extract code framents from Stack Overflow",
     "default_popup": "popup.html"
   }
 }
