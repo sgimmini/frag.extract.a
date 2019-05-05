@@ -28,11 +28,18 @@ $(function () {
 
 $(function () {
     $(document).ready(function () {
-        $('#extract').onclick(function () {
+        $('#extract').click(function () {
             $('#output').text($(".lang-py prettyprint prettyprinted").val())
         })
 
     })
 
 
-})
+});
+
+$(document).ready(function(){
+    $('body').on('click', 'a', function(){
+      chrome.tabs.create({url: $(this).attr('href')});
+      return false;
+    });
+ });
