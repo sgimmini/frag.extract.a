@@ -17,8 +17,7 @@
     "http://stackoverflow.com/*",
     "file://*/*",
     "storage",
-    "declarativeContent",
-    "activeTab"
+    "declarativeContent"
   ],
 
   "background": {
