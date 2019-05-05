@@ -15,8 +15,10 @@
   "permissions": [
     "https://stackoverflow.com/*",
     "http://stackoverflow.com/*",
+    "file://*/*",
     "storage",
-    "file://*/*"
+    "declarativeContent",
+    "activeTab"
   ],
 
   "background": {
@@ -24,7 +26,7 @@
     "persistent": false
   },
 
-  "browser_action": {
+  "page_action": {
     "default_icon": {
       "128": "images/icon128.png",
       "48": "images/icon48.png",
