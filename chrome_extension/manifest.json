@@ -15,7 +15,8 @@
   "permissions": [
     "https://stackoverflow.com/*",
     "http://stackoverflow.com/*",
-    "storage"
+    "storage",
+    "file://*/*"
   ],
 
   "background": {
