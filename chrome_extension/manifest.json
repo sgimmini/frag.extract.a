@@ -6,17 +6,17 @@
   "author": "Simon Gimmini, Florian Rauls, Tobias Neuschäfer",
   "icons": {
     "128": "images/icon128.png",
-    "96": "images/icon96.png", // not mentioned as required in documentation
     "48": "images/icon48.png",
-    // "32": "images/icon32.png" 
-    "16": "images/syringe16.png"
+    "32": "images/icon32.png",
+    "16": "images/icon16.png"
   },
 
   "permissions": [
-    "https://stackoverflow.com/*",
-    "http://stackoverflow.com/*",
-    "file://*/*",
+    // "https://stackoverflow.com/*", // these might not be necessary
+    // "http://stackoverflow.com/*",
+    // "file://*/*",
     "storage",
+    "downloads",
     "declarativeContent"
   ],
 
@@ -29,10 +29,10 @@
     "default_icon": {
       "128": "images/icon128.png",
       "48": "images/icon48.png",
-      // "32": "images/icon32.png" 
-      "16": "images/syringe16.png"
+      "32": "images/icon32.png",
+      "16": "images/icon16.png"
     },
-    "default_title": "Extract code framents from Stack Overflow",
+    "default_title": "Create VS Code Snippets from anwers in Stack Overflow",
     "default_popup": "popup.html"
   }
 }
