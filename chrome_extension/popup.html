@@ -1,31 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>frag.extractor</title>
-    <script src="jquery-3.4.1.min.js"></script>
-    <script src="popup.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-<h1 id="warning">This can cause lethal damage!</h1>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>frag.extractor</title>
+            <script src="jquery-3.4.1.min.js"></script>
+            <script src="popup.js"></script>
+            <link rel="stylesheet" type="text/css">
+        </head>
+    <body>
+        <h1 id="heading">Suggested Fragment:</h1>
+        Name
+        <label for="snippetname"></label><input type="text" id="snippetname">
 
-<h2 id="greet">You clicked the button!</h2>
+        Description
+        <label for="snippetdescription"></label><input type="text" id="snippetdescription">
 
-<label for="name"></label><input type="text" id="name">
+        Prefix'
+        <label for="snippetprefix"></label><input type="text" id="snippetprefix">
 
-<label for="input"></label><input type="text" id="input">
+        Code
+        <label for="snippetbody"></label><input type="text" id="snippetbody">
 
-<p class="someclass">someclass</p>
+        <a href=https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets>More information on creating VS Code Snippets</a>
 
-<p id="output"></p>
-
-<button type="button" id="extract">Get Code snipped</button>
-
-
-
-
-
-</body>
+    </body>
 </html>
-
