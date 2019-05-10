@@ -1,4 +1,5 @@
 {
+  // Extension ID: hfhfpooklgkdloiohapobdhkkdbcckaf
   "manifest_version": 2,
   "name": "Frag Extract",
   "version": "0.1",
@@ -12,11 +13,11 @@
   },
 
   "permissions": [
-    // "https://stackoverflow.com/*", // these might not be necessary
-    // "http://stackoverflow.com/*",
-    // "file://*/*",
+    "https://stackoverflow.com/*",
+    "http://stackoverflow.com/*",
+    "file://*/*",
     "storage",
-    "downloads",
+    "nativeMessaging",
     "declarativeContent"
   ],
 
