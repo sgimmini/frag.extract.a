@@ -42,23 +42,20 @@ $(document).ready(function(){
       chrome.tabs.create({url: $(this).attr('href')});
       return false;
     });
- });
+});
 
- var port = chrome.runtime.connectNative('native.messaging.example')
+function sendNativeMessage() {
+   message = {
+       "name": document.getElementById('snippetname').value,
+       "prefix": document.getElementById('snippetprefix').value,
+       "body": document.getElementById('snippetbody').value,
+       "description": document.getElementById('snippetdescription').value
+   };
+   chrome.runtime.sendNativeMessage('native.messaging.example', message);
+}
 
- function sendNativeMessage() {
-    message = {
-        "name": document.getElementById('snippetname').value,
-        "prefix": document.getElementById('snippetprefix').value,
-        "body": document.getElementById('snippetbody').value,
-        "description": document.getElementById('snippetdescription').value
-    };
-    port.postMessage(message);
-    appendMessage("Sent message: <b>" + JSON.stringify(message) + "</b>");
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('send-message-button').addEventListener(
         'click', sendNativeMessage);
-    updateUiState();
-  });
+    // updateUiState();
+});
