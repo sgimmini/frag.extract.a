@@ -37,18 +37,19 @@ def read_thread_func(queue):
   message_number = 0
   while 1:
     # Read the message length (first 4 bytes).
-    text_length_bytes = sys.stdin.read(4)
+    text_length = sys.stdin.read(4)
+    text_length_bytes = sys.stdin.buffer.read(4)
 
-    if len(text_length_bytes) == 0:
+    if len(text_length) == 0:
       if queue:
         queue.put(None)
       sys.exit(0)
 
     # Unpack message length as 4 byte integer.
-    text_length = struct.unpack('i', text_length_bytes)[0]
+    text_length = struct.unpack('i', text_length_bytes)
 
     # Read the text (JSON object) of the message.
-    text = sys.stdin.read(text_length).decode('utf-8')
+    text = sys.stdin.read(text_length)
 
     if queue:
       queue.put(text)
