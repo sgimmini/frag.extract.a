@@ -1,9 +1,0 @@
-{
-    "name": "com.frag.extract.messaging_host",
-    "description": "Exports fragments from Frag Extract extension",
-    "path": "%userprofile%\.vscode\extensions\frag.extract\chrome_native_messaging_host.exe",
-    "type": "stdio",
-    "allowed_origins": [
-      "chrome-extension://hfhfpooklgkdloiohapobdhkkdbcckaf/"
-    ]
-  }
