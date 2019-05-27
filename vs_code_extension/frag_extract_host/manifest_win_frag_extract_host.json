@@ -1,9 +1,6 @@
-// Copyright 2013 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 {
   "name": "frag_extract_host",
-  "description": "Chrome Native Messaging API Example Host",
+  "description": "Export code snippets from frag.extract Chrome extension",
   "path": "frag_extract_host.bat",
   "type": "stdio",
   "allowed_origins": [
