@@ -20,20 +20,20 @@ else
   fi
 fi
 
-HOST_NAME=frag_extract_host
+HOST_NAME=com.google.chrome.example.echo
 
 # Create directory to store native messaging host.
 mkdir -p "$TARGET_DIR"
 
 # Copy native messaging host manifest.
-cp "$DIR/manifest_frag_extract_host.json" "$TARGET_DIR"
+cp "$DIR/$HOST_NAME.json" "$TARGET_DIR"
 
 # Update host path in the manifest.
-HOST_PATH=$DIR/frag_extract_host.py
+HOST_PATH=$DIR/native-messaging-example-host
 ESCAPED_HOST_PATH=${HOST_PATH////\\/}
-sed -i -e "s/HOST_PATH/$ESCAPED_HOST_PATH/" "$TARGET_DIR/manifest_frag_extract_host.json"
+sed -i -e "s/HOST_PATH/$ESCAPED_HOST_PATH/" "$TARGET_DIR/$HOST_NAME.json"
 
 # Set permissions for the manifest so that all users can read it.
-chmod o+r "$TARGET_DIR/manifest_frag_extract_host.json"
+chmod o+r "$TARGET_DIR/$HOST_NAME.json"
 
 echo "Native messaging host $HOST_NAME has been installed."

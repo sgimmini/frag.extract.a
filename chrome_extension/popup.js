@@ -1,3 +1,6 @@
+var port = chrome.runtime.connectNative('manifest_frag_extract_host.json');
+
+
 $(document).ready(function () {
     $('body').on('click', 'a', function () {
         chrome.tabs.create({ url: $(this).attr('href') });
