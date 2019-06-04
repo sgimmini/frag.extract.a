@@ -6,6 +6,12 @@
   "version": "0.1",
   "description": "Easily extract code fragments from Stack Overflow answers and add them as Snippets in Visual Studio Code.",
   "author": "Simon Gimmini, Florian Rauls, Tobias Neuschäfer",
+  "content_scripts": [
+	  {
+		  "matches": ["http://www.stackoverflow.com/"],
+		  "css": ["style.css"]
+	  }
+  ],
   "icons": {
     "128": "images/icon128.png",
     "48": "images/icon48.png",

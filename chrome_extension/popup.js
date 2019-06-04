@@ -1,4 +1,4 @@
-var port = chrome.runtime.connectNative('manifest_frag_extract_host.json');
+var port = chrome.runtime.connectNative("com.frag.extract");
 
 
 $(document).ready(function () {
@@ -15,7 +15,7 @@ function sendNativeMessage() {
         "body": document.getElementById('snippetbody').value,
         "description": document.getElementById('snippetdescription').value
     };
-    chrome.runtime.sendNativeMessage('frag_extract_host', message);
+    chrome.runtime.sendNativeMessage('com.frag.extract', message);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
