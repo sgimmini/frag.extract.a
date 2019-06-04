@@ -1,5 +1,5 @@
 {
-  "name": "frag_extract_host",
+  "name": "com.frag.extract",
   "description": "Export code snippets from frag.extract Chrome extension",
   "path": "HOST_PATH",
   "type": "stdio",

@@ -16,6 +16,6 @@ else
   fi
 fi
 
-HOST_NAME=frag_extract_host
-rm "$TARGET_DIR/manifest_frag_extract_host.json"
+HOST_NAME=extract_host
+rm "$TARGET_DIR/com.frag.extract.json"
 echo "Native messaging host $HOST_NAME has been uninstalled."
