@@ -1,4 +1,4 @@
-var port = chrome.runtime.connectNative("com.frag.extract");
+//var port = chrome.runtime.connectNative("com.frag.extract");
 
 
 $(document).ready(function () {
