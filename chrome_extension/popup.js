@@ -7,10 +7,16 @@ $(document).ready(function () {
 
 function sendNativeMessage() {
     message = {
-        "name": document.getElementById('snippetname').value,
+        "label": document.getElementById('snippetname').value,
         "prefix": document.getElementById('snippetprefix').value,
+        "scope": "python",
         "body": document.getElementById('snippetbody').value,
-        "description": document.getElementById('snippetdescription').value
+        "description": document.getElementById('snippetdescription').value,
+        "keywords": "",
+        "tags": "",
+        "domain": "",
+        "placeholders": "",
+        "snippet": ""
     };
     chrome.runtime.sendNativeMessage('com.frag.extract', message);
 }
