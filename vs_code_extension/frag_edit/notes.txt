@@ -1,0 +1,21 @@
+- not supporting themes: the text colour in the fragment editor is hard coded, users of a light theme won't be able to see it
+- connection to our chrome extension requires python 3
+- man bekommt dauernd Fehler für tags, bei einem tag ("sd") und einem Fragment mit diesem Tag:
+	############
+	[W] | [TreeItem | get tag]: Failed for TreeItem: sd
+	############
+	> Object (kann man aufklappen)
+	> Object (kann man aufklappen)
+	[W] | [Database | getTreeItem]: Failed for label: sd
+- die aktuelle Lösung, dass der dauernd die in memory Datenbank neu aufbaut, ist scheiße und vermutlich verdammt ressourcen-fressend. Wenn euch eine bessere Lösung einfällt,
+  die dafür sorgt, dass neue Fragmente möglichst schnell angezeigt werden (sobald man irgendwas in dem Frag Editor Anzeigebereich macht, z.B. ihn öffnet, Fragment bearbeiten will)
+  und, dass neue Fragmente nicht eventuell überschrieben werden, könnt ihr das gerne ändern und auch die extract.py umbauen.
+  Ich hab versucht sqlite3 zu nehmen, statt sql.js (was viel besser wär), aber das hat riesen Probleme verursacht, weil es ein native module ist. Vermutlich seid ihr auch schon
+  darüber gestolpert
+- Für die Deinstallation vom Native Messaging bei Deinstallation der Erweiterung haben wir bisher keine Lösung, das ist ein Skript (je nach OS: eins für Win, eins für Lin+Mac),
+  was in out/frag.extract.host liegt und ausgeführt werden müsste, wenn die VSCode Erweiterung deinstalliert wird
+- Damit das install Skript für den Native Messaging Host nicht bei jedem Start ausgeführt wird nutzen wir einen globalState Memento, der nach der Installation auf true gesetzt wird.
+  Das Problem ist, dass dieser globalState auch beim debuggen gesetzt wird und nicht wieder gelöscht wird. Wenn ihr also die Erweiterung bei euch debugged und später richtig installiert,
+  dann wird der Native Messaging Host nicht mehr installiert. Ihr müsst dann vorher in %USERPROFILE%\AppData\Roaming\Code\User\globalStorage die state.vscdb SQLite Datenbank öffnen und
+  nach euer Erweiterung suchen und "hostinstalled" auf false setzen. Alternativ könnt ihr zum Testen die auskommentierte Zeile in extension.ts wieder einkommentieren.
+- Zum Testen beim Installieren mussten wir die Erweiterung packagen, deshalb ist "publisher" in der package.json gesetzt auf einen von uns kreierten Publisher.
