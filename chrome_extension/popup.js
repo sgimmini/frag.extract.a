@@ -15,8 +15,7 @@ function sendNativeMessage() {
         "keywords": "",
         "tags": "",
         "domain": "",
-        "placeholders": "",
-        "snippet": ""
+        "placeholders": ""
     };
     chrome.runtime.sendNativeMessage('com.frag.extract', message);
 }
