@@ -1,9 +1,0 @@
-{
-  "name": "com.frag.extract",
-  "description": "Export code snippets from frag.extract Chrome extension",
-  "path": "HOST_PATH",
-  "type": "stdio",
-  "allowed_origins": [
-    "chrome-extension://faoicolglehmgplpccapgobineahofjh/"
-  ]
-}
