@@ -12,9 +12,6 @@ class Database {
         Database._loadedTreeItems = new Map();
     }
     static createFragmentDatabase() {
-        if (!fs.existsSync(Database._fragmentDirectory)) {
-            fs.mkdirSync(Database._fragmentDirectory);
-        }
         if (!fs.existsSync(Database._fragmentDirectory + "/fragments.fragmentDatabase")) {
             const bufferfragmentDatabase = new sql.Database();
             const data = bufferfragmentDatabase.export();

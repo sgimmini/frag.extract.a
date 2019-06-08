@@ -19,10 +19,6 @@ export class Database {
     }
 
     static createFragmentDatabase(): void {
-        if (!fs.existsSync(Database._fragmentDirectory)) {
-            fs.mkdirSync(Database._fragmentDirectory);
-        }
-
         if (!fs.existsSync(Database._fragmentDirectory + "/fragments.fragmentDatabase")) {
             const bufferfragmentDatabase = new sql.Database();
             const data = bufferfragmentDatabase.export();

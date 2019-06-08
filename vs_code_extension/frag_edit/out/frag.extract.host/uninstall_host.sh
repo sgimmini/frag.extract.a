@@ -24,5 +24,3 @@ HOST_NAME=com.frag.extract
 
 rm "$TARGET_DIR/com.frag.extract.json"
 rm "$TARGET_TWO_DIR/com.frag.extract.json"
-
-echo "Native messaging host $HOST_NAME has been uninstalled."

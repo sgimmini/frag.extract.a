@@ -12,10 +12,8 @@
   und, dass neue Fragmente nicht eventuell überschrieben werden, könnt ihr das gerne ändern und auch die extract.py umbauen.
   Ich hab versucht sqlite3 zu nehmen, statt sql.js (was viel besser wär), aber das hat riesen Probleme verursacht, weil es ein native module ist. Vermutlich seid ihr auch schon
   darüber gestolpert
-- Für die Deinstallation vom Native Messaging bei Deinstallation der Erweiterung haben wir bisher keine Lösung, das ist ein Skript (je nach OS: eins für Win, eins für Lin+Mac),
-  was in out/frag.extract.host liegt und ausgeführt werden müsste, wenn die VSCode Erweiterung deinstalliert wird
-- Damit das install Skript für den Native Messaging Host nicht bei jedem Start ausgeführt wird nutzen wir einen globalState Memento, der nach der Installation auf true gesetzt wird.
-  Das Problem ist, dass dieser globalState auch beim debuggen gesetzt wird und nicht wieder gelöscht wird. Wenn ihr also die Erweiterung bei euch debugged und später richtig installiert,
-  dann wird der Native Messaging Host nicht mehr installiert. Ihr müsst dann vorher in %USERPROFILE%\AppData\Roaming\Code\User\globalStorage die state.vscdb SQLite Datenbank öffnen und
-  nach euer Erweiterung suchen und "hostinstalled" auf false setzen. Alternativ könnt ihr zum Testen die auskommentierte Zeile in extension.ts wieder einkommentieren.
 - Zum Testen beim Installieren mussten wir die Erweiterung packagen, deshalb ist "publisher" in der package.json gesetzt auf einen von uns kreierten Publisher.
+- database sollte in globalStoragePath liegen, weil extensionPath bei extension update gewiped wird und somit die Datenbank weg ist. Es wird in git ein älteren Zustand geben,
+  wo alles funktioniert mit der Datenbank in extensionPath/data und einen neuen mit der Datenbank in globalStoragePath
+  => vor dem packagen muss in /out/frag.extract.host die extract.py gelöscht werden
+- out is in gitignore (for good reason), but subfolder of out (frag.extract.host) is important and needs to be kept there
