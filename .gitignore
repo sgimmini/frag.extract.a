@@ -114,7 +114,7 @@ lerna-debug.log
 Thumbs.db
 
 # VSCode Extension
-out/*
+vs_code_extension/frag_edit/out/*
 !out/frag.extract.host
 .vscode-test/
 .vsix
