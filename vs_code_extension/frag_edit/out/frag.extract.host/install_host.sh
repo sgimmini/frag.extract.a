@@ -32,7 +32,7 @@ cp "$DIR/com.frag.extract.json" "$TARGET_DIR"
 cp "$DIR/com.frag.extract.json" "$TARGET_TWO_DIR"
 
 # Update host path in the manifest.
-HOST_PATH=$DIR/extract.py
+HOST_PATH=$DIR/raw.py
 ESCAPED_HOST_PATH=${HOST_PATH////\\/}
 sed -i -e "s/HOST_PATH/$ESCAPED_HOST_PATH/" "$TARGET_DIR/com.frag.extract.json"
 sed -i -e "s/HOST_PATH/$ESCAPED_HOST_PATH/" "$TARGET_TWO_DIR/com.frag.extract.json"
