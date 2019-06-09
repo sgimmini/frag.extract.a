@@ -2,6 +2,7 @@
 
 set -e
 
+DIR="$( cd "$( dirname "$0" )" && pwd )"
 if [ "$(uname -s)" = "Darwin" ]; then
   if [ "$(whoami)" = "root" ]; then
     TARGET_DIR="/Library/Google/Chrome/NativeMessagingHosts"
