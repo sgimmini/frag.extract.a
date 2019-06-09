@@ -1,0 +1,19 @@
+- not supporting themes: the text colour in the fragment editor is hard coded, users of a light theme won't be able to see it
+- connection to our chrome extension requires python 3
+- man bekommt dauernd Fehler für tags, bei einem tag ("sd") und einem Fragment mit diesem Tag:
+	############
+	[W] | [TreeItem | get tag]: Failed for TreeItem: sd
+	############
+	> Object (kann man aufklappen)
+	> Object (kann man aufklappen)
+	[W] | [Database | getTreeItem]: Failed for label: sd
+- die aktuelle Lösung, dass der dauernd die in memory Datenbank neu aufbaut, ist scheiße und vermutlich verdammt ressourcen-fressend. Wenn euch eine bessere Lösung einfällt,
+  die dafür sorgt, dass neue Fragmente möglichst schnell angezeigt werden (sobald man irgendwas in dem Frag Editor Anzeigebereich macht, z.B. ihn öffnet, Fragment bearbeiten will)
+  und, dass neue Fragmente nicht eventuell überschrieben werden, könnt ihr das gerne ändern und auch die extract.py umbauen.
+  Ich hab versucht sqlite3 zu nehmen, statt sql.js (was viel besser wär), aber das hat riesen Probleme verursacht, weil es ein native module ist. Vermutlich seid ihr auch schon
+  darüber gestolpert
+- Zum Testen beim Installieren mussten wir die Erweiterung packagen, deshalb ist "publisher" in der package.json gesetzt auf einen von uns kreierten Publisher.
+- database sollte in globalStoragePath liegen, weil extensionPath bei extension update gewiped wird und somit die Datenbank weg ist. Es wird in git ein älteren Zustand geben,
+  wo alles funktioniert mit der Datenbank in extensionPath/data und einen neuen mit der Datenbank in globalStoragePath
+  => vor dem packagen muss in /out/frag.extract.host die extract.py gelöscht werden
+- out is in gitignore (for good reason), but subfolder of out (frag.extract.host) is important and needs to be kept there

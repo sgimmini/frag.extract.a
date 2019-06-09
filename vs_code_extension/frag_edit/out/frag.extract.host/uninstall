@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+var shell = require('shelljs');
+const path = require('path')
+
+if (process.platform === 'win32') {
+    shell.exec('"' + path.resolve(__dirname) + '"' + '\\uninstall_host.bat');
+} else {
+    shell.exec(path.resolve(__dirname, './uninstall_host.sh'));
+}

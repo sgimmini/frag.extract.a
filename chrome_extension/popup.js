@@ -7,10 +7,15 @@ $(document).ready(function () {
 
 function sendNativeMessage() {
     message = {
-        "name": document.getElementById('snippetname').value,
+        "label": document.getElementById('snippetlabel').value,
         "prefix": document.getElementById('snippetprefix').value,
+        "scope": document.getElementById('snippetscope').value,
         "body": document.getElementById('snippetbody').value,
-        "description": document.getElementById('snippetdescription').value
+        "description": document.getElementById('snippetdescription').value,
+        "keywords": document.getElementById('snippetkeywords').value,
+        "tags": document.getElementById('snippettags').value,
+        "domain": document.getElementById('snippetdomain').value,
+        "placeholders": document.getElementById('snippetplaceholders').value
     };
     chrome.runtime.sendNativeMessage('com.frag.extract', message);
 }
