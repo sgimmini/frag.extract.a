@@ -1,2 +1,20 @@
-# Auto detect text files and perform LF normalization
+# Set the default behavior, in case people don't have core.autocrlf set.
 * text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+uninstall text
+
+# Declare files that will always have CRLF line endings on checkout.
+install_host.bat text eol=crlf
+uninstall_host.bat text eol=crlf
+win.com.frag.extract.json text eol=crlf
+com.frag.extract.bat text eol=crlf
+
+# Declare files that will always have LF line endings on checkout
+install_host.sh text eol=lf
+uninstall_host.sh text eol=lf
+com.frag.extract.json text eol=lf
+
+# Denote all files that are truly binary and should not be modified.
+*.fragmentDatabase binary

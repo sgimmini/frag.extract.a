@@ -112,3 +112,10 @@ lerna-debug.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# VSCode Extension
+out/*
+!out/frag.extract.host
+.vscode-test/
+.vsix
+out/frag.extract.host/extract.py
