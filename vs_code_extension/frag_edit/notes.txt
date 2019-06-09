@@ -14,6 +14,5 @@
   darüber gestolpert
 - Zum Testen beim Installieren mussten wir die Erweiterung packagen, deshalb ist "publisher" in der package.json gesetzt auf einen von uns kreierten Publisher.
 - database sollte in globalStoragePath liegen, weil extensionPath bei extension update gewiped wird und somit die Datenbank weg ist. Es wird in git ein älteren Zustand geben,
-  wo alles funktioniert mit der Datenbank in extensionPath/data und einen neuen mit der Datenbank in globalStoragePath
-  => vor dem packagen muss in /out/frag.extract.host die extract.py gelöscht werden
-- out is in gitignore (for good reason), but subfolder of out (frag.extract.host) is important and needs to be kept there
+  wo alles funktioniert mit der Datenbank in extensionPath/data und einen neuen mit der Datenbank in globalStoragePath. Damit der native messaging host installiert wird, darf in
+  out/frag.extract.host nicht extract.py vorhanden sein (das ist nur zum debuggen wichtig, beim packagen mit vsce wird extract.py ignored)
