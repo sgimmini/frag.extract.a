@@ -13,6 +13,7 @@
   Ich hab versucht sqlite3 zu nehmen, statt sql.js (was viel besser wär), aber das hat riesen Probleme verursacht, weil es ein native module ist. Vermutlich seid ihr auch schon
   darüber gestolpert
 - Zum Testen beim Installieren mussten wir die Erweiterung packagen, deshalb ist "publisher" in der package.json gesetzt auf einen von uns kreierten Publisher.
-- database sollte in globalStoragePath liegen, weil extensionPath bei extension update gewiped wird und somit die Datenbank weg ist. Es wird in git ein älteren Zustand geben,
-  wo alles funktioniert mit der Datenbank in extensionPath/data und einen neuen mit der Datenbank in globalStoragePath. Damit der native messaging host installiert wird, darf in
-  out/frag.extract.host nicht extract.py vorhanden sein (das ist nur zum debuggen wichtig, beim packagen mit vsce wird extract.py ignored)
+- database sollte in globalStoragePath liegen, weil extensionPath bei extension update gewiped wird und somit die Datenbank weg ist.
+- Damit der native messaging host installiert wird, darf in out/frag.extract.host nicht extract.py vorhanden sein (das ist nur zum debuggen wichtig, vsce packge ignoriert extract.py)
+- Packagen nur in Linux oder auch auf Windows, wenn ihr die line ending Einstellungen in dem Repo ändert. Wird das in Windows gepackaged haben die Datein crlf line endings und damit
+  kommt Linux nicht klar (Windows hat umgekehrt kein Problem mit Linux lf line endings)
