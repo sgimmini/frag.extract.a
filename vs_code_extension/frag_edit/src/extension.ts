@@ -19,10 +19,12 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			var result = data.replace(/path/, context.globalStoragePath.replace(/\\/g, '/') + "/fragments.fragmentDatabase");
 
-			fs.writeFile(context.extensionPath + "/out/frag.extract.host/extract.py", result, 'utf8', function (err) {
-				if (err) {
-					return console.log(err);
-				}
+			myFile = context.extensionPath + "/out/frag.extract.host/extract.py";
+
+			fs.writeFile(myFile, result, 'utf8', (err) => {
+				fs.chmod(myFile, 0666, (err) => {
+				console.log('Changed file permissions');
+				});
 			});
 		});
 		if (process.platform === 'win32') {
