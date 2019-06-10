@@ -118,4 +118,4 @@ vs_code_extension/frag_edit/out/*
 !vs_code_extension/frag_edit/out/frag.extract.host
 vs_code_extension/frag_edit/.vscode-test/
 vs_code_extension/frag_edit/out/frag.extract.host/extract.py
-vs_code_extension/frag_edit/node_modules/*
+vs_code_extension/frag_edit/node_modules
