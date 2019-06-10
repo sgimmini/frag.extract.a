@@ -19,11 +19,13 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			var result = data.replace(/path/, context.globalStoragePath.replace(/\\/g, '/') + "/fragments.fragmentDatabase");
 
-			myFile = context.extensionPath + "/out/frag.extract.host/extract.py";
+			var path = context.extensionPath + "/out/frag.extract.host/extract.py";
 
-			fs.writeFile(myFile, result, 'utf8', (err) => {
-				fs.chmod(myFile, 0666, (err) => {
-				console.log('Changed file permissions');
+			fs.writeFile(path, result, 'utf8', function (err) {
+				fs.chmod(path, 0o666, function (err) {
+					if (err) {
+						return console.log(err);
+					}
 				});
 			});
 		});
