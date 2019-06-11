@@ -7,11 +7,9 @@
 	> Object (kann man aufklappen)
 	> Object (kann man aufklappen)
 	[W] | [Database | getTreeItem]: Failed for label: sd
-- die aktuelle Lösung, dass der dauernd die in memory Datenbank neu aufbaut, ist scheiße und vermutlich verdammt ressourcen-fressend. Wenn euch eine bessere Lösung einfällt,
-  die dafür sorgt, dass neue Fragmente möglichst schnell angezeigt werden (sobald man irgendwas in dem Frag Editor Anzeigebereich macht, z.B. ihn öffnet, Fragment bearbeiten will)
-  und, dass neue Fragmente nicht eventuell überschrieben werden, könnt ihr das gerne ändern und auch die extract.py umbauen.
-  Ich hab versucht sqlite3 zu nehmen, statt sql.js (was viel besser wär), aber das hat riesen Probleme verursacht, weil es ein native module ist. Vermutlich seid ihr auch schon
-  darüber gestolpert
+- alle 5 Sekunden wird überprüft ob die Datenbank sich geändert hat (ob aus der Chrome Erweiterung ein neues Fragment hinzugefügt wurde),
+  dann wird die Listenansicht der Datenbank in der VSCode Erweiterung neu aufgebaut. Außerdem wird vor jedem schreiben in die Datenbank die 
+  in memory Kopie komplett neu aufgebaut um versehentliches Überschreiben von neuen Fragmenten zu vermeiden
 - Zum Testen beim Installieren mussten wir die Erweiterung packagen, deshalb ist "publisher" in der package.json gesetzt auf einen von uns kreierten Publisher.
 - database sollte in globalStoragePath liegen, weil extensionPath bei extension update gewiped wird und somit die Datenbank weg ist.
 - die Extension braucht eine Funktion zum Exportieren der Datenbank. Einem Nutzer ist normalerweise nicht bekannt in welchem Pfad die liegt und sie wird beim deinstallieren gelöscht
