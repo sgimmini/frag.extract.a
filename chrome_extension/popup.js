@@ -12,7 +12,7 @@ function sendNativeMessage() {
         "scope": document.getElementById('snippetscope').value,
         "body": document.getElementById('snippetbody').value,
         "description": document.getElementById('snippetdescription').value,
-        "keywords": document.getElementById('snippetkeywords').value,
+        "keywords": "",
         "tags": document.getElementById('snippettags').value,
         "domain": document.getElementById('snippetdomain').value,
         "placeholders": document.getElementById('snippetplaceholders').value
