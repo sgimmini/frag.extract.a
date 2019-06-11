@@ -37,18 +37,20 @@ def Main():
         recieved['label'] = ''.join(
             random.choices(string.ascii_uppercase, k=6))
 
+    label = recieved['label'][:]
     snippet = {'label': recieved['label'], 'prefix': recieved['prefix'],
                'scope': recieved['scope'], 'body': recieved['body'], 'description': recieved['description']}
 
+    counter = 2
     while True:
         try:
             c.executemany("INSERT INTO fragments VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [(recieved['label'], recieved['prefix'], recieved['scope'], recieved['body'], recieved[
                           'description'], recieved['keywords'], recieved['tags'], recieved['domain'], recieved['placeholders'], json.dumps(snippet, separators=(',', ':'))), ])
             break
         except sqlite3.IntegrityError:
-            recieved['label'] = ''.join(
-                random.choices(string.ascii_uppercase, k=6))
+            recieved['label'] = label + ' (' + str(counter) + ')'
             snippet['label'] = recieved['label']
+            counter += 1
 
     conn.commit()
     conn.close()
