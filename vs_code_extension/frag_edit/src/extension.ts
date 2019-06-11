@@ -36,12 +36,18 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}
 
-	var database = new Database(context.globalStoragePath);
+	var database = new Database(context.globalStoragePath + '/fragments.fragmentDatabase');
 	const fragmentProvider = new FragmentProvider(context);
 	var treeView = vscode.window.createTreeView('fragmentEditor', { treeDataProvider: fragmentProvider });
 	vscode.commands.registerCommand('fragmentEditor.addFragment', () => fragmentProvider.addFragment());
 	vscode.commands.registerCommand('fragmentEditor.editFragment', (treeItem: TreeItem) => fragmentProvider.editFragment(treeItem));
 	vscode.commands.registerCommand('fragmentEditor.deleteTreeItem', (treeItem: TreeItem) => fragmentProvider.deleteTreeItem(treeItem));
+
+	// refreshes the Fragmentlist everytime a change in the database is detected (5 sec intervall)
+	fs.watchFile(context.globalStoragePath + '/fragments.fragmentDatabase', (curr, prev) => {
+		Database.loadFragments();
+		fragmentProvider.refresh();
+	});
 }
 
 export function deactivate() { }

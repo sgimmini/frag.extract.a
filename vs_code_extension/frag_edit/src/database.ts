@@ -6,12 +6,12 @@ import * as vscode from 'vscode';
 
 export class Database {
     private static _fragmentDatabase: any;
-    private static _fragmentDirectory: string;
+    private static _databasePath: string;
     private static _loadedFragments: Map<string, Fragment>;
     private static _loadedTreeItems: Map<string, TreeItem>;
 
-    constructor(path: string) {
-        Database._fragmentDirectory = path;
+    constructor(databasePath: string) {
+        Database._databasePath = databasePath;
         Database.createFragmentDatabase();
         Database._loadedFragments = new Map();
         Database.loadFragments();
@@ -19,21 +19,21 @@ export class Database {
     }
 
     static createFragmentDatabase(): void {
-        if (!fs.existsSync(Database._fragmentDirectory + "/fragments.fragmentDatabase")) {
+        if (!fs.existsSync(Database._databasePath)) {
             const bufferfragmentDatabase = new sql.Database();
             const data = bufferfragmentDatabase.export();
             const buffer = Buffer.from(data);
-            fs.writeFileSync(Database._fragmentDirectory + '/fragments.fragmentDatabase', buffer);
+            fs.writeFileSync(Database._databasePath, buffer);
         }
 
-        const filebuffer = fs.readFileSync(Database._fragmentDirectory + '/fragments.fragmentDatabase');
+        const filebuffer = fs.readFileSync(Database._databasePath);
         Database._fragmentDatabase = new sql.Database(filebuffer);
         Database._fragmentDatabase.run("CREATE TABLE IF NOT EXISTS fragments (label TEXT PRIMARY KEY, prefix TEXT, scope TEXT, body TEXT, description TEXT, keywords TEXT, tags TEXT, domain TEXT, placeholders TEXT, snippet TEXT)");
         Database.persist();
     }
 
-    private static loadFragments(): void {
-        const filebuffer = fs.readFileSync(Database._fragmentDirectory + '/fragments.fragmentDatabase');
+    static loadFragments(): void {
+        const filebuffer = fs.readFileSync(Database._databasePath);
         Database._fragmentDatabase = new sql.Database(filebuffer);
         const res = Database._fragmentDatabase.exec("SELECT * FROM fragments")[0];
         if (res === undefined) {
@@ -58,11 +58,11 @@ export class Database {
     private static persist(): void {
         const data1 = Database._fragmentDatabase.export();
         const buffer1 = Buffer.from(data1);
-        fs.writeFileSync(Database._fragmentDirectory + '/fragments.fragmentDatabase', buffer1);
+        fs.writeFileSync(Database._databasePath, buffer1);
     }
 
     static get loadedFragments(): Fragment[] {
-        Database.loadFragments();
+        //Database.loadFragments();
         return Array.from(Database._loadedFragments.values());
     }
 
@@ -71,7 +71,7 @@ export class Database {
      * @param labels Labels for which fragments should be returned
      */
     static getFragments(labels?: (string | undefined)[]): Fragment[] {
-        Database.loadFragments();
+        //Database.loadFragments();
         if (labels !== undefined) {
             var fragments: Fragment[] = [];
             labels.forEach((label: string | undefined) => {
@@ -96,7 +96,7 @@ export class Database {
      * @param label Label of the Fragment
      */
     static getFragment(label: string): Fragment | undefined {
-        Database.loadFragments();
+        //Database.loadFragments();
         var fragment = Database._loadedFragments.get(label);
         if (fragment !== undefined) {
             return fragment;
@@ -265,7 +265,7 @@ export class Database {
 
 
     static getFilteredFragments(filter: string): Fragment[] {
-        Database.loadFragments();
+        //Database.loadFragments();
         if (filter === "") {
             return Array.from(Database._loadedFragments.values());
         }
