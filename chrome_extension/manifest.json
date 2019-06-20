@@ -10,8 +10,7 @@
     {
       "matches": [
         "https://stackoverflow.com/*",
-        "http://stackoverflow.com/*",
-        "file://*/*"
+        "http://stackoverflow.com/*"
       ],
       "css": [
         "style.css"
@@ -27,7 +26,6 @@
   "permissions": [
     "https://stackoverflow.com/*",
     "http://stackoverflow.com/*",
-    "file://*/*",
     "storage",
     "nativeMessaging",
     "declarativeContent"
