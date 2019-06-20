@@ -18,9 +18,15 @@ function sendNativeMessage() {
         "placeholders": ""
     };
     chrome.runtime.sendNativeMessage('com.frag.extract', message);
+    window.close();
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('send-message-button').addEventListener(
+    document.getElementById('send_button').addEventListener(
         'click', sendNativeMessage);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('cancel_button').addEventListener(
+        'click', function () { window.close(); });
 });
