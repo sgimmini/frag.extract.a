@@ -45,7 +45,7 @@ def Main():
     while True:
         try:
             c.executemany("INSERT INTO fragments VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [(recieved['label'], recieved['prefix'], recieved['scope'], recieved['body'], recieved[
-                          'description'], "", recieved['tags'], recieved['domain'], "", json.dumps(snippet, separators=(',', ':'))), ])
+                          'description'], recieved['keywords'], recieved['tags'], recieved['domain'], recieved['placeholders'], json.dumps(snippet, separators=(',', ':'))), ])
             break
         except sqlite3.IntegrityError:
             recieved['label'] = label + ' (' + str(counter) + ')'
