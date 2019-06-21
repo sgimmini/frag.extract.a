@@ -9,12 +9,10 @@
   "content_scripts": [
     {
       "matches": [
-        "https://stackoverflow.com/*",
-        "http://stackoverflow.com/*"
+        "https://stackoverflow.com/questions/*",
+        "http://stackoverflow.com/questions/*"
       ],
-      "css": [
-        "style.css"
-      ]
+      "js": "content.js"
     }
   ],
   "icons": {
@@ -24,8 +22,8 @@
     "16": "images/icon16.png"
   },
   "permissions": [
-    "https://stackoverflow.com/*",
-    "http://stackoverflow.com/*",
+    "https://stackoverflow.com/questions/*",
+    "http://stackoverflow.com/questions/*",
     "storage",
     "nativeMessaging",
     "declarativeContent",
