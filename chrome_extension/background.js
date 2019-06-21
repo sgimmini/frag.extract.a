@@ -12,3 +12,7 @@ chrome.runtime.onInstalled.addListener(function () {
     }]);
   });
 });
+
+chrome.tabs.onActivated.addListener(function (activeInfo) {
+  chrome.storage.local.remove(['label', 'prefix', 'scope', 'body', 'description', 'tags', 'domain']);
+});

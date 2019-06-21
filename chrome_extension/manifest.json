@@ -28,7 +28,8 @@
     "http://stackoverflow.com/*",
     "storage",
     "nativeMessaging",
-    "declarativeContent"
+    "declarativeContent",
+    "tabs"
   ],
   "background": {
     "scripts": [
