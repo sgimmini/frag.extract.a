@@ -12,5 +12,3 @@ chrome.runtime.onInstalled.addListener(function () {
     }]);
   });
 });
-
-var userInput = { label: "", prefix: "", scope: "", body: "", description: "", tags: "", domain: "" };
