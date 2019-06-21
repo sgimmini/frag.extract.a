@@ -1,3 +1,9 @@
+for (var key in chrome.extension.getBackgroundPage().userInput) {
+    if (chrome.extension.getBackgroundPage().userInput.key) {
+        document.getElementById(key).value = chrome.extension.getBackgroundPage().userInput.key;
+    }
+}
+
 $(document).ready(function () {
     $('body').on('click', 'a', function () {
         chrome.tabs.create({ url: $(this).attr('href') });
@@ -7,17 +13,19 @@ $(document).ready(function () {
 
 function sendNativeMessage() {
     message = {
-        "label": document.getElementById('snippetlabel').value,
-        "prefix": document.getElementById('snippetprefix').value,
-        "scope": document.getElementById('snippetscope').value,
-        "body": document.getElementById('snippetbody').value,
-        "description": document.getElementById('snippetdescription').value,
+        "label": document.getElementById('label').value,
+        "prefix": document.getElementById('prefix').value,
+        "scope": document.getElementById('scope').value,
+        "body": document.getElementById('body').value,
+        "description": document.getElementById('description').value,
         "keywords": "",
-        "tags": document.getElementById('snippettags').value,
-        "domain": document.getElementById('snippetdomain').value,
+        "tags": document.getElementById('tags').value,
+        "domain": document.getElementById('domain').value,
         "placeholders": ""
     };
-    chrome.runtime.sendNativeMessage('com.frag.extract', message);
+    chrome.runtime.sendNativeMessage('com.frag.extract', chrome.extension.getBackgroundPage().userInput);
+    chrome.extension.getBackgroundPage().userInput = { label: "", prefix: "", scope: "", body: "", description: "", tags: "", domain: "" };
+    chrome.storage.local.remove(['label', 'prefix', 'scope', 'body', 'description', 'tags', 'domain']);
     window.close();
 }
 
@@ -29,44 +37,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancel_button').addEventListener(
-        'click', function () { window.close(); });
-});
-
-// save content of input fields
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('snippetlabel').addEventListener(
-        'input', function () { chrome.storage.local.set({ label: document.getElementById('snippetlabel').value }); });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('snippetprefix').addEventListener(
-        'input', function () { chrome.storage.local.set({ prefix: document.getElementById('snippetprefix').value }); });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('snippetscope').addEventListener(
-        'input', function () { chrome.storage.local.set({ scope: document.getElementById('snippetscope').value }); });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('snippetbody').addEventListener(
-        'input', function () { chrome.storage.local.set({ body: document.getElementById('snippetbody').value }); });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('snippetdescription').addEventListener(
-        'input', function () {
-            chrome.storage.local.set({ description: document.getElementById('snippetdescription').value });
-            chrome.storage.local.get(['label'], function (result) { document.getElementById('snippetprefix').value = result.label; });
+        'click', function () {
+            chrome.extension.getBackgroundPage().userInput = { label: "", prefix: "", scope: "", body: "", description: "", tags: "", domain: "" };
+            window.close();
         });
 });
 
+//chrome.storage.local.get(['label'], function (result) { document.getElementById('prefix').value = result.label; });
+
+// save content of input fields
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('snippetags').addEventListener(
-        'input', function () { chrome.storage.local.set({ tags: document.getElementById('snippettags').value }); });
+    document.getElementById('label').addEventListener(
+        'input', function () { chrome.extension.getBackgroundPage().userInput.label = document.getElementById('label').value; });
+});
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('prefix').addEventListener(
+        'input', function () { chrome.storage.local.set({ prefix: document.getElementById('prefix').value }); });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('snippetdomain').addEventListener(
-        'input', function () { chrome.storage.local.set({ domain: document.getElementById('snippetdomain').value }); });
+    document.getElementById('scope').addEventListener(
+        'input', function () { chrome.storage.local.set({ scope: document.getElementById('scope').value }); });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('body').addEventListener(
+        'input', function () { chrome.storage.local.set({ body: document.getElementById('body').value }); });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('description').addEventListener(
+        'input', function () { chrome.storage.local.set({ description: document.getElementById('description').value }); });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('tags').addEventListener(
+        'input', function () { chrome.storage.local.set({ tags: document.getElementById('tags').value }); });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('domain').addEventListener(
+        'input', function () { chrome.storage.local.set({ domain: document.getElementById('domain').value }); });
 });

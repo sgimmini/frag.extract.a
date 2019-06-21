@@ -1,6 +1,6 @@
 chrome.runtime.onInstalled.addListener(function () {
 
-  // Extension popup menu can only be opened stackoverflow.com and local files
+  // Extension popup menu can only be opened stackoverflow.com
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
     chrome.declarativeContent.onPageChanged.addRules([{
       conditions: [
@@ -12,3 +12,5 @@ chrome.runtime.onInstalled.addListener(function () {
     }]);
   });
 });
+
+var userInput = { label: "", prefix: "", scope: "", body: "", description: "", tags: "", domain: "" };
