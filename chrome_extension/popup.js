@@ -18,7 +18,20 @@ $(document).ready(function () {
 });
 
 function sendNativeMessage() {
-    message = {
+    var message = {};
+    chrome.storage.local.get({ 'label': "", 'prefix': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
+        message.label = result.label;
+        message.prefix = result.prefix;
+        message.scope = result.scope;
+        message.body = result.body;
+        message.description = result.description;
+        message.keywords = "";
+        message.tags = result.tags;
+        message.domain = result.domain;
+        message.placeholders = "";
+        chrome.runtime.sendNativeMessage('com.frag.extract', message);
+    });
+    /*message = {
         "label": document.getElementById('label').value,
         "prefix": document.getElementById('prefix').value,
         "scope": document.getElementById('scope').value,
@@ -28,17 +41,22 @@ function sendNativeMessage() {
         "tags": document.getElementById('tags').value,
         "domain": document.getElementById('domain').value,
         "placeholders": ""
-    };
-    chrome.runtime.sendNativeMessage('com.frag.extract', message);
+    };*/
+    //chrome.runtime.sendNativeMessage('com.frag.extract', message);
     // clear previous state
-    chrome.storage.local.remove(['label', 'prefix', 'scope', 'body', 'description', 'tags', 'domain']);
-    window.close();
+    //chrome.storage.local.remove(['label', 'prefix', 'scope', 'body', 'description', 'tags', 'domain']);
+    //window.close();
 }
 
 // send and cancel buttons
-document.addEventListener('DOMContentLoaded', function () {
+/*document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('form').addEventListener(
         'submit', sendNativeMessage);
+});*/
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('save').addEventListener(
+        'click', sendNativeMessage);
 });
 
 document.addEventListener('DOMContentLoaded', function () {
