@@ -37,12 +37,12 @@ function sendNativeMessage() {
 
 // send and cancel buttons
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('send_button').addEventListener(
-        'click', sendNativeMessage);
+    document.getElementById('form').addEventListener(
+        'submit', sendNativeMessage);
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('cancel_button').addEventListener(
+    document.getElementById('cancel').addEventListener(
         'click', function () {
             chrome.storage.local.remove(['label', 'prefix', 'scope', 'body', 'description', 'tags', 'domain']);
             window.close();

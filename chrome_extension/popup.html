@@ -11,24 +11,32 @@
 
 <body>
     <h1 id="heading">Suggested Fragment:</h1>
-    <p>
-        <label for="label">Label</label><input id="label" type="text">
+    <form id="form">
+        Label <br>
+        <input id="label" type="text" autofocus required><br>
 
-        <label for="description">Description</label><input id="description" type="text">
+        Description <br>
+        <textarea id="description" rows="2" cols="60"></textarea><br>
 
-        <label for="prefix">Prefix</label><input id="prefix" type="text">
+        Prefix <br>
+        <input id="prefix" type="text"><br>
 
-        <label for="body">Code</label><input id="body" type="text">
+        Code <br>
+        <textarea id="body" rows="6" cols="60"></textarea><br>
 
-        <label for="tags">Tags</label><input id="tags" type="text">
+        Tags <br>
+        <input id="tags" type="text" multiple><br>
 
-        <label for="domain">Libraries / Packages</label><input id="domain" type="text">
+        Libraries / Packages <br>
+        <input id="domain" type="text" multiple><br>
 
-        <label for="scope">Language</label><input id="scope" type="text">
-    </p>
+        Language <br>
+        <input id="scope" type="text"><br><br>
 
-    <button id='send_button'>Save</button>
-    <button id='cancel_button'>Cancel</button>
+        <input id="saves" type="submit" value="Save">
+        <input id="cancel" type="button" value="Cancel">
+    </form>
+
     <br>
     <a href=https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets>More information
         on creating VS Code Snippets</a> </body> </html>
