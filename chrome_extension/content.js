@@ -19,5 +19,3 @@ function jumpToCode() {
     var topPos = myElement.offsetTop;
     document.getElementsByTagName('code').scrollTop = topPos;
 }
-
-chrome.runtime.sendMessage('jumpto', "fack");

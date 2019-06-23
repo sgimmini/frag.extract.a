@@ -77,3 +77,10 @@ document.addEventListener('DOMContentLoaded', function () {
            console.log('jumpto')
         });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.querySelector('.button'),
+        check = document.querySelector('.check');
+        
+  });
+  
