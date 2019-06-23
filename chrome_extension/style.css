@@ -61,11 +61,49 @@ label{
 }
 
 div{
+    text-align: left;
+}
+
+div.centr{
     text-align: center;
 }
 
+div.col{
+    columns: 40px 2;
+    column-gap: 20px;
+    text-align: left;
+}
 
 .lbl{
-    text-align: left;
+    text-align: center;
     line-height: 1.7;
+}
+
+
+#column_container{
+    position: relative;
+    columns: 40px 2;
+    column-gap: 20px;
+    text-align: center;
+}
+
+#column1{
+    margin: 0;
+    position: relative;
+    top: 90%;
+    left: 50%;
+    -ms-transform: translate(20%, 80%);
+    transform: translate(-40%, -15%);
+}
+
+#column2{
+    text-align: left;
+}
+
+#column3{
+    margin: 0;
+    position: relative;
+    left: 10%;
+    text-align: left;
+    -ms-transform: translate(10%, 10%);
 }
