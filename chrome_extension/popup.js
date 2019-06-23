@@ -17,15 +17,13 @@ $(document).ready(function () {
     });
 });
 
-function sendNativeMessage() {
-    chrome.runtime.sendMessage({ content: "sendNativeMessage" });
-    window.close();
-}
-
 // send and cancel buttons
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('form').addEventListener(
-        'submit', sendNativeMessage);
+        'submit', function () {
+            chrome.runtime.sendMessage({ content: "sendNativeMessage" });
+            window.close();
+        });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
