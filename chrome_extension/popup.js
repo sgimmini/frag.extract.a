@@ -63,3 +63,17 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('domain').addEventListener(
         'input', function () { chrome.storage.local.set({ domain: document.getElementById('domain').value }); });
 });
+
+
+/* function jumpToCode(codeblocks) {
+    var myElement = codeblocks[3];
+    var topPos = myElement.offsetTop;
+    document.getElementsByTagName('code').scrollTop = topPos;
+} */
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('jumpto').addEventListener(
+        'click', function () { 
+           console.log('jumpto')
+        });
+});
