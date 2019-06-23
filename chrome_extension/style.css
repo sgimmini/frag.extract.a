@@ -12,12 +12,13 @@ input{
     background: -ms-linear-gradient(top, #eee, #fff);
     background: -o-linear-gradient(top, #eee, #fff);
     box-shadow: 1px 2px 4px rgba(0,0,0, .2);
-    border-radius: 5px;
+    border-radius: 3px;
+    width: 98%;
 }
 
 textarea{    
     padding: 1px;
-    border-radius: 9px;
+    border-radius: 3px;
     background: #eee;
     border: 1px solid #DDD;
     background: -moz-linear-gradient(top, #EEE, #FFF);    
@@ -25,6 +26,7 @@ textarea{
     background: -ms-linear-gradient(top, #eee, #fff);
     background: -o-linear-gradient(top, #eee, #fff);
     box-shadow: 1px 2px 4px rgba(0,0,0, .2);
+    width: 450px;
 }
 
 h1{font-family: Arial, Helvetica, sans-serif}
@@ -82,8 +84,8 @@ div.col{
 
 #column_container{
     position: relative;
-    columns: 40px 2;
-    column-gap: 20px;
+    columns: 100px 2;
+    column-gap: 40px;
     text-align: center;
 }
 
