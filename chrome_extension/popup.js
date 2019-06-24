@@ -81,3 +81,10 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.querySelector('.button'),
+        check = document.querySelector('.check');
+        
+  });
+  

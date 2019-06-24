@@ -7,36 +7,81 @@
     <script src="jquery-3.4.1.min.js"></script>
     <script src="popup.js"></script>
     <script src="content.js"></script>
-    <link rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <h1 id="heading">Suggested Fragment:</h1>
     <form id="form">
-        Label <br>
-        <input id="label" type="text" autofocus required><br>
 
-        Description <br>
-        <textarea id="description" rows="2" cols="60"></textarea><br>
+        <div id="wrapper">
+            <div id="column_container">
+                <div id="column2">
+                    <label for="label">Label</label><br>
+                    <input id="label" type="text" autofocus required><br>
+                </div>
+                <div id="column2">
+                    <label for="prefix">Prefix</label><br>
+                    <input id="prefix" type="text"><br><br>
+                </div>
+            </div>
+        </div>
 
-        Prefix <br>
-        <input id="prefix" type="text"><br>
+        <div>
+            <label for="description">Description</label><br>
+            <textarea id="description" rows="2" cols="60"></textarea><br>
+        </div>
+        
+        <div>
+            <label for="body">Code</label><br>
+            <textarea id="body" rows="6" cols="60"></textarea>
+        </div>
 
-        Code <br>
-        <textarea id="body" rows="6" cols="60"></textarea>
-        <input id="jumpto" type="button" value="Jump to Codeblock"><br>
 
-        Tags <br>
-        <input id="tags" type="text" multiple><br>
+        <div id="wrapper">
+            <div id="column_container">
+                <div id="column1"> <br>
+                    <button id="jumpto" type="button"  class="button3">Jump to Codeblock</button><br>
+                </div>
+                <div id="column2"> 
+                    <label for="tags" class="lbl">Tags</label><br>
+                    <input id="tags" type="text" multiple><br> 
+                </div>
+            </div>
+        </div>
 
-        Libraries / Packages <br>
-        <input id="domain" type="text" multiple><br>
+        <div id="wrapper">
+            <div id="column_container">
+                <div id="column2">
+                    <label for="domain" class="lbl">Libraries / Packages</label><br>
+                    <input id="domain" type="text" multiple><br>
+                </div>
 
-        Language <br>
-        <input id="scope" type="text"><br><br>
+                <div id="column2">
+                    <label for="scope" class="lbl">Language</label><br>
+                    <input id="scope" type="text"><br><br>
+                </div>
+            </div>
+        </div>
+        
 
+
+        <!-- 
         <input id="save" type="submit" value="Save">
         <input id="cancel" type="button" value="Cancel">
+        -->
+        <div id="wrapper">
+            <div id="column_container">
+                <div id="column3">
+                    <button id="save" type="submit" class="button3">Save</button>
+                    <button id="cancel" type="submit" class="button3">Cancel</button><br>
+                </div>
+                <div id="column3">
+                    
+                </div>               
+            </div>
+        </div>
+                
     </form>
 
     <br>
