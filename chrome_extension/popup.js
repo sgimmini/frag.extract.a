@@ -73,7 +73,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('jumpto').addEventListener(
-        'click', function () { 
-           console.log('jumpto')
+        'click', function () {
+            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                // for now; later: need to save number of codeblock that was extracted
+                var number = 0;
+                chrome.tabs.sendMessage(tabs[0].id, { codeblock: 0 });
+            });
         });
 });

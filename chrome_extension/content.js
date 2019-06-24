@@ -14,10 +14,14 @@ for (let i = 0; i < 3; i++) {
 
  */
 
-function jumpToCode() {
+/*function jumpToCode() {
     var myElement = paragraphs[3];
     var topPos = myElement.offsetTop;
     document.getElementsByTagName('code').scrollTop = topPos;
-}
+}*/
 
-chrome.runtime.sendMessage('jumpto', "fack");
+chrome.runtime.onMessage.addListener(function (recieved, callback) {
+    if (recieved.codeblock) {
+        document.getElementsByTagName('code').scrollTop = document.getElementsByTagName('code')[recieved.codeblock].offsetTop;
+    }
+});
