@@ -14,7 +14,7 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 chrome.tabs.onActivated.addListener(function (activeInfo) {
-  chrome.storage.local.remove(['label', 'prefix', 'scope', 'body', 'description', 'tags', 'domain']);
+  chrome.storage.local.remove(['label', 'prefix', 'scope', 'body', 'description', 'tags', 'domain', 'blocknumber']);
 });
 
 chrome.runtime.onMessage.addListener(function (recieved, callback) {
