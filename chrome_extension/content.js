@@ -25,17 +25,17 @@ chrome.runtime.onMessage.addListener(function (recieved, callback) {
     }
 });
 */
-console.log("injected");
-
 
 function addToFragmentButtons() {
     console.log("buttons");
-    var codeblocks = document.getElementsByClassName("prettyprint");
+    var codeblocks = document.getElementsByClassName("prettyprinted");
     for (var codeblock of codeblocks) {
         console.log("something");
         var button = document.createElement('button');
         button.innerText = "Add to fragment";
         codeblock.insertAdjacentElement('afterend', button);
+	document.removeClass('prettyprinted');
+	prettyPrint();
     }
 }
 
