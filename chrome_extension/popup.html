@@ -8,6 +8,7 @@
     <script src="materialize.js"></script>
     <script src="popup.js"></script>
     <link rel="stylesheet" href="materialize.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
@@ -17,28 +18,34 @@
             <form class="col s12">
                 <h5>Sis is se häda</h5>
                 <div class="row">
-                    <div class="input-field col s12">
+                    <div class="input-field col s6">
                         <input id="label" type="text" autofocus required class="validate">
                         <label for="label">LABEL</label>
                     </div>
+
+                    <div class="input-field col s6">
+                            <textarea id="tags" class="materialize-textarea"></textarea>
+                            <label for="tags">Tags</label>
+                        </div>
 
                     <div class="input-field col s12">
                         <textarea placeholder=" " id="description" class="materialize-textarea"></textarea>
                         <label for="description">Description</label>
                     </div>
 
-                    <div class="input-field col s12">
+                    <div class="input-field col s3">
                         <input id="prefix" type="text">
                         <label for="prefix">Prefix</label>
                     </div>
 
-                    <div class="input-field col s12">
-                        <textarea placeholder=" " id="body" class="materialize-textarea"></textarea>
-                        <label for="body">Code</label>
+                    <div class="input-field col s6">
+                        <textarea id="domain" class="materialize-textarea"></textarea>
+                        <label for="domain">Lib's / Pkg's</label>
                     </div>
 
-                    <div class="input-field col s12" style="text-align: center;">
-                        <button id="jumpto" type="button" class="waves-effect waves-light btn-small">Jump to Codeblock</button>
+                    <div class="input-field col s3">
+                        <textarea id="scope" class="materialize-textarea"></textarea>
+                        <label for="scope">Language</label>
                     </div>
 
                     <!--
@@ -51,23 +58,14 @@
                     -->  
 
                     <div class="input-field col s12">
-                        <textarea id="tags" class="materialize-textarea"></textarea>
-                        <label for="tags">Tags</label>
-                    </div>
-
-                    <div class="input-field col s12">
-                        <textarea id="domain" class="materialize-textarea"></textarea>
-                        <label for="domain">Libraries / Packages</label>
-                    </div>
-
-                    <div class="input-field col s12">
-                        <textarea id="scope" class="materialize-textarea"></textarea>
-                        <label for="scope">Language</label>
+                            <textarea placeholder=" " id="body" class="materialize-textarea" style="font-family: monospace, monospace; font-size: 140%"></textarea>
+                            <label for="body">Code</label>
+                            <button id="jumpto" type="button" class="waves-effect waves-light btn-small tooltipped" data-position="left" data-tooltip="s"><i class="medium material-icons">undo</i></button>   
                     </div>
 
                     <div class="input-field col s12" style="text-align: center;">
-                         <button id="save" type="submit" class="waves-effect waves-light btn-small">Save</button>
-                        <button id="cancel" type="button" class="waves-effect waves-light btn-small">Cancel</button>
+                        <button id="save" type="submit" class="waves-effect waves-light btn-small"><i class="medium material-icons right">send</i>save</button>
+                        <button id="cancel" type="button" class="waves-effect waves-light btn-small"><i class="medium material-icons right">cancel</i>Cancel</button>
                     </div>
                 </div>
             </form>

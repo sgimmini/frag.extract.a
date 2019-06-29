@@ -2162,7 +2162,7 @@ html {
  * Remove the margin in all browsers (opinionated).
  */
 body {
-  min-width:400px;
+  min-width:350px;
   min-height:100%;
 }
 
