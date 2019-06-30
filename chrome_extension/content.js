@@ -27,15 +27,13 @@ chrome.runtime.onMessage.addListener(function (recieved, callback) {
 */
 
 function addToFragmentButtons() {
-    console.log("buttons");
-    var codeblocks = document.getElementsByClassName("prettyprinted");
+    var codeblocks = document.getElementsByTagName('code');
     for (var codeblock of codeblocks) {
-        console.log("something");
-        var button = document.createElement('button');
-        button.innerText = "Add to fragment";
-        codeblock.insertAdjacentElement('afterend', button);
-	document.removeClass('prettyprinted');
-	prettyPrint();
+        if (codeblock.parentElement.tagName == 'PRE') {
+            var button = document.createElement('button');
+            button.innerText = "Add to fragment";
+            codeblock.insertAdjacentElement('afterend', button);
+        }
     }
 }
 
