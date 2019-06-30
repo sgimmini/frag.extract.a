@@ -27,7 +27,7 @@ chrome.runtime.onMessage.addListener(function (recieved, callback) {
 */
 
 function addToFragmentButtons() {
-    var codeblocks = document.getElementsByTagName('code');
+    var codeblocks = document.getElementById('answers').getElementsByTagName('code');
     for (var codeblock of codeblocks) {
         if (codeblock.parentElement.tagName == 'PRE') {
             var button = document.createElement('button');
