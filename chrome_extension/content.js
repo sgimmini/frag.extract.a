@@ -37,10 +37,10 @@ function addToFragmentButtons() {
                 'click', function () {
                     alert("button clicked");
                 }
-            )
+            );
         }
     }
-}
+};
 
 addToFragmentButtons();
 
