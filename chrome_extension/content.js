@@ -27,20 +27,14 @@ chrome.runtime.onMessage.addListener(function (recieved, callback) {
 */
 
 function addToFragmentButtons() {
-    // console.log("buttons");
-
-    var codeblocks = document.getElementsByClassName("prettyprinted");
-	console.log(codeblocks.length);
-    console.log(codeblocks);
-    console.log(document);
+    var codeblocks = document.getElementById('answers').getElementsByTagName('code');
     for (var codeblock of codeblocks) {
-        console.log("something");
-        var button = document.createElement('button');
-        button.innerText = "Add to fragment";
-        codeblock.insertAdjacentElement('afterend', button);
-	// document.removeClass('prettyprinted');
-	// prettyPrint();
+        if (codeblock.parentElement.tagName == 'PRE') {
+            var button = document.createElement('button');
+            button.innerText = "Add to fragment";
+            codeblock.insertAdjacentElement('afterend', button);
+        }
     }
 }
-setTimeout(addToFragmentButtons, 5000);
-// addToFragmentButtons();
+
+addToFragmentButtons();
