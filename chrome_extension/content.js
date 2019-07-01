@@ -27,16 +27,20 @@ chrome.runtime.onMessage.addListener(function (recieved, callback) {
 */
 
 function addToFragmentButtons() {
-    console.log("buttons");
+    // console.log("buttons");
+
     var codeblocks = document.getElementsByClassName("prettyprinted");
+	console.log(codeblocks.length);
+    console.log(codeblocks);
+    console.log(document);
     for (var codeblock of codeblocks) {
         console.log("something");
         var button = document.createElement('button');
         button.innerText = "Add to fragment";
         codeblock.insertAdjacentElement('afterend', button);
-	document.removeClass('prettyprinted');
-	prettyPrint();
+	// document.removeClass('prettyprinted');
+	// prettyPrint();
     }
 }
-
-addToFragmentButtons();
+setTimeout(addToFragmentButtons, 5000);
+// addToFragmentButtons();
