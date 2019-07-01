@@ -34,6 +34,6 @@ chrome.runtime.onMessage.addListener(function (recieved, callback) {
       chrome.storage.local.remove(['label', 'prefix', 'scope', 'body', 'description', 'tags', 'domain']);
     });
   } else if (recieved.content == 'add') {
-    window.open("popup.html", "extension_popup", "width=300,height=400,status=no,scrollbars=yes,resizable=no");
+    window.open("popup.html", "extension_popup", "width=300,height=400,status=no,scrollbars=no,resizable=no");
   }
 });
