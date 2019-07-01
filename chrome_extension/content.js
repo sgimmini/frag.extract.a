@@ -33,6 +33,11 @@ function addToFragmentButtons() {
             var button = document.createElement('button');
             button.innerText = "Add to fragment";
             codeblock.insertAdjacentElement('afterend', button);
+            button.addEventListener(
+                'click', function () {
+                    alert("button clicked");
+                }
+            )
         }
     }
 }
