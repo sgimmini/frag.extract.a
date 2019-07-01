@@ -38,3 +38,5 @@ function addToFragmentButtons() {
 }
 
 addToFragmentButtons();
+
+// for scrolling: scroll(0, window.pageYOffset - codeblocks[0].getBoundingClientRect().y)
