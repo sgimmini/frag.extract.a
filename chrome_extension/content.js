@@ -35,7 +35,8 @@ function addToFragmentButtons() {
             codeblock.insertAdjacentElement('afterend', button);
             button.addEventListener(
                 'click', function () {
-                    alert("button clicked");
+                    //alert("button clicked");
+                    chrome.runtime.sendMessage({ content: "add" });
                 }
             );
         }
