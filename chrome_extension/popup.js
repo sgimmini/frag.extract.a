@@ -1,8 +1,7 @@
 $(document).ready(function () {
     // fill text fields with values from previous state
-    chrome.storage.local.get({ 'label': "", 'prefix': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
+    chrome.storage.local.get({ 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
         document.getElementById('label').value = result.label;
-        document.getElementById('prefix').value = result.prefix;
         document.getElementById('scope').value = result.scope;
         document.getElementById('body').value = result.body;
         document.getElementById('description').value = result.description;
@@ -38,10 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('label').addEventListener(
         'input', function () { chrome.storage.local.set({ label: document.getElementById('label').value }); });
-});
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('prefix').addEventListener(
-        'input', function () { chrome.storage.local.set({ prefix: document.getElementById('prefix').value }); });
 });
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('scope').addEventListener(
@@ -85,6 +80,5 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     var btn = document.querySelector('.button'),
         check = document.querySelector('.check');
-        
-  });
-  
+
+});
