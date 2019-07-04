@@ -22,7 +22,7 @@ chrome.runtime.onMessage.addListener(function (recieved, callback) {
     chrome.storage.local.get({ 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
       var message = {};
       message.label = result.label;
-      message.prefix = result.body.replace(/(?: |\.|,|:|\(|\{|\+|-|=|"|'|<).*/, '');
+      message.prefix = result.body.replace(/(?: |\.|,|:|\(|\{|\+|-|=|"|'|<|;).*/, '');
       message.scope = result.scope;
       message.body = result.body;
       message.description = result.description;
