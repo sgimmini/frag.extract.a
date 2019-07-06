@@ -20,7 +20,7 @@ $(document).ready(function () {
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('form').addEventListener(
         'submit', function () {
-            chrome.runtime.sendMessage({ content: "sendNativeMessage" });
+            chrome.runtime.sendMessage({ content: 'sendNativeMessage' });
             window.close();
         });
 });
@@ -70,9 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('jumpto').addEventListener(
         'click', function () {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                // for now; later: need to save number of codeblock that was extracted
-                var number = 0;
-                chrome.tabs.sendMessage(tabs[0].id, { codeblock: 0 });
+                chrome.tabs.sendMessage(tabs[0].id, { content: 'scroll' });
             });
         });
 });

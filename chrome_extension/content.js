@@ -1,30 +1,3 @@
-/*
-console.log("started");
-let paragraphs = document.getElementsByTagName('code');
-var oneElement = paragraphs[3];
-
-var topPos = oneElement.offsetTop;
-
-for (elt of paragraphs) {
-    elt.style['background-color'] = '#FFB2B2';
-}
-
-for (let i = 0; i < 3; i++) {
-    paragraphs[i].style['background-color'] = '#FFB2B2';
-}
-
-function jumpToCode() {
-    var myElement = paragraphs[3];
-    var topPos = myElement.offsetTop;
-    document.getElementsByTagName('code').scrollTop = topPos;
-}
-
-chrome.runtime.onMessage.addListener(function (recieved, callback) {
-    if (recieved.codeblock) {
-        document.getElementsByTagName('code').scrollTop = document.getElementsByTagName('code')[recieved.codeblock].offsetTop;
-    }
-});
-*/
 // all codeblocks in all answers without inline code
 const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
 var scrollpos;
@@ -33,7 +6,7 @@ function extract() {
     // determine which codeblock here
     const code = codeblocks[0].innerText;
     // set scrollpos here
-
+    scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
     chrome.storage.local.set({
         scope: "", /*extract all languages from tags and have a drop down menu*/
         body: code,
@@ -51,8 +24,8 @@ function addToFragmentButtons() {
             'click', function (event) {
                 chrome.storage.local.set({ body: event.currentTarget.parentElement.firstChild.innerText });
                 // set scrollpos here
-
-                //chrome.runtime.sendMessage({ content: "add" });
+                scrollpos = window.pageYOffset - event.currentTarget.parentElement.firstChild.getBoundingClientRect().y;
+                //chrome.runtime.sendMessage({ content: 'add' });
             }
         );
     }
@@ -60,5 +33,11 @@ function addToFragmentButtons() {
 
 extract();
 addToFragmentButtons();
+
+chrome.runtime.onMessage.addListener(function (recieved, callback) {
+    if (recieved.content == 'scroll') {
+        scroll(0, scrollpos);
+    }
+});
 
 // for scrolling: scroll(0, window.pageYOffset - codeblocks[0].getBoundingClientRect().y)
