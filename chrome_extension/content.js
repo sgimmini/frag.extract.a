@@ -1,28 +1,21 @@
-// all codeblocks in all answers without inline code
-const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
-var scrollpos;
+var scrollpos = 0;
+var scope = "", body = "", description = "", tags = "";
 
-function extract() {
+function setup() {
+    // all codeblocks in all answers without inline code
+    const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
     // determine which codeblock here
-    var code = '';
     if (codeblocks.length) {
-        code = codeblocks[0].innerText;
+        body = codeblocks[0].innerText;
         // set scrollpos here
         scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
     }
     // get description
-    const title = document.getElementById('question-header').innerText.replace(/(?: \[closed\])?\sAsk Question$/, '');
-    chrome.storage.local.set({
-        label: "",
-        scope: "", // extract all languages from tags and have a drop down menu
-        body: code,
-        description: title.charAt(0).toUpperCase() + title.slice(1),
-        tags: "", // extract all tags and have them in a drop down menu
-        domain: ""
-    });
-};
+    description = document.getElementById('question-header').innerText.replace(/(?: \[closed\])?\sAsk Question$/, '');
 
-function addToFragmentButtons() {
+    // extract all languages from tags and have a drop down menu
+    // extract all tags and have them in a drop down menu
+
     for (var codeblock of codeblocks) {
         var button = document.createElement('button');
         button.innerText = "Add to fragment";
@@ -38,14 +31,13 @@ function addToFragmentButtons() {
     }
 };
 
-extract();
-addToFragmentButtons();
+setup();
 
-chrome.runtime.onMessage.addListener(function (recieved, callback) {
-    if (recieved.content == 'scroll') {
+chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
+    if (recieved.content == 'setPopup') {
+        sendResponse({ url: window.location, label: "", scope: scope, body: body, description: description, tags: tags, domain: "" });
+    } else if (recieved.content == 'scroll') {
         scroll(0, scrollpos);
-    } else if (recieved.content == 'extract') {
-        extract();
     }
 });
 

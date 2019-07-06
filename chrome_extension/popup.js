@@ -1,12 +1,41 @@
 function loadState() {
     // fill text fields with values from previous state
-    chrome.storage.local.get({ 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
-        document.getElementById('label').value = result.label;
-        document.getElementById('scope').value = result.scope;
-        document.getElementById('body').value = result.body;
-        document.getElementById('description').value = result.description;
-        document.getElementById('tags').value = result.tags;
-        document.getElementById('domain').value = result.domain;
+    chrome.storage.local.get({ 'url': "", 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            // if you're still on the site the poup was last opened, load status
+            if (result.url == tabs[0].url) {
+                document.getElementById('label').value = result.label;
+                document.getElementById('scope').value = result.scope;
+                document.getElementById('body').value = result.body;
+                document.getElementById('description').value = result.description;
+                document.getElementById('tags').value = result.tags;
+                document.getElementById('domain').value = result.domain;
+
+            } // if you're on a different SO site, where the content script was injected, load automatically extracted fragment
+            else if (/https:\/\/stackoverflow.com\/questions\/\d*\/.*/.test(tabs[0].url)) {
+                chrome.tabs.sendMessage(tabs[0].id, { content: 'setPopup' }, function (response) {
+                    document.getElementById('label').value = response.label;
+                    document.getElementById('scope').value = response.scope;
+                    document.getElementById('body').value = response.body;
+                    document.getElementById('description').value = response.description;
+                    document.getElementById('tags').value = response.tags;
+                    document.getElementById('domain').value = response.domain;
+                    chrome.storage.local.set({
+                        url: tabs[0].url,
+                        label: response.label,
+                        scope: response.scope,
+                        body: response.body,
+                        description: response.description,
+                        tags: response.tags,
+                        domain: response.domain
+                    });
+                });
+            } // if you're on a different site (not a SO question page), clear last status and load empty popup
+            else {
+                chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain']);
+            }
+        })
+
     });
     /*if (!document.getElementById('description')) {
         document.getElementsByTagName('h5')[0].innerText = "No Fragment found";
@@ -28,10 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancel').addEventListener(
         'click', function () {
-            chrome.storage.local.remove(['label', 'prefix', 'scope', 'body', 'description', 'tags', 'domain']);
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, { content: 'extract' });
-            });
+            chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain']);
             window.close();
         });
 });
