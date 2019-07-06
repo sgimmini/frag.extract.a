@@ -9,8 +9,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://stackoverflow.com/questions/*/*",
-        "https://shiffman.net/*"
+        "https://stackoverflow.com/questions/*/*"
       ],
       "exclude_matches": [
         "https://stackoverflow.com/questions/tagged/*"
