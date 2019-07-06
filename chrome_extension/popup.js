@@ -33,13 +33,11 @@ function loadState() {
             } // if you're on a different site (not a SO question page), clear last status and load empty popup
             else {
                 chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain']);
+                document.getElementById('title').innerText = "No Fragment found";
             }
-        })
+        });
 
     });
-    /*if (!document.getElementById('description')) {
-        document.getElementsByTagName('h5')[0].innerText = "No Fragment found";
-    }*/
 };
 
 loadState();
