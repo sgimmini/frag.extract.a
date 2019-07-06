@@ -4,13 +4,18 @@ var scrollpos;
 
 function extract() {
     // determine which codeblock here
-    const code = codeblocks[0].innerText;
-    // set scrollpos here
-    scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
+    var code = '';
+    if (codeblocks.length) {
+        code = codeblocks[0].innerText;
+        // set scrollpos here
+        scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
+    }
+    // get description
+    const title = document.getElementById('question-header').innerText.replace(/(?: \[closed\])?\sAsk Question$/, '')
     chrome.storage.local.set({
         scope: "", /*extract all languages from tags and have a drop down menu*/
         body: code,
-        description: document.getElementById('question-header').innerText.replace(/(?: \[closed\])?\sAsk Question$/, ''),
+        description: title.charAt(0).toUpperCase() + title.slice(1),
         tags: "" /*extract all tags and have them in a drop down menu*/
     });
 };
