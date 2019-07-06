@@ -8,6 +8,9 @@ function loadState() {
         document.getElementById('tags').value = result.tags;
         document.getElementById('domain').value = result.domain;
     });
+    if (!document.getElementById('description')) {
+        document.getElementsByTagName('h5')[0].innerText = "No Fragment found";
+    }
 };
 
 loadState();

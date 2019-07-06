@@ -11,7 +11,7 @@ function extract() {
         scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
     }
     // get description
-    const title = document.getElementById('question-header').innerText.replace(/(?: \[closed\])?\sAsk Question$/, '')
+    const title = document.getElementById('question-header').innerText.replace(/(?: \[closed\])?\sAsk Question$/, '');
     chrome.storage.local.set({
         scope: "", /*extract all languages from tags and have a drop down menu*/
         body: code,
