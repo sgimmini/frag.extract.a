@@ -22,9 +22,9 @@ function addToFragmentButtons() {
         codeblock.insertAdjacentElement('afterend', button);
         button.addEventListener(
             'click', function (event) {
-                chrome.storage.local.set({ body: event.currentTarget.parentElement.firstChild.innerText });
+                chrome.storage.local.set({ body: event.target.parentElement.firstChild.innerText });
                 // set scrollpos here
-                scrollpos = window.pageYOffset - event.currentTarget.parentElement.firstChild.getBoundingClientRect().y;
+                scrollpos = window.pageYOffset - event.target.parentElement.firstChild.getBoundingClientRect().y;
                 //chrome.runtime.sendMessage({ content: 'add' });
             }
         );

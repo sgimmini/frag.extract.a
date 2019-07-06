@@ -1,4 +1,4 @@
-$(document).ready(function () {
+function loadState() {
     // fill text fields with values from previous state
     chrome.storage.local.get({ 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
         document.getElementById('label').value = result.label;
@@ -8,13 +8,9 @@ $(document).ready(function () {
         document.getElementById('tags').value = result.tags;
         document.getElementById('domain').value = result.domain;
     });
+};
 
-    // support for clickable hyperlinks
-    $('body').on('click', 'a', function () {
-        chrome.tabs.create({ url: $(this).attr('href') });
-        return false;
-    });
-});
+loadState();
 
 // save button
 document.addEventListener('DOMContentLoaded', function () {
@@ -41,6 +37,16 @@ document.addEventListener('DOMContentLoaded', function () {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
                 chrome.tabs.sendMessage(tabs[0].id, { content: 'scroll' });
             });
+        });
+});
+
+// working hyperlinks
+document.addEventListener('DOMContentLoaded', function () {
+    window.addEventListener(
+        'click', function (event) {
+            if (event.target.href !== undefined) {
+                chrome.tabs.create({ url: event.target.href });
+            }
         });
 });
 
