@@ -25,23 +25,40 @@ chrome.runtime.onMessage.addListener(function (recieved, callback) {
     }
 });
 */
+// all codeblocks in all answers without inline code
+const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
+var scrollpos;
+
+function extract() {
+    // determine which codeblock here
+    const code = codeblocks[0].innerText;
+    // set scrollpos here
+
+    chrome.storage.local.set({
+        scope: "", /*extract all languages from tags and have a drop down menu*/
+        body: code,
+        description: document.getElementById('question-header').innerText.replace(/(?: \[closed\])?\sAsk Question$/, ''),
+        tags: "" /*extract all tags and have them in a drop down menu*/
+    });
+};
 
 function addToFragmentButtons() {
-    var codeblocks = document.getElementById('answers').getElementsByTagName('code');
     for (var codeblock of codeblocks) {
-        if (codeblock.parentElement.tagName == 'PRE') {
-            var button = document.createElement('button');
-            button.innerText = "Add to fragment";
-            codeblock.insertAdjacentElement('afterend', button);
-            button.addEventListener(
-                'click', function () {
-                    chrome.runtime.sendMessage({ content: "add" });
-                }
-            );
-        }
+        var button = document.createElement('button');
+        button.innerText = "Add to fragment";
+        codeblock.insertAdjacentElement('afterend', button);
+        button.addEventListener(
+            'click', function (event) {
+                chrome.storage.local.set({ body: event.currentTarget.parentElement.firstChild.innerText });
+                // set scrollpos here
+
+                //chrome.runtime.sendMessage({ content: "add" });
+            }
+        );
     }
 };
 
+extract();
 addToFragmentButtons();
 
 // for scrolling: scroll(0, window.pageYOffset - codeblocks[0].getBoundingClientRect().y)
