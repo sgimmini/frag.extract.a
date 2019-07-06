@@ -8,9 +8,9 @@ function loadState() {
         document.getElementById('tags').value = result.tags;
         document.getElementById('domain').value = result.domain;
     });
-    if (!document.getElementById('description')) {
+    /*if (!document.getElementById('description')) {
         document.getElementsByTagName('h5')[0].innerText = "No Fragment found";
-    }
+    }*/
 };
 
 loadState();
@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancel').addEventListener(
         'click', function () {
             chrome.storage.local.remove(['label', 'prefix', 'scope', 'body', 'description', 'tags', 'domain']);
+            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, { content: 'extract' });
+            });
             window.close();
         });
 });

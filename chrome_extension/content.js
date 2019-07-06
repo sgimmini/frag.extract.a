@@ -13,10 +13,12 @@ function extract() {
     // get description
     const title = document.getElementById('question-header').innerText.replace(/(?: \[closed\])?\sAsk Question$/, '');
     chrome.storage.local.set({
-        scope: "", /*extract all languages from tags and have a drop down menu*/
+        label: "",
+        scope: "", // extract all languages from tags and have a drop down menu
         body: code,
         description: title.charAt(0).toUpperCase() + title.slice(1),
-        tags: "" /*extract all tags and have them in a drop down menu*/
+        tags: "", // extract all tags and have them in a drop down menu
+        domain: ""
     });
 };
 
@@ -42,6 +44,8 @@ addToFragmentButtons();
 chrome.runtime.onMessage.addListener(function (recieved, callback) {
     if (recieved.content == 'scroll') {
         scroll(0, scrollpos);
+    } else if (recieved.content == 'extract') {
+        extract();
     }
 });
 
