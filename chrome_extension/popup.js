@@ -16,7 +16,7 @@ $(document).ready(function () {
     });
 });
 
-// send and cancel buttons
+// save button
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('form').addEventListener(
         'submit', function () {
@@ -25,11 +25,22 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 });
 
+// cancel button
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancel').addEventListener(
         'click', function () {
             chrome.storage.local.remove(['label', 'prefix', 'scope', 'body', 'description', 'tags', 'domain']);
             window.close();
+        });
+});
+
+// jump to codeblock button
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('jumpto').addEventListener(
+        'click', function () {
+            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, { content: 'scroll' });
+            });
         });
 });
 
@@ -57,26 +68,4 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('domain').addEventListener(
         'input', function () { chrome.storage.local.set({ domain: document.getElementById('domain').value }); });
-});
-
-
-/* function jumpToCode(codeblocks) {
-    var myElement = codeblocks[3];
-    var topPos = myElement.offsetTop;
-    document.getElementsByTagName('code').scrollTop = topPos;
-} */
-
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('jumpto').addEventListener(
-        'click', function () {
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, { content: 'scroll' });
-            });
-        });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    var btn = document.querySelector('.button'),
-        check = document.querySelector('.check');
-
 });
