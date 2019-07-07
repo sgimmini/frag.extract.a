@@ -1,9 +1,11 @@
 function loadState() {
     // fill text fields with values from previous state
     chrome.storage.local.get({ 'url': "", 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
+        // returns array of length 1 with the currently viewed tab
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             // if you're still on the site the poup was last opened, load last state with your changes from the automatically extracted fragment
-            if (result.url == tabs[0].url) {
+            // also true when real popup is opened after clicking an Add to Fragment on SO question page, correct data in storage in this case guaranteed by content script
+            if (tabs[0].url == result.url || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
                 document.getElementById('label').value = result.label;
                 document.getElementById('scope').value = result.scope;
                 document.getElementById('body').value = result.body;
@@ -11,7 +13,7 @@ function loadState() {
                 document.getElementById('tags').value = result.tags;
                 document.getElementById('domain').value = result.domain;
 
-            } // if you're on a different SO site, where the content script was injected, load automatically extracted fragment
+            } // if you're on a different SO question page (where the content script was injected), load automatically extracted fragment
             else if (/https:\/\/stackoverflow.com\/questions\/\d*\/.*/.test(tabs[0].url)) {
                 chrome.tabs.sendMessage(tabs[0].id, { content: 'setPopup' }, function (response) {
                     // response contains all the fragment attributes that were extracted from the question page by content script
@@ -21,8 +23,7 @@ function loadState() {
                     document.getElementById('description').value = response.description;
                     document.getElementById('tags').value = response.tags;
                     document.getElementById('domain').value = response.domain;
-                    // update the saved state, so you can close the popup and open it again without losing any work
-                    // also set's the url, so when you reopen the popup without opening it on another site in between, your changes get restored
+                    // set the url, so when you reopen the popup without opening it on another site in between, your changes get restored
                     chrome.storage.local.set({
                         url: tabs[0].url,
                         label: response.label,

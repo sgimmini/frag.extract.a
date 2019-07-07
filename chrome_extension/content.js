@@ -25,11 +25,34 @@ function setup() {
         codeblock.insertAdjacentElement('afterend', button);
         button.addEventListener(
             'click', function (event) {
-                chrome.storage.local.set({ body: event.target.parentElement.firstChild.innerText });
-                // set scrollpos
-                scrollpos = window.pageYOffset - event.target.parentElement.firstChild.getBoundingClientRect().y;
-                // still need to change how popup loads its state before we can open a popup upon button press
-                //chrome.runtime.sendMessage({ content: 'add' });
+                // set reference to the codeblock
+                const bodyElem = event.currentTarget.parentElement.firstChild;
+                chrome.storage.local.get(['url'], function (result) {
+                    // check if the URL of the SO question page is the same as is saved, meaning the automatically extracted fragment was already saved in storage
+                    // if this is a different page, set the correct values for storage
+                    if (window.location != result.url) {
+                        chrome.storage.local.set({
+                            url: window.location,
+                            label: "",
+                            scope: scope,
+                            body: bodyElem.innerText,
+                            description: description,
+                            tags: tags,
+                            domain: ""
+                        }, function () {
+                            // then set the scrollpos and open the popup window
+                            scrollpos = window.pageYOffset - bodyElem.getBoundingClientRect().y;
+                            chrome.runtime.sendMessage({ content: 'add' });
+                        });
+                    } // if this is the same page, only the new, user selected codeblock needs to be saved
+                    else {
+                        chrome.storage.local.set({ body: bodyElem.innerText }, function () {
+                            // then set the scrollpos and open the popup window
+                            scrollpos = window.pageYOffset - bodyElem.getBoundingClientRect().y;
+                            chrome.runtime.sendMessage({ content: 'add' });
+                        });
+                    }
+                });
             }
         );
     }
