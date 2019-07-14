@@ -16,28 +16,34 @@ function loadState() {
             } // if you're on a different SO question page (where the content script was injected), load automatically extracted fragment
             else if (/https:\/\/stackoverflow.com\/questions\/\d*\/.*/.test(tabs[0].url)) {
                 chrome.tabs.sendMessage(tabs[0].id, { content: 'setPopup' }, function (response) {
-                    // response contains all the fragment attributes that were extracted from the question page by content script
-                    document.getElementById('label').value = response.label;
-                    document.getElementById('scope').value = response.scope;
-                    document.getElementById('body').value = response.body;
-                    document.getElementById('description').value = response.description;
-                    document.getElementById('tags').value = response.tags;
-                    document.getElementById('domain').value = response.domain;
-                    // set the url, so when you reopen the popup without opening it on another site in between, your changes get restored
-                    chrome.storage.local.set({
-                        url: tabs[0].url,
-                        label: response.label,
-                        scope: response.scope,
-                        body: response.body,
-                        description: response.description,
-                        tags: response.tags,
-                        domain: response.domain
-                    });
+                    // error handling, if extension is installed and tab is not reloaded (meaning the content script has not been injected)
+                    if (chrome.runtime.lastError) {
+                        alert("Please reload this tab!");
+                        window.close();
+                    } else {
+                        // response contains all the fragment attributes that were extracted from the question page by content script
+                        document.getElementById('label').value = response.label;
+                        document.getElementById('scope').value = response.scope;
+                        document.getElementById('body').value = response.body;
+                        document.getElementById('description').value = response.description;
+                        document.getElementById('tags').value = response.tags;
+                        document.getElementById('domain').value = response.domain;
+                        // set the url, so when you reopen the popup without opening it on another site in between, your changes get restored
+                        chrome.storage.local.set({
+                            url: tabs[0].url,
+                            label: response.label,
+                            scope: response.scope,
+                            body: response.body,
+                            description: response.description,
+                            tags: response.tags,
+                            domain: response.domain
+                        });
+                    }
                 });
             } // if you're on a different site (not a SO question page), clear last state and load empty editor
-            // also change title to no longer say "Suggested Fragment"
             else {
                 chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain']);
+                // also change title to no longer say "Suggested Fragment"
                 document.getElementById('title').innerText = "No Fragment found";
             }
         });
