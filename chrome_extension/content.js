@@ -12,7 +12,10 @@ function setup() {
         scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
     }
     // get description
-    description = document.getElementById('question-header').innerText.replace(/(?: \[closed\])?\sAsk Question$/, '');
+    const questionHeader = document.getElementById('question-header');
+    if (questionHeader) {
+        description = questionHeader.innerText.replace(/(?: \[closed\])?\sAsk Question$/, '');
+    }
 
     // extract all languages from tags and have a drop down menu
     // extract all tags and have them in a drop down menu
