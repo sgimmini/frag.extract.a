@@ -63,8 +63,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('form').addEventListener(
         'submit', function () {
             // saves fragment to database via python script in frag.edit vsc extension
-            chrome.runtime.sendMessage({ content: 'sendNativeMessage' });
-            window.close();
+            chrome.runtime.sendMessage({ content: 'sendNativeMessage' }, function () {
+                window.close();
+            });
         });
 });
 
@@ -73,8 +74,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancel').addEventListener(
         'click', function () {
             // clears current state, when popup is reopened it will fetch automatically extracted fragment from content script
-            chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain']);
-            window.close();
+            chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain'], function () {
+                window.close();
+            });
         });
 });
 
