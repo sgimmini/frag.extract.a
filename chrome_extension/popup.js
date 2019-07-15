@@ -18,8 +18,12 @@ function loadState() {
                 chrome.tabs.sendMessage(tabs[0].id, { content: 'setPopup' }, function (response) {
                     // error handling, if extension is installed and tab is not reloaded (meaning the content script has not been injected)
                     if (chrome.runtime.lastError) {
-                        alert("Please reload this tab!");
-                        window.close();
+                        // replace entire popup with message to reload tab
+                        body = document.createElement('body');
+                        header = document.createElement('H4');
+                        header.innerText = "Please reload this tab";
+                        body.appendChild(header);
+                        document.body = body;
                     } else {
                         // response contains all the fragment attributes that were extracted from the question page by content script
                         document.getElementById('label').value = response.label;
