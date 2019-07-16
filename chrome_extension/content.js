@@ -7,12 +7,15 @@ function setup() {
     const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
     // determine which codeblock is the best for fragment in here
     if (codeblocks.length) {
-        body = codeblocks[0].innerText;
+        body = codeblocks[0].innerText.replace(/\s$/, '');
         // set scrollpos
         scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
     }
     // get description
-    description = document.getElementById('question-header').innerText.replace(/(?: \[closed\])?\sAsk Question$/, '');
+    const questionHeader = document.getElementById('question-header');
+    if (questionHeader) {
+        description = questionHeader.innerText.replace(/(?: \[closed\])?\sAsk Question$/, '');
+    }
 
     // extract all languages from tags and have a drop down menu
     // extract all tags and have them in a drop down menu
@@ -35,7 +38,7 @@ function setup() {
                             url: window.location,
                             label: "",
                             scope: scope,
-                            body: bodyElem.innerText,
+                            body: bodyElem.innerText.replace(/\s$/, ''),
                             description: description,
                             tags: tags,
                             domain: ""
@@ -46,7 +49,7 @@ function setup() {
                         });
                     } // if this is the same page, only the new, user selected codeblock needs to be saved
                     else {
-                        chrome.storage.local.set({ body: bodyElem.innerText }, function () {
+                        chrome.storage.local.set({ body: bodyElem.innerText.replace(/\s$/, '') }, function () {
                             // then set the scrollpos and open the popup window
                             scrollpos = window.pageYOffset - bodyElem.getBoundingClientRect().y;
                             chrome.runtime.sendMessage({ content: 'add' });
