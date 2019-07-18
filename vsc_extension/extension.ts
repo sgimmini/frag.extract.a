@@ -1,3 +1,14 @@
+/* Contains the relevant changes to frag.edit's VSC extension
+ * that enables support for communication with our Chrome extension
+ * and adding fragments from that Chrome extension to the fragment database
+ * Requires the frag.extract.host folder to be located in /out and "shelljs": "^0.8.3"
+ * be declared under "dependencies" in package.json
+ * Also requires extract.py to be ignored by vsce packaging tool and that
+ * packaging happens on a machine running Linux
+ * For proper cleanup add "vscode:uninstall": "node ./out/frag.extract.host/uninstall"
+ * under "scripts" in package.json
+ */
+
 'use strict';
 
 import * as vscode from 'vscode';
@@ -36,6 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}
 
+	// (possibly old) stuff thats used by frag.edit extension, not relevant to integration of native messaging host
 	var database = new Database(context.globalStoragePath + '/fragments.fragmentDatabase');
 	const fragmentProvider = new FragmentProvider(context);
 	var treeView = vscode.window.createTreeView('fragmentEditor', { treeDataProvider: fragmentProvider });
@@ -45,6 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// refreshes the Fragmentlist everytime a change in the database is detected (5 sec intervall)
 	fs.watchFile(context.globalStoragePath + '/fragments.fragmentDatabase', (curr, prev) => {
+		// requires that loadFragments() actually loads a new in memory copy of the database to get the newly added fragments by the native messaging host
 		Database.loadFragments();
 		fragmentProvider.refresh();
 	});
