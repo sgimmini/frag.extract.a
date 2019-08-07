@@ -23,9 +23,17 @@ function setup() {
     for (var codeblock of codeblocks) {
         // create Add to fragment buttons on every codeblock
         var button = document.createElement('button');
-        button.innerText = "Add to fragment";
+        var parent = codeblock.parentElement
+        //var nextEle = codeblock.get;
+        button.setAttribute("type", "button");
+        //button.setAttribute("style", "background-color: blue;"); 
+
+        //todo: somehow change css to use materialize
+        
+        button.innerHTML = "jump";
+        parent.insertAdjacentElement("afterend", button);
         // insert them after the code, but still inside grey box
-        codeblock.insertAdjacentElement('afterend', button);
+        //codeblock.insertAdjacentElement('afterend', button);
         button.addEventListener(
             'click', function (event) {
                 // set reference to the codeblock
