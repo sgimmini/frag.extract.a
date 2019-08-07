@@ -28,5 +28,40 @@ no use.
 
 ### Native Messaging
 Native Messaging (NM) is a function implemented by Google for communication between the chrome webbrowser and
-a NM-host located on the clients file system. This host is installed automatically into ``~/.config/chromium/
-NativeMessagingHosts/com.frag.extract.json`` on Linux like Operating Systems or ``hier für Windoof``
+a NM-host located on the clients file system. This host is installed automatically into
+``~/.config/chromium/NativeMessagingHosts/com.frag.extract.json``
+on Linux like Operating Systems or
+``hier für Windows``.
+It also contains the path to a script located in
+``/.vscode-oss/extensions/[extension-version]/out/frag.extract.host/extract.py``, on linux and
+``again windows``, on Windows,
+and an allowed extension origin: chrome-extension://faoicolglehmgplpccapgobineahofjh/.
+When sending a fragment a short time connection is established. The decision was against
+a long life connection as this would consume much more (mir fällt nicht ein wie man CPU usage anders nennt).
+With this decision made it is also not possible to communicate from the database to the chrome extension
+which could have been a possibility to check whether a fragment already exists in the database, in order
+to prevent redundant fragments.
+
+For more information about Native Messaging see https://developer.chrome.com/apps/nativeMessaging
+
+
+
+### Fragments
+A fragment contains of a
+- label
+- tags
+- description, defaultly the title of the question
+- language
+- library and packages
+- code
+
+
+### Popup
+The Popup contains input fields for all fragment contents and three butons:
+- ''jump to fragment'': scrolls to the codes origin on the opened website
+- ''save'': saves the parameters in database and closes popup
+- ''cancel'': cancels the editing process and closes popup
+
+Important to notice is:
+- when popup loses focus it closes but saves current changes in the editing process
+- when `saving` or `canceling` current process on editing gets lost
