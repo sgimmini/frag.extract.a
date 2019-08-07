@@ -24,3 +24,9 @@ no use.
    appearing with all needed data parsed from the website. Again there will be
    an user-interaction to set a label. The pop-up closes when leaving
    it with the cursor, pressing the cancel-button or by sending the fragment.
+
+
+### Native Messaging
+Native Messaging (NM) is a function implemented by Google for communication between the chrome webbrowser and
+a NM-host located on the clients file system. This host is installed automatically into ``~/.config/chromium/
+NativeMessagingHosts/com.frag.extract.json`` on Linux like Operating Systems or ``hier für Windoof``
