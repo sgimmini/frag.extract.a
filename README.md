@@ -1,6 +1,11 @@
 # frag.extract.a
 
-this still needs to be done
+## ToDo
+- continue on readme
+- code input field of fixed size bigger than now, because when reopening it code can be cut off
+- languages field in popup to dropdown menu
+- use model for parsing fragments to popup
+- change add to fragment button to look better
 
 fragment extractor for StackOverflow.
 A tool to extract code-fragments from StackOverflow into a Visual Studio Code Extension (link to other groups project).
@@ -29,12 +34,12 @@ no use.
 ### Native Messaging
 Native Messaging (NM) is a function implemented by Google for communication between the chrome webbrowser and
 a NM-host located on the clients file system. This host is installed automatically into
-``~/.config/chromium/NativeMessagingHosts/com.frag.extract.json``
+`~/.config/chromium/NativeMessagingHosts/com.frag.extract.json`
 on Linux like Operating Systems or
 ``hier für Windows``.
 It also contains the path to a script located in
-``/.vscode-oss/extensions/[extension-version]/out/frag.extract.host/extract.py``, on linux and
-``again windows``, on Windows,
+`/.vscode-oss/extensions/[extension-version]/out/frag.extract.host/extract.py`, on linux and
+`again windows`, on Windows,
 and an allowed extension origin: chrome-extension://faoicolglehmgplpccapgobineahofjh/.
 When sending a fragment a short time connection is established. The decision was against
 a long life connection as this would consume much more (mir fällt nicht ein wie man CPU usage anders nennt).
@@ -64,4 +69,6 @@ The Popup contains input fields for all fragment contents and three butons:
 
 Important to notice is:
 - when popup loses focus it closes but saves current changes in the editing process
-- when `saving` or `canceling` current process on editing gets lost
+- when `canceling` current process on editing gets lost, `saving` clears input fields as well
+
+
