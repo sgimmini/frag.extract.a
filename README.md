@@ -5,7 +5,7 @@
 - code input field of fixed size bigger than now, because when reopening it code can be cut off
 - languages field in popup to dropdown menu
 - use model for parsing fragments to popup
-- change add to fragment button to look better
+- change add to fragment button to look better: put outside of codeblock, which looks better but still not the best way
 
 fragment extractor for StackOverflow.
 A tool to extract code-fragments from StackOverflow into a Visual Studio Code Extension (link to other groups project).
