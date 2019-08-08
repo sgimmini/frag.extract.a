@@ -49,6 +49,7 @@ function loadState() {
                 chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain']);
                 // also change title to no longer say "Suggested Fragment"
                 document.getElementById('title').innerText = "No Fragment found";
+                document.getElementById('jumpto').disabled = true;
             }
         });
 
