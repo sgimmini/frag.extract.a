@@ -33,6 +33,7 @@ function setup() {
         // parentelement of the codeblock in order to put the button outside the grey box
         var parent = codeblock.parentElement;
         button.setAttribute("type", "button");
+        button.setAttribute("style", "float: right;");
         //button.setAttribute("style", "background-color: blue;"); 
         // todo: "redo-arrow" instead of a string
         button.innerHTML = String.fromCharCode(8631);
