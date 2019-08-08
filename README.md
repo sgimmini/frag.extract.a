@@ -5,9 +5,11 @@
 - code input field of fixed size bigger than now, because when reopening it code can be cut off
     - code block has bigger size now and all input fields have a margin to the top - 
 - languages field in popup to dropdown menu
+    - first tag of question determines language (transitionally)
 - use model for parsing fragments to popup
 - change add to fragment button to look better: 
-    - put outside of codeblock, which looks better but still not the best way. Apparently does not open popup
+    - Not Anymore: put outside of codeblock, which looks better but still not the best way. Apparently does not open popup
+    - changed string to arrow and placed button on the right inside of grey box 
 
 fragment extractor for StackOverflow.
 A tool to extract code-fragments from StackOverflow into a Visual Studio Code Extension (link to other groups project).
