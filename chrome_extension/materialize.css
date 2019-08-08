@@ -6579,7 +6579,7 @@ textarea.materialize-textarea + label:after, .select-wrapper + label:after {
 .input-field .prefix {
   position: absolute;
   width: 3rem;
-  font-size: 2rem;
+  font-size: 1rem;
   -webkit-transition: color .2s;
   transition: color .2s;
   top: 0.5rem;

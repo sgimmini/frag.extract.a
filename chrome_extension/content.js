@@ -35,7 +35,7 @@ function setup() {
         button.setAttribute("type", "button");
         //button.setAttribute("style", "background-color: blue;"); 
         // todo: "redo-arrow" instead of a string
-        button.innerHTML = "jump";
+        button.innerHTML = String.fromCharCode(8631);
         // set the button after the grey box, but popup does not work then
         //parent.insertAdjacentElement("afterend", button);
         // insert them after the code, but still inside grey box
