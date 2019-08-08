@@ -23,7 +23,9 @@ function setup() {
     }
 
     // extract all languages from tags and have a drop down menu
-
+    // assuming first tag contains the language 
+    var regEx = /(\w+)$/i;
+    const language = String(Array.from(document.getElementById('question').getElementsByTagName('a'))[0]).match(regEx)[0];
     // extract all tags and have them in a drop down menu
 
     // create Add to fragment buttons on every codeblock
@@ -35,8 +37,8 @@ function setup() {
         button.setAttribute("type", "button");
         button.setAttribute("style", "float: right; ");
         //button.setAttribute("style", "background-color: blue;"); 
-        // todo: "redo-arrow" instead of a string
-        button.innerHTML = String.fromCharCode(8631);
+        button.innerHTML = language;
+        //button.innerHTML = String.fromCharCode(8631);
         // set the button after the grey box, but popup does not work then
         //parent.insertAdjacentElement("afterend", button);
         // insert them after the code, but still inside grey box
