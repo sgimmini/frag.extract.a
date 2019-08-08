@@ -36,9 +36,8 @@ function setup() {
         var parent = codeblock.parentElement;
         button.setAttribute("type", "button");
         button.setAttribute("style", "float: right; ");
-        //button.setAttribute("style", "background-color: blue;"); 
-        button.innerHTML = language;
-        //button.innerHTML = String.fromCharCode(8631);
+        //button.setAttribute("style", "background-color: blue;");
+        button.innerHTML = String.fromCharCode(8631);
         // set the button after the grey box, but popup does not work then
         //parent.insertAdjacentElement("afterend", button);
         // insert them after the code, but still inside grey box
@@ -55,7 +54,7 @@ function setup() {
                         chrome.storage.local.set({
                             url: window.location,
                             label: "",
-                            scope: scope,
+                            scope: language,
                             // remove trailing whitespace
                             body: bodyElem.innerText.replace(/\s$/, ''),
                             description: description,
