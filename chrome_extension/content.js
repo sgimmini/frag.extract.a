@@ -23,17 +23,16 @@ function setup() {
     for (var codeblock of codeblocks) {
         // create Add to fragment buttons on every codeblock
         var button = document.createElement('button');
-        var parent = codeblock.parentElement
-        //var nextEle = codeblock.get;
+        // parentelement of the codeblock in order to put the button outside the grey box
+        var parent = codeblock.parentElement;
         button.setAttribute("type", "button");
         //button.setAttribute("style", "background-color: blue;"); 
-
-        //todo: somehow change css to use materialize
-        
+        // todo: "redo-arrow" instead of a string
         button.innerHTML = "jump";
-        parent.insertAdjacentElement("afterend", button);
+        // set the button after the grey box, but popup does not work then
+        //parent.insertAdjacentElement("afterend", button);
         // insert them after the code, but still inside grey box
-        //codeblock.insertAdjacentElement('afterend', button);
+        codeblock.insertAdjacentElement('afterend', button);
         button.addEventListener(
             'click', function (event) {
                 // set reference to the codeblock
