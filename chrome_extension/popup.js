@@ -47,6 +47,7 @@ function loadState() {
             } // if you're on a different site (not a SO question page), clear last state and load empty editor
             else {
                 chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain']);
+                chrome.storage.local.set({ url: tabs[0].url });
                 // also change title to no longer say "Suggested Fragment"
                 document.getElementById('title').innerText = "No Fragment found";
             }
@@ -55,7 +56,7 @@ function loadState() {
     });
 };
 
-// ran whenever popup is opened
+// runs whenever popup is opened
 loadState();
 
 // save button
