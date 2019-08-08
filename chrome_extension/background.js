@@ -32,7 +32,7 @@ chrome.runtime.onMessage.addListener(function (recieved) {
       // send fragment as message to python script to be added to the database
       chrome.runtime.sendNativeMessage('com.frag.extract', message);
       // clears current state, when popup is reopened it will fetch automatically extracted fragment from content script
-      chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain']);
+      chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto']);
     });
   } // opens the extension popup as normal browser popup when user hits an Add to fragment button on page, since extension popup cannot be opened programmatically
   else if (recieved.content == 'add') {
