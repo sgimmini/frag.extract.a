@@ -1,8 +1,10 @@
 function loadState() {
     // fill text fields with values from previous state
-    chrome.storage.local.get({ 'url': "", 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
+    chrome.storage.local.get({ 'url': "", 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "", 'jumpto': true }, function (result) {
+
         // returns array of length 1 with the currently viewed tab
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+
             // if you're still on the site the poup was last opened, load last state with your changes from the automatically extracted fragment
             // also true when real popup is opened after clicking an Add to Fragment on SO question page, correct data in storage in this case guaranteed by content script
             if (tabs[0].url == result.url || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
@@ -13,9 +15,16 @@ function loadState() {
                 document.getElementById('tags').value = result.tags;
                 document.getElementById('domain').value = result.domain;
 
-            } // if you're on a different SO question page (where the content script was injected), load automatically extracted fragment
+                // jump to codeblock gets greyed out if no codeblock was found on SO page or real popup is opened, because addressing the content script from there does not work
+                if (!result.jumpto || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
+                    document.getElementById('jumpto').disabled = true;
+                }
+            }
+
+            // if you're on a different SO question page (where the content script was injected), load automatically extracted fragment
             else if (/https:\/\/stackoverflow.com\/questions\/\d*\/.*/.test(tabs[0].url)) {
                 chrome.tabs.sendMessage(tabs[0].id, { content: 'setPopup' }, function (response) {
+
                     // error handling, if extension is installed and tab is not reloaded (meaning the content script has not been injected)
                     if (chrome.runtime.lastError) {
                         // replace entire popup with message to reload tab
@@ -32,30 +41,53 @@ function loadState() {
                         document.getElementById('description').value = response.description;
                         document.getElementById('tags').value = response.tags;
                         document.getElementById('domain').value = response.domain;
-                        // set the url, so when you reopen the popup without opening it on another site in between, your changes get restored
-                        chrome.storage.local.set({
-                            url: tabs[0].url,
-                            label: response.label,
-                            scope: response.scope,
-                            body: response.body,
-                            description: response.description,
-                            tags: response.tags,
-                            domain: response.domain
-                        });
+
+                        // if no codeblock was found, grey out jump to codeblock button
+                        if (!response.body) {
+                            document.getElementById('jumpto').disabled = true;
+                            // set the url, so when you reopen the popup without opening it on another site in between, your changes get restored
+                            chrome.storage.local.set({
+                                url: tabs[0].url,
+                                label: response.label,
+                                scope: response.scope,
+                                body: response.body,
+                                description: response.description,
+                                tags: response.tags,
+                                domain: response.domain,
+                                // so that jump to codeblock button gets greyed out again upon reopening of the popup
+                                jumpto: false
+                            });
+                        } else {
+                            // set the url, so when you reopen the popup without opening it on another site in between, your changes get restored
+                            chrome.storage.local.set({
+                                url: tabs[0].url,
+                                label: response.label,
+                                scope: response.scope,
+                                body: response.body,
+                                description: response.description,
+                                tags: response.tags,
+                                domain: response.domain,
+                            });
+                        }
                     }
                 });
-            } // if you're on a different site (not a SO question page), clear last state and load empty editor
+            }
+
+            // if you're on a different site (not a SO question page), clear last state and load empty editor
             else {
-                chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain']);
+                chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto']);
+                // so that state is restored upon reopening of the popup
+                chrome.storage.local.set({ url: tabs[0].url, jumpto: false });
                 // also change title to no longer say "Suggested Fragment"
                 document.getElementById('title').innerText = "No Fragment found";
+                // grey ou jump to codeblock
+                document.getElementById('jumpto').disabled = true;
             }
         });
-
     });
 };
 
-// ran whenever popup is opened
+// runs whenever popup is opened
 loadState();
 
 // save button
@@ -74,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancel').addEventListener(
         'click', function () {
             // clears current state, when popup is reopened it will fetch automatically extracted fragment from content script
-            chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain'], function () {
+            chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto'], function () {
                 window.close();
             });
         });
