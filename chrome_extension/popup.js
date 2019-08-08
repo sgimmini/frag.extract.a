@@ -1,8 +1,10 @@
 function loadState() {
     // fill text fields with values from previous state
     chrome.storage.local.get({ 'url': "", 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "", 'jumpto': true }, function (result) {
+
         // returns array of length 1 with the currently viewed tab
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+
             // if you're still on the site the poup was last opened, load last state with your changes from the automatically extracted fragment
             // also true when real popup is opened after clicking an Add to Fragment on SO question page, correct data in storage in this case guaranteed by content script
             if (tabs[0].url == result.url || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
@@ -12,14 +14,17 @@ function loadState() {
                 document.getElementById('description').value = result.description;
                 document.getElementById('tags').value = result.tags;
                 document.getElementById('domain').value = result.domain;
+
                 // jump to codeblock gets greyed out if no codeblock was found on SO page or real popup is opened, because addressing the content script from there does not work
                 if (!result.jumpto || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
                     document.getElementById('jumpto').disabled = true;
                 }
+            }
 
-            } // if you're on a different SO question page (where the content script was injected), load automatically extracted fragment
+            // if you're on a different SO question page (where the content script was injected), load automatically extracted fragment
             else if (/https:\/\/stackoverflow.com\/questions\/\d*\/.*/.test(tabs[0].url)) {
                 chrome.tabs.sendMessage(tabs[0].id, { content: 'setPopup' }, function (response) {
+
                     // error handling, if extension is installed and tab is not reloaded (meaning the content script has not been injected)
                     if (chrome.runtime.lastError) {
                         // replace entire popup with message to reload tab
@@ -66,7 +71,9 @@ function loadState() {
                         }
                     }
                 });
-            } // if you're on a different site (not a SO question page), clear last state and load empty editor
+            }
+
+            // if you're on a different site (not a SO question page), clear last state and load empty editor
             else {
                 chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto']);
                 // so that state is restored upon reopening of the popup

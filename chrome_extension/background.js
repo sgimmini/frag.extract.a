@@ -13,7 +13,10 @@ chrome.runtime.onInstalled.addListener(function () {
   });
 });
 
+// handle runtime background tasks for the extension
 chrome.runtime.onMessage.addListener(function (recieved) {
+
+  // save button was successfully clicked in extension popup, fragment now needs to be send to external python script to be saved to database
   if (recieved.content == 'sendNativeMessage') {
     chrome.storage.local.get({ 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
       // construct database fragment as message to be send to python script
@@ -34,7 +37,10 @@ chrome.runtime.onMessage.addListener(function (recieved) {
       // clears current state, when popup is reopened it will fetch automatically extracted fragment from content script
       chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto']);
     });
-  } // opens the extension popup as normal browser popup when user hits an Add to fragment button on page, since extension popup cannot be opened programmatically
+  }
+
+  // a add to fragment button in SO question page was clicked
+  // opens the extension popup as normal browser popup, since extension popup cannot be opened programmatically
   else if (recieved.content == 'add') {
     // width and height need to be adapted, scrollbars=no seems to not do anything, there are still scrollbars
     const popup = window.open("popup.html", "extension_popup", "width=300,height=400,status=no,scrollbars=no,resizable=no");
