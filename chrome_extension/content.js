@@ -57,8 +57,10 @@ function insertAddToFragmentButtons(codeblocks) {
         codeblock.insertAdjacentElement('afterend', button);
         button.addEventListener(
             'click', function (event) {
-                // set reference to the codeblock
-                const bodyElem = event.currentTarget.parentElement.firstChild;
+                // remove trailing whitespace
+                const newCodeblock = event.currentTarget.parentElement.firstChild.innerText.replace(/\s$/, '');
+                // set scrollposs
+                scrollpos = window.pageYOffset - event.currentTarget.parentElement.firstChild.getBoundingClientRect().y;
 
                 chrome.storage.local.get(['url'], function (result) {
                     // check if the URL of the SO question page is the same as is saved, meaning the automatically extracted fragment was already saved in storage
@@ -68,23 +70,19 @@ function insertAddToFragmentButtons(codeblocks) {
                             url: window.location,
                             label: "",
                             scope: scope,
-                            // remove trailing whitespace
-                            body: bodyElem.innerText.replace(/\s$/, ''),
+                            body: newCodeblock,
                             description: description,
                             tags: tags,
                             domain: ""
                         }, function () {
-                            // then set the scrollpos and open the popup window
-                            scrollpos = window.pageYOffset - bodyElem.getBoundingClientRect().y;
+                            // open the popup window
                             chrome.runtime.sendMessage({ content: 'add' });
                         });
                     }
                     // if this is the same page, only the new, user selected codeblock needs to be saved
                     else {
-                        // remove trailing whitespace
-                        chrome.storage.local.set({ body: bodyElem.innerText.replace(/\s$/, '') }, function () {
-                            // then set the scrollpos and open the popup window
-                            scrollpos = window.pageYOffset - bodyElem.getBoundingClientRect().y;
+                        chrome.storage.local.set({ body: newCodeblock }, function () {
+                            // open the popup window
                             chrome.runtime.sendMessage({ content: 'add' });
                         });
                     }
@@ -92,8 +90,11 @@ function insertAddToFragmentButtons(codeblocks) {
             }
         );
     }
-}
+};
 
+function detectJsHtmlCss(block, arrayScope) {
+
+};
 
 // run setup when content script is injected into SO page
 setup();
