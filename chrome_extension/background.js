@@ -47,7 +47,7 @@ chrome.runtime.onMessage.addListener(function (recieved) {
   else if (recieved.content == 'add') {
     // width and height need to be adapted, scrollbars=no seems to not do anything, there are still scrollbars
     const popup = window.open("popup.html", "extension_popup", "width=300,height=400,status=no,scrollbars=no,resizable=no");
-    // set listener for mouse down, to close popup automatically when user clicks somewhere outside of popup (like extension popup behaviour)
+    // set listener for when window becomes inactive, to close popup automatically when user clicks somewhere outside of popup (like extension popup behaviour)
     popup.addEventListener('blur', function () {
       popup.close();
     });

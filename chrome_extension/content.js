@@ -9,7 +9,7 @@ function setup() {
 
     /*
      * Extract label [primary key in fragment database, also the name of the fragment in tree view in vsc extension]
-     * -> see github issue on this topic
+     * -> see github issue on this topic: https://github.com/smn57/frag.extract.a/issues/6
      */
 
     /*
