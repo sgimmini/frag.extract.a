@@ -1,6 +1,6 @@
 // these variables need to be accessible through the entire life of the page this script was injected in
-var scrollpos = 0;
-var scope = "", body = "", description = "", tags = "";
+let scrollpos = 0;
+let scope = "", body = "", description = "", tags = "";
 // list of all languages that can be recognized from tags
 // this list is not comprehensive, please add any further programming lanuages you may think of
 const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++', 'css', 'sql', 'c', 'r', 'objective-c', 'swift', 'ruby', 'excel', 'vba', 'vb.net', 'scala', 'typescript', 'matlab', 'bash', 'shell', 'go', 'rust', 'octave'];
@@ -15,6 +15,7 @@ function setup() {
         // remove trailing whitespace
         body = codeblocks[0].innerText.replace(/\s$/, '');
         // set scrollpos
+        // does not work properly: target codeblock is just below the screen, not visible, instead of at the top of the screen
         scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
     }
 
@@ -33,13 +34,14 @@ function setup() {
     const arrayScope = arrayTags.filter(tag => languageList.includes(tag));
     scope = arrayScope.toString();
 
-    /*// assuming first tag contains the language 
-    var regEx = /(\w+)$/i;
-    const language = String(Array.from(document.getElementById('question').getElementsByTagName('a'))[0]).match(regEx)[0];
-    */
-
+    // almost all cases where multiple languages are tagged are javascript, html and css
+    // therefore an attempt is made to determine which of these 3 languages the selected codeblock is
 
     // create Add to fragment buttons on every codeblock
+    insertAddToFragmentButtons(codeblocks);
+};
+
+function insertAddToFragmentButtons(codeblocks) {
     for (var codeblock of codeblocks) {
 
         var button = document.createElement('button');
@@ -90,7 +92,8 @@ function setup() {
             }
         );
     }
-};
+}
+
 
 // run setup when content script is injected into SO page
 setup();
@@ -111,6 +114,3 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
         scroll(0, scrollpos);
     }
 });
-
-// does not work properly: target codeblock is just below the screen, not visible, instead of at the top of the screen
-// for scrolling: scroll(0, window.pageYOffset - codeblocks[0].getBoundingClientRect().y)
