@@ -7,6 +7,15 @@ const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++'
 
 function setup() {
 
+    /*
+     * Extract label [primary key in fragment database, also the name of the fragment in tree view in vsc extension]
+     * -> see github issue on this topic
+     */
+
+    /*
+     * Extract body [codeblock of the fragment]
+     * -> best codeblock in the answers is selected
+     */
     // all codeblocks in all answers without inline code
     const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
     // determine which codeblock is the best for fragment in here
@@ -19,29 +28,39 @@ function setup() {
         scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
     }
 
-    // get description
+    /*
+     * Extract description [description of functionality in codeblock]
+     * -> question title is used
+     */
     const questionHeader = document.getElementById('question-header');
     if (questionHeader) {
-        // remove potential "[closed]" and "Ask Question" from Question Header
+        // remove potential "[closed]" and "Ask Question" from question header
         description = questionHeader.innerText.replace(/(?: \[closed\])?\sAsk Question$/, '');
     }
 
-    // extract all tags and have them in a drop down menu
+    /*
+     * Extract tags [used to quickly access fragments relating to something specific in tree view in vsc extension]
+     * -> SO's tags for questions are used
+     */
     const arrayTags = Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, ''));
     tags = arrayTags.toString();
 
-    // extract all languages from tags and have a drop down menu
+    /*
+     * Extract scope [language the codeblock is written in]
+     * -> SO's tags for questions are matched to predefined languageList
+     */
     const arrayScope = arrayTags.filter(tag => languageList.includes(tag));
     scope = arrayScope.toString();
+
+    /*
+     * Extract domain [libraries or frameworks that are used in the codeblock, use of this attribute is unclear]
+     * -> SO's tags for questions are presented as options in popup, no action needed in content script
+     */
 
     // almost all cases where multiple languages are tagged are javascript, html and css
     // therefore an attempt is made to determine which of these 3 languages the selected codeblock is
 
     // create Add to fragment buttons on every codeblock
-    insertAddToFragmentButtons(codeblocks);
-};
-
-function insertAddToFragmentButtons(codeblocks) {
     for (var codeblock of codeblocks) {
 
         var button = document.createElement('button');
@@ -72,8 +91,7 @@ function insertAddToFragmentButtons(codeblocks) {
                             scope: scope,
                             body: newCodeblock,
                             description: description,
-                            tags: tags,
-                            domain: ""
+                            tags: tags
                         }, function () {
                             // open the popup window
                             chrome.runtime.sendMessage({ content: 'add' });
@@ -92,7 +110,7 @@ function insertAddToFragmentButtons(codeblocks) {
     }
 };
 
-function detectJsHtmlCss(block, arrayScope) {
+function detectJsHtmlCss(codeblock, arrayScope) {
 
 };
 
@@ -106,7 +124,7 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
     // when extension popup is opened on a site different to the last one 
     // hand over automatically extracted fragment to the popup to display and be edited by user
     if (recieved.content == 'setPopup') {
-        sendResponse({ url: window.location, label: "", scope: scope, body: body, description: description, tags: tags, domain: "" });
+        sendResponse({ url: window.location, label: "", scope: scope, body: body, description: description, tags: tags });
     }
 
     // when jump to codeblock button is clicked

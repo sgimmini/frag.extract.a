@@ -21,15 +21,18 @@ chrome.runtime.onMessage.addListener(function (recieved) {
     chrome.storage.local.get({ 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
       // construct database fragment as message to be send to python script
       var message = {};
-      // all trailing whitespace is trimmed and prefix is set as the first word in the codeblock
+      // all trailing whitespace is trimmed
       message.label = result.label.replace(/\s$/, '');
+      // prefix is set as the first word in the codeblock
       message.prefix = result.body.replace(/(?: |\.|,|:|\(|\{|\+|-|=|"|'|<|;).*/, '');
       message.scope = result.scope.replace(/\s$/, '');
       message.body = result.body.replace(/\s$/, '');
       message.description = result.description.replace(/\s$/, '');
+      // only used in vsc extension, only included here if in the future someone decides to utilize this attribute in chrome extension
       message.keywords = "";
       message.tags = result.tags.replace(/\s$/, '');
       message.domain = result.domain.replace(/\s$/, '');
+      // vsc extension functionality to recognize variables writes their name and type in here,  only included here if in the future someone decides to utilize this attribute in chrome extension
       message.placeholders = "";
 
       // send fragment as message to python script to be added to the database

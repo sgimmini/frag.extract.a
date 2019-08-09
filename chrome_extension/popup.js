@@ -1,5 +1,5 @@
 function loadState() {
-    // fill text fields with values from previous state
+    // get the previous state from storage
     chrome.storage.local.get({ 'url': "", 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "", 'jumpto': true }, function (result) {
 
         // returns array of length 1 with the currently viewed tab
