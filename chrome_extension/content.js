@@ -2,7 +2,8 @@
 var scrollpos = 0;
 var scope = "", body = "", description = "", tags = "";
 // list of all languages that can be recognized from tags
-const languageList = ['javascript', 'html', 'css', 'python'];
+// this list is not comprehensive, please add any further programming lanuages you may think of
+const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++', 'css', 'sql', 'c', 'r', 'objective-c', 'swift', 'ruby', 'excel', 'vba', 'vb.net', 'scala', 'typescript', 'matlab', 'bash', 'shell', 'go', 'rust', 'octave'];
 
 function setup() {
 
