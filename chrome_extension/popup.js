@@ -80,7 +80,7 @@ function loadState() {
                 chrome.storage.local.set({ url: tabs[0].url, jumpto: false });
                 // also change title to no longer say "Suggested Fragment"
                 document.getElementById('title').innerText = "No Fragment found";
-                // grey ou jump to codeblock
+                // grey out jump to codeblock
                 document.getElementById('jumpto').disabled = true;
             }
         });

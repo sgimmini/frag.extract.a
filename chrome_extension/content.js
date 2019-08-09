@@ -50,15 +50,14 @@ function setup() {
      * -> SO's tags for questions are matched to predefined languageList
      */
     const arrayScope = arrayTags.filter(tag => languageList.includes(tag));
-    scope = arrayScope.toString();
+    // almost all cases where multiple languages are tagged are javascript and html
+    // therefore an attempt is made to determine which of these languages the selected codeblock is
+    scope = detectJsHtml(body, arrayScope).toString();
 
     /*
      * Extract domain [libraries or frameworks that are used in the codeblock, use of this attribute is unclear]
      * -> SO's tags for questions are presented as options in popup, no action needed in content script
      */
-
-    // almost all cases where multiple languages are tagged are javascript, html and css
-    // therefore an attempt is made to determine which of these 3 languages the selected codeblock is
 
     // create Add to fragment buttons on every codeblock
     for (var codeblock of codeblocks) {
@@ -78,6 +77,8 @@ function setup() {
             'click', function (event) {
                 // remove trailing whitespace
                 const newCodeblock = event.currentTarget.parentElement.firstChild.innerText.replace(/\s$/, '');
+                // check if lanuage needs to be changed
+                scope = detectJsHtml(newCodeblock, arrayScope).toString();
                 // set scrollposs
                 scrollpos = window.pageYOffset - event.currentTarget.parentElement.firstChild.getBoundingClientRect().y;
 
@@ -110,8 +111,19 @@ function setup() {
     }
 };
 
-function detectJsHtmlCss(codeblock, arrayScope) {
-
+function detectJsHtml(codeblock, arrayScope) {
+    // only works for html and javascript
+    if (arrayScope.every(language => ['javascript', 'html'].includes(language))) {
+        // detect html features
+        if (/<(\S+).*>.*<\/\1>/.test(codeblock)) {
+            return ['html'];
+        }
+        else {
+            return ['javascript'];
+        }
+    } else {
+        return arrayScope;
+    }
 };
 
 // run setup when content script is injected into SO page
