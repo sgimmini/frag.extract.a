@@ -1,6 +1,8 @@
 // these variables need to be accessible through the entire life of the page this script was injected in
 var scrollpos = 0;
 var scope = "", body = "", description = "", tags = "";
+// list of all languages that can be recognized from tags
+const languageList = ['javascript', 'html', 'css', 'python'];
 
 function setup() {
 
@@ -22,18 +24,26 @@ function setup() {
         description = questionHeader.innerText.replace(/(?: \[closed\])?\sAsk Question$/, '');
     }
 
+    // extract all tags and have them in a drop down menu
+    const arrayTags = Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, ''));
+    tags = arrayTags.toString();
+
     // extract all languages from tags and have a drop down menu
-    // assuming first tag contains the language 
+    const arrayScope = arrayTags.filter(tag => languageList.includes(tag));
+    scope = arrayScope.toString();
+
+    /*// assuming first tag contains the language 
     var regEx = /(\w+)$/i;
     const language = String(Array.from(document.getElementById('question').getElementsByTagName('a'))[0]).match(regEx)[0];
-    // extract all tags and have them in a drop down menu
+    */
+
 
     // create Add to fragment buttons on every codeblock
     for (var codeblock of codeblocks) {
 
         var button = document.createElement('button');
         // parentelement of the codeblock in order to put the button outside the grey box
-        var parent = codeblock.parentElement;
+        //var parent = codeblock.parentElement;
         button.setAttribute("type", "button");
         button.setAttribute("style", "float: right; ");
         //button.setAttribute("style", "background-color: blue;");
@@ -54,7 +64,7 @@ function setup() {
                         chrome.storage.local.set({
                             url: window.location,
                             label: "",
-                            scope: language,
+                            scope: scope,
                             // remove trailing whitespace
                             body: bodyElem.innerText.replace(/\s$/, ''),
                             description: description,
@@ -84,6 +94,8 @@ function setup() {
 // run setup when content script is injected into SO page
 setup();
 
+// handle requests from other parts of extension
+// only popup.js sends requests
 chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
 
     // when extension popup is opened on a site different to the last one 
