@@ -25,7 +25,7 @@ function setup() {
         body = codeblocks[0].innerText.replace(/\s$/, '');
         // set scrollpos
         // does not work properly: target codeblock is just below the screen, not visible, instead of at the top of the screen
-        scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().top;
+        scrollpos = codeblocks[0].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
     }
 
     /*
@@ -80,7 +80,7 @@ function setup() {
                 // check if lanuage needs to be changed
                 scope = detectJsHtml(newCodeblock, arrayScope).toString();
                 // set scrollposs
-                scrollpos = window.pageYOffset - event.currentTarget.parentElement.firstChild.getBoundingClientRect().y;
+                scrollpos = event.currentTarget.parentElement.firstChild.getBoundingClientRect().top; // - event.currentTarget.parentElement.firstChild.getBoundingClientRect().height;
 
                 chrome.storage.local.get(['url'], function (result) {
                     // check if the URL of the SO question page is the same as is saved, meaning the automatically extracted fragment was already saved in storage
