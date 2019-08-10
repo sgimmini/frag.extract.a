@@ -40,7 +40,6 @@ function loadState() {
                         document.getElementById('body').value = response.body;
                         document.getElementById('description').value = response.description;
                         document.getElementById('tags').value = response.tags;
-                        document.getElementById('domain').value = response.domain;
 
                         // if no codeblock was found, grey out jump to codeblock button
                         if (!response.body) {
@@ -53,7 +52,6 @@ function loadState() {
                                 body: response.body,
                                 description: response.description,
                                 tags: response.tags,
-                                domain: response.domain,
                                 // so that jump to codeblock button gets greyed out again upon reopening of the popup
                                 jumpto: false
                             });
@@ -66,7 +64,6 @@ function loadState() {
                                 body: response.body,
                                 description: response.description,
                                 tags: response.tags,
-                                domain: response.domain,
                             });
                         }
                     }
