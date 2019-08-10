@@ -25,7 +25,7 @@ function setup() {
         body = codeblocks[0].innerText.replace(/\s$/, '');
         // set scrollpos
         // does not work properly: target codeblock is just below the screen, not visible, instead of at the top of the screen
-        scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
+        scrollpos = window.pageYOffset - codeblocks[0].getBoundingClientRect().top;
     }
 
     /*
