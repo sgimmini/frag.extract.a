@@ -117,7 +117,7 @@ function detectJsHtml(codeblock, arrayScope) {
         // detect html features
         if (/<(\S+).*>.*<\/\1>/.test(codeblock)) {
             // put html first in array so it will shown as the language with javascript accessible in a dropdown menu
-            return ['html', 'javascript'],
+            return ['html', 'javascript'];
         }
         else {
             return ['javascript', 'html'];
