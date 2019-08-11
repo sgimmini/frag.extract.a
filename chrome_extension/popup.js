@@ -147,11 +147,22 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('description').addEventListener(
         'input', function () { chrome.storage.local.set({ description: document.getElementById('description').value }); });
 });
+/*
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('tags').addEventListener(
         'input', function () { chrome.storage.local.set({ tags: document.getElementById('tags').value }); });
 });
+*/
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('domain').addEventListener(
         'input', function () { chrome.storage.local.set({ domain: document.getElementById('domain').value }); });
 });
+
+// Tag
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('tags').addEventListener(
+        'input', function () {}
+    )
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems, options);
+  });
