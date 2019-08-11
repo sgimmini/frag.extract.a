@@ -158,11 +158,6 @@ document.addEventListener('DOMContentLoaded', function () {
         'input', function () { chrome.storage.local.set({ domain: document.getElementById('domain').value }); });
 });
 
-// Tag
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('tags').addEventListener(
-        'input', function () {}
-    )
-    var elems = document.querySelectorAll('select');
-    var instances = M.FormSelect.init(elems, options);
-  });
+$(document).ready(function(){
+    $('select').not('.disabled').formSelect();
+});

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>frag.extractor</title>
+    <script src="jquery-3.4.1.min.js"></script>
     <script src="materialize.js"></script>
     <script src="popup.js"></script>
     <link rel="stylesheet" href="materialize.css">
@@ -23,14 +24,24 @@
                         <label for="label">LABEL</label>
                     </div>
 
-                    <div class="input-field col s6">
-                        <select multiple>
-                            <option value="" disabled selected>Choose your option</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                            <option value="3">Option 3</option>
-                          </select>
-                          <label for="tags">Tag</label>
+                    <div class="input-field col s6" style="margin-bottom: 5px">
+                        <div class="select-wrapper initialized" style="margin-top: -10px; font-size: 100%">
+                            <!--
+                               <input class="select-dropdown dropdown-trigger" type="text" readonly="true" style="margin-top: -10px">
+                                <svg class="caret" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">  
+                                    <path d="M7 10l5 5 5-5z"></path>
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                </svg>  
+                            -->
+                            
+                            <select multiple>
+                                <option value="" disabled>f</option>
+                                <option value="1">Option 1</option>
+                                <option value="2">Option 2</option>
+                                <option value="3">Option 3</option>
+                            </select>
+                        </div>
+                        <label for="tags">Tag</label>
                     </div>
 
                     <div class="input-field col s12" style="margin-bottom: 7px">
@@ -80,4 +91,9 @@
 
         <!-- this might be removed entirely, if so: remove listener for links in popup.js -->
         <a href=https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets>More
-            information on creating VS Code Snippets</a> </body> </form> </html>
+            information on creating VS Code Snippets</a> 
+    </form>
+    
+</body> 
+
+</html>
