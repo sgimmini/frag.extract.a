@@ -44,7 +44,12 @@ function setup() {
      */
     const arrayTags = Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, ''));
     tags = arrayTags.toString();
-
+    /* set values of select parameters (maybe)
+    for (let i of arrayTags){
+        $('#tags').val(i);
+    }
+    */
+   
     /*
      * Extract scope [language the codeblock is written in]
      * -> SO's tags for questions are matched to predefined languageList
