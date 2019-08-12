@@ -24,7 +24,13 @@ chrome.runtime.onMessage.addListener(function (recieved) {
       // all trailing whitespace is trimmed
       message.label = result.label.replace(/\s$/, '');
       // prefix is set as the first word in the codeblock
-      message.prefix = result.body.replace(/(?: |\.|,|:|\(|\{|\+|-|=|"|'|<|;).*/, '');
+
+      message.prefix = result.body.split(/(?: |\.|,|:|\(|\{|\+|-|=|"|'|<|;)/s)[0];
+
+
+
+
+      //message.prefix = result.body.replace(/(?: |\.|,|:|\(|\{|\+|-|=|"|'|<|;).*/s, '');
       message.scope = result.scope.replace(/\s$/, '');
       message.body = result.body.replace(/\s$/, '');
       message.description = result.description.replace(/\s$/, '');

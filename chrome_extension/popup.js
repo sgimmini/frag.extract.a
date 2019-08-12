@@ -12,7 +12,7 @@ function loadState() {
                 document.getElementById('scope').value = result.scope;
                 document.getElementById('body').value = result.body;
                 document.getElementById('description').value = result.description;
-                document.getElementById('tags').value = result.tags;
+                //document.getElementById('tags').value = result.tags;
                 document.getElementById('domain').value = result.domain;
 
                 // jump to codeblock gets greyed out if no codeblock was found on SO page or real popup is opened, because addressing the content script from there does not work
@@ -39,7 +39,7 @@ function loadState() {
                         document.getElementById('scope').value = response.scope;
                         document.getElementById('body').value = response.body;
                         document.getElementById('description').value = response.description;
-                        document.getElementById('tags').value = response.tags;
+                        //document.getElementById('tags').value = response.tags;
 
                         // if no codeblock was found, grey out jump to codeblock button
                         if (!response.body) {
@@ -158,6 +158,6 @@ document.addEventListener('DOMContentLoaded', function () {
         'input', function () { chrome.storage.local.set({ domain: document.getElementById('domain').value }); });
 });
 
-$(document).ready(function(){
+$(document).ready(function () {
     $('select').not('.disabled').formSelect();
 });

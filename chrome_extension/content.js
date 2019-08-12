@@ -49,7 +49,7 @@ function setup() {
         $('#tags').val(i);
     }
     */
-   
+
     /*
      * Extract scope [language the codeblock is written in]
      * -> SO's tags for questions are matched to predefined languageList
@@ -120,7 +120,7 @@ function detectJsHtml(codeblock, arrayScope) {
     // only works for html and javascript
     if (arrayScope.every(language => ['javascript', 'html'].includes(language))) {
         // detect html features
-        if (/<(\S+).*>.*<\/\1>/.test(codeblock)) {
+        if (/<(\S+).*>.*<\/\1>/s.test(codeblock)) {
             // put html first in array so it will shown as the language with javascript accessible in a dropdown menu
             return ['html', 'javascript'];
         }
