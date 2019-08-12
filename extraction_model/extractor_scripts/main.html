@@ -1,0 +1,9 @@
+This is the example to show how the trained model can be loaded into js.
+
+<script>
+const MODEL_URL = "https://github.com/smn57/frag.extract.a/tree/dev/extraction_model/lstm/tensorflowjs_model/model.json?raw=true";
+async function get_model(){
+    return model = await tf.loadLayersModel(MODEL_URL);
+}
+model = get_model();
+</script>
