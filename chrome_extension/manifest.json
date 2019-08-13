@@ -39,6 +39,10 @@
     ],
     "persistent": false
   },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
   "page_action": {
     "default_icon": {
       "128": "images/icon128.png",
