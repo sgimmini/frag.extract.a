@@ -14,7 +14,7 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 // handle runtime background tasks for the extension
-chrome.runtime.onMessage.addListener(function (recieved) {
+chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
 
   // save button was successfully clicked in extension popup, fragment now needs to be send to external python script to be saved to database
   if (recieved.content == 'sendNativeMessage') {
@@ -45,6 +45,7 @@ chrome.runtime.onMessage.addListener(function (recieved) {
       chrome.runtime.sendNativeMessage('com.frag.extract', message);
       // clears current state, when popup is reopened it will fetch automatically extracted fragment from content script
       chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto']);
+      sendResponse({ this: "is stupid" });
     });
   }
 
