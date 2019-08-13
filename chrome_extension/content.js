@@ -148,3 +148,4 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
         scroll(0, scrollpos);
     }
 });
+
