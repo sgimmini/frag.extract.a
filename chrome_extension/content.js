@@ -64,11 +64,11 @@ function setup() {
      */
 
     // create Add to fragment buttons on every codeblock
-    for (var codeblock of codeblocks) {
+    for (let codeblock of codeblocks) {
 
-        var button = document.createElement('button');
+        let button = document.createElement('button');
         // parentelement of the codeblock in order to put the button outside the grey box
-        //var parent = codeblock.parentElement;
+        //let parent = codeblock.parentElement;
         button.setAttribute("type", "button");
         button.setAttribute("style", "float: right; ");
         //button.setAttribute("style", "background-color: blue;");
@@ -117,7 +117,7 @@ function setup() {
 
 function detectJsHtml(codeblock) {
     // only works for html and javascript
-    if (scopeArray.length && scopeArray.every(language => ['javascript', 'html'].includes(language))) {
+    if (scopeArray.length == 2 && scopeArray.every(language => ['javascript', 'html'].includes(language))) {
         // detect html features
         if (/<(\S+).*>.*<\/\1>/s.test(codeblock)) {
             // put html first in array so it will shown as the language with javascript accessible in a dropdown menu
