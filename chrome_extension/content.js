@@ -119,6 +119,7 @@ function setup() {
 function detectJsHtml(codeblock, arrayScope) {
     // only works for html and javascript
     if (arrayScope.every(language => ['javascript', 'html'].includes(language))) {
+        alert("checking html/js");
         // detect html features
         if (/<(\S+).*>.*<\/\1>/s.test(codeblock)) {
             // put html first in array so it will shown as the language with javascript accessible in a dropdown menu
