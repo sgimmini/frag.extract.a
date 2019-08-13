@@ -1,7 +1,6 @@
-function loadState() {
+function setup() {
     // get the previous state from storage
     chrome.storage.local.get({ 'url': "", 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "", 'jumpto': true }, function (result) {
-
         // returns array of length 1 with the currently viewed tab
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 
@@ -44,6 +43,7 @@ function loadState() {
                         for (let tag in response.tags) {
                             new Element('option').set('text', tag).inject(document.getElementById('tagselect'))
                         }
+
                         /*
                         var new_options = response.tags;
                         $('#tagselect').empty();
@@ -95,78 +95,64 @@ function loadState() {
     });
 };
 
-// runs whenever popup is opened
-loadState();
 
-// save button
+
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('form').addEventListener(
-        'submit', function () {
-            // saves fragment to database via python script in frag.edit vsc extension
-            chrome.runtime.sendMessage({ content: 'sendNativeMessage' }, function () {
-                window.close();
-            });
+    // restores previous state / sets up new state
+    setup();
+
+    // save button
+    document.getElementById('form').addEventListener('submit', function () {
+        // saves fragment to database via python script in frag.edit vsc extension
+        chrome.runtime.sendMessage({ content: 'sendNativeMessage' }, function () {
+            window.close();
         });
-});
+    });
 
-// cancel button
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('cancel').addEventListener(
-        'click', function () {
-            // clears current state, when popup is reopened it will fetch automatically extracted fragment from content script
-            chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto'], function () {
-                window.close();
-            });
+    // cancel button
+    document.getElementById('cancel').addEventListener('click', function () {
+        // clears current state, when popup is reopened it will fetch automatically extracted fragment from content script
+        chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto'], function () {
+            window.close();
         });
-});
+    });
 
-// jump to codeblock button
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('jumpto').addEventListener(
-        'click', function () {
-            // scroll the page to the position of the codeblock that's in the editor on page
-            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, { content: 'scroll' });
-            });
+    // jump to codeblock button
+    document.getElementById('jumpto').addEventListener('click', function () {
+        // scroll the page to the position of the codeblock that's in the editor on page
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, { content: 'scroll' });
         });
-});
+    });
 
-// working hyperlinks, only used for the "More information on creating VS Code Snippets" at the bottom
-document.addEventListener('DOMContentLoaded', function () {
-    window.addEventListener(
-        'click', function (event) {
-            if (event.target.href !== undefined) {
-                chrome.tabs.create({ url: event.target.href });
-            }
-        });
-});
+    // working hyperlinks, only used for the "More information on creating VS Code Snippets" at the bottom
+    window.addEventListener('click', function (event) {
+        if (event.target.href !== undefined) {
+            chrome.tabs.create({ url: event.target.href });
+        }
+    });
 
-// save content of input fields
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('label').addEventListener(
-        'input', function () { chrome.storage.local.set({ label: document.getElementById('label').value }); });
-});
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('scope').addEventListener(
-        'input', function () { chrome.storage.local.set({ scope: document.getElementById('scope').value }); });
-});
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('body').addEventListener(
-        'input', function () { chrome.storage.local.set({ body: document.getElementById('body').value }); });
-});
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('description').addEventListener(
-        'input', function () { chrome.storage.local.set({ description: document.getElementById('description').value }); });
-});
-/*
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('tags').addEventListener(
-        'input', function () { chrome.storage.local.set({ tags: document.getElementById('tags').value }); });
-});
-*/
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('domain').addEventListener(
-        'input', function () { chrome.storage.local.set({ domain: document.getElementById('domain').value }); });
+    // save content of input fields
+    document.getElementById('label').addEventListener('input', function () {
+        chrome.storage.local.set({ label: document.getElementById('label').value });
+    });
+    document.getElementById('scope').addEventListener('input', function () {
+        chrome.storage.local.set({ scope: document.getElementById('scope').value });
+    });
+    document.getElementById('body').addEventListener('input', function () {
+        chrome.storage.local.set({ body: document.getElementById('body').value });
+    });
+    document.getElementById('description').addEventListener('input', function () {
+        chrome.storage.local.set({ description: document.getElementById('description').value });
+    });
+    /*
+    document.getElementById('tags').addEventListener('input', function () {
+        chrome.storage.local.set({ tags: document.getElementById('tags').value });
+    });
+    */
+    document.getElementById('domain').addEventListener('input', function () {
+        chrome.storage.local.set({ domain: document.getElementById('domain').value });
+    });
 });
 
 $(document).ready(function () {
