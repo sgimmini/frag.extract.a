@@ -24,14 +24,8 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
       let message = {};
       // all trailing whitespace is trimmed
       message.label = result.label.replace(/\s$/, '');
-      // prefix is set as the first word in the codeblock
-      // TO DO this breaks if the first character is one of these word seperators
-      message.prefix = result.body.split(/(?: |\.|,|:|\(|\{|\+|-|=|"|'|<|;)/s)[0];
-
-
-
-
-      //message.prefix = result.body.replace(/(?: |\.|,|:|\(|\{|\+|-|=|"|'|<|;).*/s, '');
+      // prefix is set as the first word in the codeblock: initial widespace is deleted, then everything after the next whitespace is deleted
+      message.prefix = result.body.replace(/^\s*/s, '').replace(/\s.*/s, '');
       message.scope = result.scope.replace(/\s$/, '');
       message.body = result.body.replace(/\s$/, '');
       message.description = result.description.replace(/\s$/, '');
