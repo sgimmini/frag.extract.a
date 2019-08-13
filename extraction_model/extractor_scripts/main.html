@@ -8,10 +8,20 @@ const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json"
 
 
 function getTokenisedWord(seedWord) {
-  const word2index = jQuery.getJSON(VOCAB_URL)
+fetch(VOCAB_URL).then(function(resp){
+    return resp.json();
+}
+).then(function(data)
+{
+    console.log(data)
+}
+)
+  const word2index = 5 
+  console.log(word2index)
   const _token = word2index[seedWord.toLowerCase()]
   console.log(_token);
-  return tf.tensor1d([_token])
+  const shape = [195, 1];
+  return tf.tensor([_token], shape)
 }
 
 async function get_model(){
