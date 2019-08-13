@@ -1,16 +1,11 @@
 // these variables need to be accessible through the entire life of the page this script was injected in
 let scrollpos = 0;
-let scopeArray = [], body = "", description = "", tagArray = [];
+let label = "", scopeArray = [], body = "", description = "", tagArray = [];
 // list of all languages that can be recognized from tags
 // this list is not comprehensive, please add any further programming lanuages you may think of
 const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++', 'css', 'sql', 'c', 'r', 'objective-c', 'swift', 'ruby', 'excel', 'vba', 'vb.net', 'scala', 'typescript', 'matlab', 'bash', 'shell', 'go', 'rust', 'octave'];
 
 function setup() {
-
-    /*
-     * Extract label [primary key in fragment database, also the name of the fragment in tree view in vsc extension]
-     * -> see github issue on this topic: https://github.com/smn57/frag.extract.a/issues/6
-     */
 
     /*
      * Extract body [codeblock of the fragment]
@@ -35,8 +30,18 @@ function setup() {
     const questionHeader = document.getElementById('question-header');
     if (questionHeader) {
         // remove potential "[closed]" and "Ask Question" from question header
-        description = questionHeader.innerText.replace(/(?: \[closed\])?\sAsk Question$/, '');
+        description = questionHeader.innerText.replace(/(?: \[closed\]| \[duplicate\])?\sAsk Question$/, '');
     }
+    /*
+     * Extract label [primary key in fragment database, also the name of the fragment in tree view in vsc extension]
+     * -> see github issue on this topic: https://github.com/smn57/frag.extract.a/issues/6
+     */
+    // if user sets the option to preset the label as a copy of description
+    chrome.storage.local.get({ presetLabel: false }, function (result) {
+        if (result.presetLabel) {
+            label = description;
+        }
+    });
 
     /*
      * Extract tags [used to quickly access fragments relating to something specific in tree view in vsc extension]
@@ -92,7 +97,7 @@ function setup() {
                     if (window.location != result.url) {
                         chrome.storage.local.set({
                             url: window.location,
-                            label: "",
+                            label: label,
                             scope: scopeArray.toString(),
                             body: newCodeblock,
                             description: description,
@@ -139,7 +144,7 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
     // when extension popup is opened on a site different to the last one 
     // hand over automatically extracted fragment to the popup to display and be edited by user
     if (recieved.content == 'setPopup') {
-        sendResponse({ url: window.location, label: "", scope: scopeArray, body: body, description: description, tags: tagArray });
+        sendResponse({ url: window.location, label: label, scope: scopeArray, body: body, description: description, tags: tagArray });
     }
 
     // when jump to codeblock button is clicked

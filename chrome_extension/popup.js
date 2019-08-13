@@ -1,6 +1,6 @@
 function setup() {
     // get the previous state from storage
-    chrome.storage.local.get({ 'url': "", 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "", 'jumpto': true }, function (result) {
+    chrome.storage.local.get({ url: "", label: "", scope: "", body: "", description: "", tags: "", domain: "", jumpto: true, presetTags: false, presetLanguage: false }, function (result) {
         // returns array of length 1 with the currently viewed tab
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 
@@ -39,11 +39,11 @@ function setup() {
                         document.getElementById('body').value = response.body;
                         document.getElementById('description').value = response.description;
                         //document.getElementById('tagselect').append(response.tags[0]);
-
+                        /*
                         for (let tag in response.tags) {
                             new Element('option').set('text', tag).inject(document.getElementById('tagselect'))
                         }
-
+                        */
                         /*
                         var new_options = response.tags;
                         $('#tagselect').empty();
