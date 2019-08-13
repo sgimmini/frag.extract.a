@@ -39,7 +39,18 @@ function loadState() {
                         document.getElementById('scope').value = response.scope.toString();
                         document.getElementById('body').value = response.body;
                         document.getElementById('description').value = response.description;
-                        //document.getElementById('tags').value = response.tags.toString();
+                        //document.getElementById('tagselect').append(response.tags[0]);
+
+                        for (let tag in response.tags) {
+                            new Element('option').set('text', tag).inject(document.getElementById('tagselect'))
+                        }
+                        /*
+                        var new_options = response.tags;
+                        $('#tagselect').empty();
+                        $.each(new_options, function(value) {
+                            new Element('option').set('text', value).inject($('#tagselect'))
+                        })
+                        */
 
                         // if no codeblock was found, grey out jump to codeblock button
                         if (!response.body) {
@@ -85,13 +96,7 @@ function loadState() {
 };
 
 // HIER 
-var new_options = tagArray;
 
-$('#tagselect').empty();
-
-$each(new_options, function(value) {
-    new Element('option').set('text', value).inject($('#tagselect'))
-})
 
 
 // runs whenever popup is opened
