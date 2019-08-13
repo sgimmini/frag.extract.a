@@ -2,10 +2,11 @@ This is the example to show how the trained model can be loaded into js.
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
 <script>
 
-const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model/model.json";
+const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
 async function get_model(){
-    return model = await tf.loadLayersModel(MODEL_URL);
+    const model = await tf.loadLayersModel(MODEL_URL);
+    const result = model.predict(tf.tensor([0]))
 }
-model = get_model();
+get_model()
 
 </script>
