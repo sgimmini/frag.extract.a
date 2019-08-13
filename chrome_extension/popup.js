@@ -92,14 +92,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('form').addEventListener(
         'submit', function () {
             // saves fragment to database via python script in frag.edit vsc extension
-            chrome.runtime.sendMessage({ content: 'sendNativeMessage' }, function (response) {
-                if (chrome.runtime.lastError) {
-                    alert("freaking runtime error!");
-                }
-                else {
-                    alert(response);
-                    window.close();
-                }
+            chrome.runtime.sendMessage({ content: 'sendNativeMessage' }, function () {
+                window.close();
             });
         });
 });

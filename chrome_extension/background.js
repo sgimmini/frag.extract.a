@@ -19,12 +19,13 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
   // save button was successfully clicked in extension popup, fragment now needs to be send to external python script to be saved to database
   if (recieved.content == 'sendNativeMessage') {
     chrome.storage.local.get({ 'label': "", 'scope': "", 'body': "", 'description': "", 'tags': "", 'domain': "" }, function (result) {
+      //let result = { label: "", body: "", scope: "", description: "", tags: "", domain: "" };
       // construct database fragment as message to be send to python script
-      var message = {};
+      let message = {};
       // all trailing whitespace is trimmed
       message.label = result.label.replace(/\s$/, '');
       // prefix is set as the first word in the codeblock
-
+      // TO DO this breaks if the first character is one of these word seperators
       message.prefix = result.body.split(/(?: |\.|,|:|\(|\{|\+|-|=|"|'|<|;)/s)[0];
 
 
@@ -45,9 +46,11 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
       chrome.runtime.sendNativeMessage('com.frag.extract', message);
       // clears current state, when popup is reopened it will fetch automatically extracted fragment from content script
       chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto']);
-      sendResponse({ this: "is stupid" });
     });
+    // this line fixes an inexplicable error and has no other use whatsoever
+    sendResponse({ a: "" });
   }
+
 
   // a add to fragment button in SO question page was clicked
   // opens the extension popup as normal browser popup, since extension popup cannot be opened programmatically
