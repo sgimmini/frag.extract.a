@@ -120,7 +120,7 @@ function detectJsHtml(codeblock) {
     if (scopeArray.length == 2 && scopeArray.every(language => ['javascript', 'html'].includes(language))) {
         // detect html features
         if (/<(\S+).*>.*<\/\1>/s.test(codeblock)) {
-            // put html first in array so it will shown as the language with javascript accessible in a dropdown menu
+            // put html first in array so it will be shown as the language with javascript accessible in a dropdown menu
             scopeArray = ['html', 'javascript'];
         }
         else {
