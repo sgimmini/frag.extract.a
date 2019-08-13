@@ -1,6 +1,6 @@
 // these variables need to be accessible through the entire life of the page this script was injected in
 let scrollpos = 0;
-let scope = "", body = "", description = "", tags = "";
+let scopeArray = [], body = "", description = "", tagArray = [];
 // list of all languages that can be recognized from tags
 // this list is not comprehensive, please add any further programming lanuages you may think of
 const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++', 'css', 'sql', 'c', 'r', 'objective-c', 'swift', 'ruby', 'excel', 'vba', 'vb.net', 'scala', 'typescript', 'matlab', 'bash', 'shell', 'go', 'rust', 'octave'];
@@ -42,22 +42,21 @@ function setup() {
      * Extract tags [used to quickly access fragments relating to something specific in tree view in vsc extension]
      * -> SO's tags for questions are used
      */
-    const arrayTags = Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, ''));
-    tags = arrayTags.toString();
-    /* set values of select parameters (maybe)
-    for (let i of arrayTags){
-        $('#tags').val(i);
-    }
-    */
-
     /*
      * Extract scope [language the codeblock is written in]
      * -> SO's tags for questions are matched to predefined languageList
      */
-    const arrayScope = arrayTags.filter(tag => languageList.includes(tag));
+    // get all tags from SO page, remove links from name with regex, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
+    Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, '')).map(tag => {
+        if (languageList.includes(tag)) {
+            scopeArray.push(tag);
+        } else {
+            tagArray.push(tag);
+        }
+    });
     // almost all cases where multiple languages are tagged are javascript and html
     // therefore an attempt is made to determine which of these languages the selected codeblock is
-    scope = detectJsHtml(body, arrayScope).toString();
+    detectJsHtml(body);
 
     /*
      * Extract domain [libraries or frameworks that are used in the codeblock, use of this attribute is unclear]
@@ -83,7 +82,7 @@ function setup() {
                 // remove trailing whitespace
                 const newCodeblock = event.currentTarget.parentElement.firstChild.innerText.replace(/\s$/, '');
                 // check if lanuage needs to be changed
-                scope = detectJsHtml(newCodeblock, arrayScope).toString();
+                detectJsHtml(newCodeblock)
                 // set scrollposs
                 scrollpos = event.currentTarget.parentElement.firstChild.getBoundingClientRect().top; // - event.currentTarget.parentElement.firstChild.getBoundingClientRect().height;
 
@@ -94,18 +93,18 @@ function setup() {
                         chrome.storage.local.set({
                             url: window.location,
                             label: "",
-                            scope: scope,
+                            scope: scopeArray,
                             body: newCodeblock,
                             description: description,
-                            tags: tags
+                            tags: tagArray
                         }, function () {
                             // open the popup window
                             chrome.runtime.sendMessage({ content: 'add' });
                         });
                     }
-                    // if this is the same page, only the new, user selected codeblock needs to be saved
+                    // if this is the same page, only the new, user selected codeblock and possibly changed language need to be saved
                     else {
-                        chrome.storage.local.set({ body: newCodeblock }, function () {
+                        chrome.storage.local.set({ body: newCodeblock, scope: scopeArray }, function () {
                             // open the popup window
                             chrome.runtime.sendMessage({ content: 'add' });
                         });
@@ -116,20 +115,17 @@ function setup() {
     }
 };
 
-function detectJsHtml(codeblock, arrayScope) {
+function detectJsHtml(codeblock) {
     // only works for html and javascript
-    if (arrayScope.every(language => ['javascript', 'html'].includes(language))) {
-        alert("checking html/js");
+    if (scopeArray.length && scopeArray.every(language => ['javascript', 'html'].includes(language))) {
         // detect html features
         if (/<(\S+).*>.*<\/\1>/s.test(codeblock)) {
             // put html first in array so it will shown as the language with javascript accessible in a dropdown menu
-            return ['html', 'javascript'];
+            scopeArray = ['html', 'javascript'];
         }
         else {
-            return ['javascript', 'html'];
+            scopeArray = ['javascript', 'html'];
         }
-    } else {
-        return arrayScope;
     }
 };
 
@@ -143,7 +139,7 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
     // when extension popup is opened on a site different to the last one 
     // hand over automatically extracted fragment to the popup to display and be edited by user
     if (recieved.content == 'setPopup') {
-        sendResponse({ url: window.location, label: "", scope: scope, body: body, description: description, tags: tags });
+        sendResponse({ url: window.location, label: "", scope: scopeArray, body: body, description: description, tags: tagArray });
     }
 
     // when jump to codeblock button is clicked

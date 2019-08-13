@@ -36,10 +36,10 @@ function loadState() {
                     } else {
                         // response contains all the fragment attributes that were extracted from the question page by content script
                         document.getElementById('label').value = response.label;
-                        document.getElementById('scope').value = response.scope;
+                        document.getElementById('scope').value = response.scope.toString();
                         document.getElementById('body').value = response.body;
                         document.getElementById('description').value = response.description;
-                        //document.getElementById('tags').value = response.tags;
+                        //document.getElementById('tags').value = response.tags.toString();
 
                         // if no codeblock was found, grey out jump to codeblock button
                         if (!response.body) {
@@ -48,10 +48,10 @@ function loadState() {
                             chrome.storage.local.set({
                                 url: tabs[0].url,
                                 label: response.label,
-                                scope: response.scope,
+                                scope: response.scope.toString(),
                                 body: response.body,
                                 description: response.description,
-                                tags: response.tags,
+                                tags: response.tags.toString(),
                                 // so that jump to codeblock button gets greyed out again upon reopening of the popup
                                 jumpto: false
                             });
@@ -60,10 +60,10 @@ function loadState() {
                             chrome.storage.local.set({
                                 url: tabs[0].url,
                                 label: response.label,
-                                scope: response.scope,
+                                scope: response.scope.toString(),
                                 body: response.body,
                                 description: response.description,
-                                tags: response.tags,
+                                tags: response.tags.toString(),
                             });
                         }
                     }
@@ -92,11 +92,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('form').addEventListener(
         'submit', function () {
             // saves fragment to database via python script in frag.edit vsc extension
-            chrome.runtime.sendMessage({ content: 'sendNativeMessage' }, function () {
+            chrome.runtime.sendMessage({ content: 'sendNativeMessage' }, function (response) {
                 if (chrome.runtime.lastError) {
                     alert("freaking runtime error!");
                 }
                 else {
+                    alert(response);
                     window.close();
                 }
             });
