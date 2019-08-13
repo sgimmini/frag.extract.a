@@ -3,9 +3,17 @@ This is the example to show how the trained model can be loaded into js.
 <script>
 
 const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
+const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json"
+function getTokenisedWord(seedWord) {
+  const word2index = await (await fetch(VOCAB_URL)).json());
+  const _token = word2index[seedWord.toLowerCase()]
+  return tf.tensor1d([_token])
+}
+
 async function get_model(){
     const model = await tf.loadLayersModel(MODEL_URL);
-    const result = model.predict(tf.tensor([0]))
+    tokens = getTokenisedWord("hi there STOP how r you?")
+    const result = model.predict(tokens);
 }
 get_model()
 
