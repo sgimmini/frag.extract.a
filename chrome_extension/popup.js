@@ -95,10 +95,6 @@ function loadState() {
     });
 };
 
-/*
-// HIER 
-
-
 // runs whenever popup is opened
 loadState();
 
