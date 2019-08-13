@@ -93,10 +93,10 @@ function setup() {
                         chrome.storage.local.set({
                             url: window.location,
                             label: "",
-                            scope: scopeArray,
+                            scope: scopeArray.toString(),
                             body: newCodeblock,
                             description: description,
-                            tags: tagArray
+                            tags: tagArray.toString()
                         }, function () {
                             // open the popup window
                             chrome.runtime.sendMessage({ content: 'add' });
@@ -104,7 +104,7 @@ function setup() {
                     }
                     // if this is the same page, only the new, user selected codeblock and possibly changed language need to be saved
                     else {
-                        chrome.storage.local.set({ body: newCodeblock, scope: scopeArray }, function () {
+                        chrome.storage.local.set({ body: newCodeblock, scope: scopeArray.toString() }, function () {
                             // open the popup window
                             chrome.runtime.sendMessage({ content: 'add' });
                         });
