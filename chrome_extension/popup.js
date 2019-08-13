@@ -84,6 +84,7 @@ function loadState() {
     });
 };
 
+/*
 // HIER 
 var new_options = tagArray;
 
@@ -92,7 +93,7 @@ $('#tagselect').empty();
 $each(new_options, function(value) {
     new Element('option').set('text', value).inject($('#tagselect'))
 })
-
+*/
 
 // runs whenever popup is opened
 loadState();
