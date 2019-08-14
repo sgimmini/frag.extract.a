@@ -1,6 +1,11 @@
 // represents the user option to preset the selected language as a tag
 var presetLanguage = false;
-function setup(tagInstance, domainInstance, scopeInstance) {
+// initialize select elements
+let tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
+let domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
+let scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
+
+function setup() {
     // get the previous state from storage
     chrome.storage.local.get({ url: "", label: "", scope: [""], body: "", description: "", tags: [["", false]], domain: [["", false]], jumpto: true, presetLanguage: false }, function (result) {
         // save wether user has selected to add the language to tags or not
@@ -14,45 +19,8 @@ function setup(tagInstance, domainInstance, scopeInstance) {
             // if you're still on the site the poup was last opened, load last state with your changes from the automatically extracted fragment
             // also true when real popup is opened after clicking an Add to Fragment on SO question page, correct data in storage in this case guaranteed by content script
             if (tabs[0].url == result.url || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
-                document.getElementById('label').value = result.label;
-                document.getElementById('body').value = result.body;
-                document.getElementById('description').value = result.description;
-
-                // set the tags as options for tagselect element
-                let tagselect = document.getElementById('tagselect');
-                result.tags.forEach(tag => {
-                    let newOption = document.createElement('option');
-                    // tag[0] contains the string (meaning the actual tag)
-                    newOption.innerText = tag[0];
-                    // tag[1] contains wether it is selected or not
-                    newOption.selected = tag[1];
-                    tagselect.add(newOption);
-                });
-
-                // set the domain contents as options for domainselect element
-                let domainselect = document.getElementById('domainselect');
-                result.domain.forEach(domain => {
-                    let newOption = document.createElement('option');
-                    // domain[0] contains the string (meaning the actual tag)
-                    newOption.innerText = domain[0];
-                    // domain[1] contains wether it is selected or not
-                    newOption.selected = domain[1];
-                    domainselect.add(newOption);
-                });
-
-                // set the select options for scope and preselect the first language
-                let scopeselect = document.getElementById('scopeselect');
-                for (let i = 0; i < result.scope.length; i++) {
-                    let newOption = document.createElement('option');
-                    newOption.innerText = result.scope[i];
-                    scopeselect.add(newOption);
-                }
-                scopeselect.options[0].selected = true;
-
-                // update tagselect, domainselect, scopeselect elements
-                tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
-                domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
-                scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
+                // load saved state as input
+                loadState(result);
 
                 // jump to codeblock gets greyed out if no codeblock was found on SO page or real popup is opened, because addressing the content script from there does not work
                 if (!result.jumpto || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
@@ -76,83 +44,32 @@ function setup(tagInstance, domainInstance, scopeInstance) {
                         body.appendChild(header);
                         document.body = body;
                     } else {
-                        // response contains all the fragment attributes that were extracted from the question page by content script
-                        document.getElementById('label').value = response.label;
-                        document.getElementById('body').value = response.body;
-                        document.getElementById('description').value = response.description;
-
-                        // set the tags as options for tagselect element
-                        let tagselect = document.getElementById('tagselect');
-                        response.tags.forEach(tag => {
-                            let newOption = document.createElement('option');
-                            // tag[0] contains the string (meaning the actual tag)
-                            newOption.innerText = tag[0];
-                            // tag[1] contains wether it is selected or not
-                            newOption.selected = tag[1];
-                            tagselect.add(newOption);
-                        });
-
-                        // set the tags as not selected options for domainselect element
-                        // copy response.tags by value
-                        let responseDomain = [...response.tags];
-                        let domainselect = document.getElementById('domainselect');
-                        responseDomain.forEach(domain => {
-                            let newOption = document.createElement('option');
-                            // domain[0] contains the string (meaning the actual tag)
-                            newOption.innerText = domain[0];
-                            domainselect.add(newOption);
-                        });
-
-                        // set the scope as option as well, if user selected that option
+                        // copy response.tags by value to domain
+                        response.domain = [...response.tags];
+                        // set the scope as preselected option for tags as well, if user selected that option
                         if (presetLanguage && response.scope[0]) {
                             response.tags.push([response.scope[0], true]);
-                            let newOption = document.createElement('option');
-                            newOption.innerText = response.scope[0];
-                            newOption.selected = true;
-                            tagselect.add(newOption);
                         }
-
-                        // set the select options for scope and preselect the first language
-                        let scopeselect = document.getElementById('scopeselect');
-                        for (let i = 0; i < response.scope.length; i++) {
-                            let newOption = document.createElement('option');
-                            newOption.innerText = response.scope[i];
-                            scopeselect.add(newOption);
-                        }
-                        scopeselect.options[0].selected = true;
-
-                        // update tagselect, domainselect, scopeselect elements
-                        tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
-                        domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
-                        scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
+                        // load response from content script as input
+                        loadState(response);
 
                         // if no codeblock was found, grey out jump to codeblock button
                         if (!response.body) {
                             document.getElementById('jumpto').disabled = true;
-                            // set the url, so when you reopen the popup without opening it on another site in between, your changes get restored
-                            chrome.storage.local.set({
-                                url: tabs[0].url,
-                                label: response.label,
-                                scope: response.scope,
-                                body: response.body,
-                                description: response.description,
-                                tags: response.tags,
-                                domain: responseDomain,
-                                // so that jump to codeblock button gets greyed out again upon reopening of the popup
-                                jumpto: false
-                            });
-                        } else {
-                            // set the url, so when you reopen the popup without opening it on another site in between, your changes get restored
-                            chrome.storage.local.set({
-                                url: tabs[0].url,
-                                label: response.label,
-                                scope: response.scope,
-                                body: response.body,
-                                description: response.description,
-                                tags: response.tags,
-                                domain: responseDomain
-                            });
+                            result.jumpto = false;
                         }
+                        // set the url, so when you reopen the popup without opening it on another site in between, your changes get restored
+                        chrome.storage.local.set({
+                            url: tabs[0].url,
+                            label: response.label,
+                            scope: response.scope,
+                            body: response.body,
+                            description: response.description,
+                            tags: response.tags,
+                            domain: responseDomain,
+                            // so that jump to codeblock button gets greyed out again upon reopening of the popup
+                            jumpto: result.jumpto
+                        });
                     }
                 });
             }
@@ -174,16 +91,52 @@ function setup(tagInstance, domainInstance, scopeInstance) {
     });
 };
 
+function loadState(input) {
+    // input contains all the fragment attributes that were extracted from the question page by content script
+    document.getElementById('label').value = input.label;
+    document.getElementById('body').value = input.body;
+    document.getElementById('description').value = input.description;
+
+    // set the tags as options for tagselect element
+    let tagselect = document.getElementById('tagselect');
+    input.tags.forEach(tag => {
+        let newOption = document.createElement('option');
+        // tag[0] contains the string (meaning the actual tag)
+        newOption.innerText = tag[0];
+        // tag[1] contains wether it is selected or not
+        newOption.selected = tag[1];
+        tagselect.add(newOption);
+    });
+
+    // set the tags as not selected options for domainselect element
+    let domainselect = document.getElementById('domainselect');
+    inputDomain.forEach(domain => {
+        let newOption = document.createElement('option');
+        // domain[0] contains the string (meaning the actual tag)
+        newOption.innerText = domain[0];
+        domainselect.add(newOption);
+    });
+
+    // set the select options for scope and preselect the first language
+    let scopeselect = document.getElementById('scopeselect');
+    for (let i = 0; i < input.scope.length; i++) {
+        let newOption = document.createElement('option');
+        newOption.innerText = input.scope[i];
+        scopeselect.add(newOption);
+    }
+    scopeselect.options[0].selected = true;
+
+    // update tagselect, domainselect, scopeselect elements
+    tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
+    domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
+    scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
+};
+
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    // initialize select elements
-    let tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
-    let domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
-    let scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
-
     // restores previous state / sets up new state
-    setup(tagInstance, domainInstance, scopeInstance);
+    setup();
 
     // save button
     document.getElementById('form').addEventListener('submit', function () {
