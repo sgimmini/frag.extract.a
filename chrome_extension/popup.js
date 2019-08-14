@@ -1,6 +1,6 @@
 // represents the user option to preset the selected language as a tag
 var presetLanguage = false;
-function setup(tagInstance, domainInstance) {
+function setup(tagInstance, domainInstance, scopeInstance) {
     // get the previous state from storage
     chrome.storage.local.get({ url: "", label: "", scope: [""], body: "", description: "", tags: [["", false]], domain: [["", false]], jumpto: true, presetLanguage: false }, function (result) {
         // save wether user has selected to add the language to tags or not
@@ -28,6 +28,7 @@ function setup(tagInstance, domainInstance) {
                     newOption.selected = tag[1];
                     tagselect.add(newOption);
                 });
+
                 // set the domain contents as options for domainselect element
                 let domainselect = document.getElementById('domainselect');
                 result.domain.forEach(domain => {
@@ -38,9 +39,20 @@ function setup(tagInstance, domainInstance) {
                     newOption.selected = domain[1];
                     domainselect.add(newOption);
                 });
-                // update tagselect and domainselect elements
+
+                // set the select options for scope and preselect the first language
+                let scopeselect = document.getElementById('scopeselect');
+                for (let i = 0; i < result.scope.length; i++) {
+                    let newOption = document.createElement('option');
+                    newOption.innerText = result.scope[i];
+                    scopeselect.add(newOption);
+                }
+                scopeselect.options[0].selected = true;
+
+                // update tagselect, domainselect, scopeselect elements
                 tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
                 domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
+                scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
 
                 // jump to codeblock gets greyed out if no codeblock was found on SO page or real popup is opened, because addressing the content script from there does not work
                 if (!result.jumpto || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
@@ -79,6 +91,7 @@ function setup(tagInstance, domainInstance) {
                             newOption.selected = tag[1];
                             tagselect.add(newOption);
                         });
+
                         // set the tags as not selected options for domainselect element
                         // copy response.tags by value
                         let responseDomain = [...response.tags];
@@ -98,9 +111,20 @@ function setup(tagInstance, domainInstance) {
                             newOption.selected = true;
                             tagselect.add(newOption);
                         }
-                        // update tagselect and domainselect elements
+
+                        // set the select options for scope and preselect the first language
+                        let scopeselect = document.getElementById('scopeselect');
+                        for (let i = 0; i < response.scope.length; i++) {
+                            let newOption = document.createElement('option');
+                            newOption.innerText = response.scope[i];
+                            scopeselect.add(newOption);
+                        }
+                        scopeselect.options[0].selected = true;
+
+                        // update tagselect, domainselect, scopeselect elements
                         tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
                         domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
+                        scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
 
                         // if no codeblock was found, grey out jump to codeblock button
                         if (!response.body) {
@@ -153,15 +177,13 @@ function setup(tagInstance, domainInstance) {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    // initialize select element
+    // initialize select elements
     let tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
     let domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
+    let scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
 
     // restores previous state / sets up new state
-    setup(tagInstance, domainInstance);
-    if (presetLanguage) {
-        alert(yey);
-    }
+    setup(tagInstance, domainInstance, scopeInstance);
 
     // save button
     document.getElementById('form').addEventListener('submit', function () {
