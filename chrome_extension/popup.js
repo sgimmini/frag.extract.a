@@ -128,7 +128,7 @@ function setup() {
                             body: response.body,
                             description: response.description,
                             tags: response.tags,
-                            domain: responseDomain,
+                            domain: response.domain,
                             // so that jump to codeblock button gets greyed out again upon reopening of the popup
                             jumpto: result.jumpto
                         });
