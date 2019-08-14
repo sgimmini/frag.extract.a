@@ -1,6 +1,8 @@
-function setup(instance) {
+function setup(instance, presetLanguage) {
     // get the previous state from storage
-    chrome.storage.local.get({ url: "", label: "", scope: "", body: "", description: "", tags: "", domain: "", jumpto: true, presetTags: false, presetLanguage: false }, function (result) {
+    chrome.storage.local.get({ url: "", label: "", scope: [""], body: "", description: "", tags: [["", false]], domain: [["", false]], jumpto: true, presetLanguage: false }, function (result) {
+        // save wether user has selected to add the language to tags or not
+        presetLanguage = result.presetLanguage;
         // returns array of length 1 with the currently viewed tab
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 
@@ -11,11 +13,21 @@ function setup(instance) {
             // also true when real popup is opened after clicking an Add to Fragment on SO question page, correct data in storage in this case guaranteed by content script
             if (tabs[0].url == result.url || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
                 document.getElementById('label').value = result.label;
-                document.getElementById('scope').value = result.scope;
                 document.getElementById('body').value = result.body;
                 document.getElementById('description').value = result.description;
-                //document.getElementById('tags').value = result.tags;
-                document.getElementById('domain').value = result.domain;
+
+                // set the tags as options for tagselect element
+                let tagselect = document.getElementById('tagselect');
+                result.tags.forEach(tag => {
+                    let newOption = document.createElement('option');
+                    // tag[0] contains the string (meaning the actual tag)
+                    newOption.innerText = tag[0];
+                    // tag[1] contains wether it is selected or not
+                    newOption.selected = tag[1];
+                    tagselect.add(newOption);
+                });
+                // update tagselect element
+                instance = M.FormSelect.init(document.getElementById('tagselect'));
 
                 // jump to codeblock gets greyed out if no codeblock was found on SO page or real popup is opened, because addressing the content script from there does not work
                 if (!result.jumpto || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
@@ -41,17 +53,26 @@ function setup(instance) {
                     } else {
                         // response contains all the fragment attributes that were extracted from the question page by content script
                         document.getElementById('label').value = response.label;
-                        document.getElementById('scope').value = response.scope.toString();
                         document.getElementById('body').value = response.body;
                         document.getElementById('description').value = response.description;
 
+                        // set the tags as options for tagselect element
                         let tagselect = document.getElementById('tagselect');
                         response.tags.forEach(tag => {
                             let newOption = document.createElement('option');
-                            newOption.innerText = tag;
-                            // options.push(newOption);
+                            // tag[0] contains the string (meaning the actual tag)
+                            newOption.innerText = tag[0];
+                            // tag[1] contains wether it is selected or not
+                            newOption.selected = tag[1];
                             tagselect.add(newOption);
                         });
+                        // set the scope as option as well, if user selected that option
+                        if (presetLanguage && response.scope[0]) {
+                            let newOption = document.createElement('option');
+                            newOption.innerText = response.scope[0];
+                            newOption.selected = true;
+                            tagselect.add(newOption);
+                        }
                         // update tagselect element
                         instance = M.FormSelect.init(document.getElementById('tagselect'));
 
@@ -62,10 +83,11 @@ function setup(instance) {
                             chrome.storage.local.set({
                                 url: tabs[0].url,
                                 label: response.label,
-                                scope: response.scope.toString(),
+                                scope: response.scope,
                                 body: response.body,
                                 description: response.description,
-                                tags: response.tags.toString(),
+                                tags: response.tags,
+                                domain: response.tags,
                                 // so that jump to codeblock button gets greyed out again upon reopening of the popup
                                 jumpto: false
                             });
@@ -74,10 +96,11 @@ function setup(instance) {
                             chrome.storage.local.set({
                                 url: tabs[0].url,
                                 label: response.label,
-                                scope: response.scope.toString(),
+                                scope: response.scope,
                                 body: response.body,
                                 description: response.description,
-                                tags: response.tags.toString(),
+                                tags: response.tags,
+                                domain: response.tags
                             });
                         }
                     }
@@ -106,9 +129,11 @@ function setup(instance) {
 document.addEventListener('DOMContentLoaded', function () {
     // initialize select element
     let instance = M.FormSelect.init(document.getElementById('tagselect'));
+    // represents the user option to preset the selected language as a tag
+    let presetLanguage = false;
 
     // restores previous state / sets up new state
-    setup(instance);
+    setup(instance, presetLanguage);
 
     // save button
     document.getElementById('form').addEventListener('submit', function () {
@@ -145,9 +170,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('label').addEventListener('input', function () {
         chrome.storage.local.set({ label: document.getElementById('label').value });
     });
+    /*
     document.getElementById('scope').addEventListener('input', function () {
         chrome.storage.local.set({ scope: document.getElementById('scope').value });
     });
+    */
     document.getElementById('body').addEventListener('input', function () {
         chrome.storage.local.set({ body: document.getElementById('body').value });
     });
@@ -159,7 +186,9 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.storage.local.set({ tags: document.getElementById('tags').value });
     });
     */
+    /*
     document.getElementById('domain').addEventListener('input', function () {
         chrome.storage.local.set({ domain: document.getElementById('domain').value });
     });
+    */
 });
