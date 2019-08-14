@@ -1,16 +1,12 @@
-function removeOptions(selectbox) {
-    let i;
-    for (i = selectbox.options.length - 1; i >= 0; i--) {
-        selectbox.remove(i);
-    }
-}
-
-function setup() {
+function setup(instance) {
     // get the previous state from storage
     chrome.storage.local.get({ url: "", label: "", scope: "", body: "", description: "", tags: "", domain: "", jumpto: true, presetTags: false, presetLanguage: false }, function (result) {
         // returns array of length 1 with the currently viewed tab
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 
+            /*
+             * Reopening popup on last site -> state is restored
+             */
             // if you're still on the site the poup was last opened, load last state with your changes from the automatically extracted fragment
             // also true when real popup is opened after clicking an Add to Fragment on SO question page, correct data in storage in this case guaranteed by content script
             if (tabs[0].url == result.url || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
@@ -27,6 +23,9 @@ function setup() {
                 }
             }
 
+            /*
+             * Opening popup on new SO question page -> collecting fragment from content script
+             */
             // if you're on a different SO question page (where the content script was injected), load automatically extracted fragment
             else if (/https:\/\/stackoverflow.com\/questions\/\d*\/.*/.test(tabs[0].url)) {
                 chrome.tabs.sendMessage(tabs[0].id, { content: 'setPopup' }, function (response) {
@@ -34,8 +33,8 @@ function setup() {
                     // error handling, if extension is installed and tab is not reloaded (meaning the content script has not been injected)
                     if (chrome.runtime.lastError) {
                         // replace entire popup with message to reload tab
-                        body = document.createElement('body');
-                        header = document.createElement('H4');
+                        let body = document.createElement('body');
+                        let header = document.createElement('H4');
                         header.innerText = "Please reload this tab";
                         body.appendChild(header);
                         document.body = body;
@@ -45,38 +44,16 @@ function setup() {
                         document.getElementById('scope').value = response.scope.toString();
                         document.getElementById('body').value = response.body;
                         document.getElementById('description').value = response.description;
-                        //document.getElementById('tagselect').value = response.tags;
-                        removeOptions(document.getElementById('tagselect'));
-                        /*
-                        for (a in document.getElementById('tagselect').options) {
-                            select.options.remove(0);
-                        }
-                        */
+
+                        let tagselect = document.getElementById('tagselect');
                         response.tags.forEach(tag => {
                             let newOption = document.createElement('option');
                             newOption.innerText = tag;
-                            //let newContent = document.createTextNode(tag);
-                            //let newContent = document.createTextNode(tag);
-                            //newOption.appendChild(newContent);
-                            let currentSelect = document.getElementById('tagselect');
-                            currentSelect.add(newOption);
-                            //new Element('option').set('text', tag).inject(document.getElementById('tagselect'));
+                            // options.push(newOption);
+                            tagselect.add(newOption);
                         });
-                        // for test purpose write tag in body 
-                        //document.getElementById('body').value = document.getElementById('tagselect').options[0].value;
-
-                        // update view to see changes
-                        $(document).ready(function () {
-                            $('select').not('.disabled').formSelect();
-                        });
-
-                        /*
-                        let new_options = response.tags;
-                        $('#tagselect').empty();
-                        $.each(new_options, function(value) {
-                            new Element('option').set('text', value).inject($('#tagselect'))
-                        })
-                        */
+                        // update tagselect element
+                        instance = M.FormSelect.init(document.getElementById('tagselect'));
 
                         // if no codeblock was found, grey out jump to codeblock button
                         if (!response.body) {
@@ -107,6 +84,9 @@ function setup() {
                 });
             }
 
+            /*
+             * Opening popup on NOT a question page -> don't load last state and no suggested fragment
+             */
             // if you're on a different site (not a SO question page), clear last state and load empty editor
             else {
                 chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto']);
@@ -124,8 +104,11 @@ function setup() {
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    // initialize select element
+    let instance = M.FormSelect.init(document.getElementById('tagselect'));
+
     // restores previous state / sets up new state
-    setup();
+    setup(instance);
 
     // save button
     document.getElementById('form').addEventListener('submit', function () {
@@ -179,8 +162,4 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('domain').addEventListener('input', function () {
         chrome.storage.local.set({ domain: document.getElementById('domain').value });
     });
-});
-
-$(document).ready(function () {
-    $('select').not('.disabled').formSelect();
 });
