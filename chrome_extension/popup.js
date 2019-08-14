@@ -66,6 +66,7 @@ function setup() {
                         // for test purpose write tag in body 
                         document.getElementById('body').value = document.getElementById('tagselect').options[0].value;
                         
+                        // update view to see changes
                         $(document).ready(function () {
                             $('select').not('.disabled').formSelect();
                         });
