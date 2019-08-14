@@ -5,20 +5,18 @@ This is the example to show how the trained model can be loaded into js.
 
 
 const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
-const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/tokenizer.json"
+const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json"
 
-
-function get_JSON_from_URL(url){
-    fetch(url).then(function(resp){
-        return resp.json();
-    })
-    .then(function(myJson) {
-    console.log(typeof JSON.parse(myJson))
-    console.log(myJson[("hi there stop how r you ?")]);
-  });
-}
 
 function getTokenisedWord(seedWord) {
+
+    fetch(VOCAB_URL)
+    .then(function(resp){
+        return resp.json();
+    })
+    .then(function(data){
+     console.log(data);   
+    });
         word2index = get_JSON_from_URL(VOCAB_URL)
         console.log(word2index)
         const _token = word2index[seedWord.toLowerCase()]
