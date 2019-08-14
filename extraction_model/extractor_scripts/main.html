@@ -8,25 +8,29 @@ const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_s
 const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/tokenizer.json"
 
 
-function getTokenisedWord(seedWord) {
-    fetch(VOCAB_URL).then(function(resp){
+function get_JSON_from_URL(url){
+    fetch(url).then(function(resp){
         return resp.json();
-    }
-    ).then(function(data)
-    {
-        const word2index = JSON.parse(data);
-        console.log(typeof data)
+    })
+    .then(function(myJson) {
+    console.log(typeof JSON.parse(myJson))
+    console.log(myJson[("hi there stop how r you ?")]);
+  });
+}
+
+function getTokenisedWord(seedWord) {
+        word2index = get_JSON_from_URL(VOCAB_URL)
+        console.log(word2index)
         const _token = word2index[seedWord.toLowerCase()]
         console.log(_token);
         return tf.tensor([_token])
     }
-    )
-}
+    
+
 
 async function get_model(){
     const model = await tf.loadLayersModel(MODEL_URL);
     tokens = getTokenisedWord("hi there STOP how r you?")
-    
     const result = model.predict(tokens);
 }
 get_model()
