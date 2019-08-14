@@ -1,6 +1,6 @@
 function removeOptions(selectbox) {
-    var i;
-    for(i = selectbox.options.length - 1 ; i >= 0 ; i--) {
+    let i;
+    for (i = selectbox.options.length - 1; i >= 0; i--) {
         selectbox.remove(i);
     }
 }
@@ -43,7 +43,7 @@ function setup() {
                         // response contains all the fragment attributes that were extracted from the question page by content script
                         document.getElementById('label').value = response.label;
                         document.getElementById('scope').value = response.scope.toString();
-                        //document.getElementById('body').value = response.body;
+                        document.getElementById('body').value = response.body;
                         document.getElementById('description').value = response.description;
                         //document.getElementById('tagselect').value = response.tags;
                         removeOptions(document.getElementById('tagselect'));
@@ -52,27 +52,26 @@ function setup() {
                             select.options.remove(0);
                         }
                         */
-                        
-                        for (let tag in response.tags) {
-                            var newOption = document.createElement('option');
-                            newOption.innerText = tag.innerText;
-                            //var newContent = document.createTextNode(tag);
-                            var newContent = document.createTextNode(tag.content);
-                            newOption.appendChild(newContent);
-                            var currentSelect = document.getElementById('tagselect');
+                        response.tags.forEach(tag => {
+                            let newOption = document.createElement('option');
+                            newOption.innerText = tag;
+                            //let newContent = document.createTextNode(tag);
+                            //let newContent = document.createTextNode(tag);
+                            //newOption.appendChild(newContent);
+                            let currentSelect = document.getElementById('tagselect');
                             currentSelect.add(newOption);
-                            //new Element('option').set('text', tag).inject(document.getElementById('tagselect'))
-                        }
+                            //new Element('option').set('text', tag).inject(document.getElementById('tagselect'));
+                        });
                         // for test purpose write tag in body 
-                        document.getElementById('body').value = document.getElementById('tagselect').options[0].value;
-                        
+                        //document.getElementById('body').value = document.getElementById('tagselect').options[0].value;
+
                         // update view to see changes
                         $(document).ready(function () {
                             $('select').not('.disabled').formSelect();
                         });
 
                         /*
-                        var new_options = response.tags;
+                        let new_options = response.tags;
                         $('#tagselect').empty();
                         $.each(new_options, function(value) {
                             new Element('option').set('text', value).inject($('#tagselect'))
