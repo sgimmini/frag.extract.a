@@ -32,17 +32,11 @@ function setup() {
         // remove potential "[closed]" and "Ask Question" from question header
         description = questionHeader.innerText.replace(/(?: \[closed\]| \[duplicate\])?\sAsk Question$/, '');
     }
+
     /*
      * Extract label [primary key in fragment database, also the name of the fragment in tree view in vsc extension]
      * -> see github issue on this topic: https://github.com/smn57/frag.extract.a/issues/6
      */
-    // if user sets the option to preset the label as a copy of description
-    chrome.storage.local.get({ presetLabel: false }, function (result) {
-        if (result.presetLabel) {
-            label = description;
-        }
-    });
-
     /*
      * Extract tags [used to quickly access fragments relating to something specific in tree view in vsc extension]
      * -> SO's tags for questions are used
@@ -51,12 +45,33 @@ function setup() {
      * Extract scope [language the codeblock is written in]
      * -> SO's tags for questions are matched to predefined languageList
      */
-    // get all tags from SO page, remove links from name with regex, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
-    Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, '')).forEach(tag => {
-        if (languageList.includes(tag)) {
-            scopeArray.push(tag);
+    // all of these require a value stored with chrome storage api, therefore, they are grouped
+    chrome.storage.local.get({ presetLabel: false, presetTabs: false }, function (result) {
+        // if user sets the option to preset the label as a copy of description
+        if (result.presetLabel) {
+            label = description;
+        }
+        // if user sets the option to preselect all tabs
+        if (result.presetTabs) {
+            // get all tags from SO page, remove links from name with regex, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
+            Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, '')).forEach(tag => {
+                if (languageList.includes(tag)) {
+                    scopeArray.push(tag);
+                } else {
+                    // second value determines wether this option is selected or not
+                    tagArray.push([tag, true]);
+                }
+            });
         } else {
-            tagArray.push(tag);
+            // get all tags from SO page, remove links from name with regex, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
+            Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, '')).forEach(tag => {
+                if (languageList.includes(tag)) {
+                    scopeArray.push(tag);
+                } else {
+                    // second value determines wether this option is selected or not
+                    tagArray.push([tag, false]);
+                }
+            });
         }
     });
     // almost all cases where multiple languages are tagged are javascript and html
@@ -93,10 +108,10 @@ function setup() {
                         chrome.storage.local.set({
                             url: window.location,
                             label: label,
-                            scope: scopeArray.toString(),
+                            scope: scopeArray,
                             body: newCodeblock,
                             description: description,
-                            tags: tagArray.toString()
+                            tags: tagArray
                         }, function () {
                             // open the popup window
                             chrome.runtime.sendMessage({ content: 'add' });
@@ -104,7 +119,7 @@ function setup() {
                     }
                     // if this is the same page, only the new, user selected codeblock and possibly changed language need to be saved
                     else {
-                        chrome.storage.local.set({ body: newCodeblock, scope: scopeArray.toString() }, function () {
+                        chrome.storage.local.set({ body: newCodeblock, scope: scopeArray }, function () {
                             // open the popup window
                             chrome.runtime.sendMessage({ content: 'add' });
                         });
@@ -148,4 +163,3 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
         scroll(0, scrollpos);
     }
 });
-
