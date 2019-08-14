@@ -5,6 +5,9 @@ let label = "", scopeArray = [], body = "", description = "", tagArray = [];
 // this list is not comprehensive, please add any further programming lanuages you may think of
 const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++', 'css', 'sql', 'c', 'r', 'objective-c', 'swift', 'ruby', 'excel', 'vba', 'vb.net', 'scala', 'typescript', 'matlab', 'bash', 'shell', 'go', 'rust', 'octave'];
 
+// run setup when content script is injected into SO page
+setup();
+
 function setup() {
 
     /*
@@ -143,9 +146,6 @@ function detectJsHtml(codeblock) {
         }
     }
 };
-
-// run setup when content script is injected into SO page
-setup();
 
 // handle requests from other parts of extension
 // only popup.js sends requests

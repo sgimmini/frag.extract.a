@@ -5,6 +5,68 @@ let tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
 let domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
 let scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
 
+document.addEventListener('DOMContentLoaded', function () {
+    // restores previous state / sets up new state
+    setup();
+
+    // save button
+    document.getElementById('form').addEventListener('submit', function () {
+        // saves fragment to database via python script in frag.edit vsc extension
+        chrome.runtime.sendMessage({ content: 'sendNativeMessage' }, function () {
+            window.close();
+        });
+    });
+
+    // cancel button
+    document.getElementById('cancel').addEventListener('click', function () {
+        // clears current state, when popup is reopened it will fetch automatically extracted fragment from content script
+        chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto'], function () {
+            window.close();
+        });
+    });
+
+    // jump to codeblock button
+    document.getElementById('jumpto').addEventListener('click', function () {
+        // scroll the page to the position of the codeblock that's in the editor on page
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, { content: 'scroll' });
+        });
+    });
+
+    // working hyperlinks, only used for the "More information on creating VS Code Snippets" at the bottom
+    window.addEventListener('click', function (event) {
+        if (event.target.href !== undefined) {
+            chrome.tabs.create({ url: event.target.href });
+        }
+    });
+
+    // save content of input fields
+    document.getElementById('label').addEventListener('input', function () {
+        chrome.storage.local.set({ label: document.getElementById('label').value });
+    });
+    /*
+    document.getElementById('scope').addEventListener('input', function () {
+        chrome.storage.local.set({ scope: document.getElementById('scope').value });
+    });
+    */
+    document.getElementById('body').addEventListener('input', function () {
+        chrome.storage.local.set({ body: document.getElementById('body').value });
+    });
+    document.getElementById('description').addEventListener('input', function () {
+        chrome.storage.local.set({ description: document.getElementById('description').value });
+    });
+    /*
+    document.getElementById('tags').addEventListener('input', function () {
+        chrome.storage.local.set({ tags: document.getElementById('tags').value });
+    });
+    */
+    /*
+    document.getElementById('domain').addEventListener('input', function () {
+        chrome.storage.local.set({ domain: document.getElementById('domain').value });
+    });
+    */
+});
+
 function setup() {
     // get the previous state from storage
     chrome.storage.local.get({ url: "", label: "", scope: [""], body: "", description: "", tags: [["", false]], domain: [["", false]], jumpto: true, presetLanguage: false }, function (result) {
@@ -110,7 +172,7 @@ function loadState(input) {
 
     // set the tags as not selected options for domainselect element
     let domainselect = document.getElementById('domainselect');
-    inputDomain.forEach(domain => {
+    input.domain.forEach(domain => {
         let newOption = document.createElement('option');
         // domain[0] contains the string (meaning the actual tag)
         newOption.innerText = domain[0];
@@ -131,67 +193,3 @@ function loadState(input) {
     domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
     scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
 };
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    // restores previous state / sets up new state
-    setup();
-
-    // save button
-    document.getElementById('form').addEventListener('submit', function () {
-        // saves fragment to database via python script in frag.edit vsc extension
-        chrome.runtime.sendMessage({ content: 'sendNativeMessage' }, function () {
-            window.close();
-        });
-    });
-
-    // cancel button
-    document.getElementById('cancel').addEventListener('click', function () {
-        // clears current state, when popup is reopened it will fetch automatically extracted fragment from content script
-        chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto'], function () {
-            window.close();
-        });
-    });
-
-    // jump to codeblock button
-    document.getElementById('jumpto').addEventListener('click', function () {
-        // scroll the page to the position of the codeblock that's in the editor on page
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { content: 'scroll' });
-        });
-    });
-
-    // working hyperlinks, only used for the "More information on creating VS Code Snippets" at the bottom
-    window.addEventListener('click', function (event) {
-        if (event.target.href !== undefined) {
-            chrome.tabs.create({ url: event.target.href });
-        }
-    });
-
-    // save content of input fields
-    document.getElementById('label').addEventListener('input', function () {
-        chrome.storage.local.set({ label: document.getElementById('label').value });
-    });
-    /*
-    document.getElementById('scope').addEventListener('input', function () {
-        chrome.storage.local.set({ scope: document.getElementById('scope').value });
-    });
-    */
-    document.getElementById('body').addEventListener('input', function () {
-        chrome.storage.local.set({ body: document.getElementById('body').value });
-    });
-    document.getElementById('description').addEventListener('input', function () {
-        chrome.storage.local.set({ description: document.getElementById('description').value });
-    });
-    /*
-    document.getElementById('tags').addEventListener('input', function () {
-        chrome.storage.local.set({ tags: document.getElementById('tags').value });
-    });
-    */
-    /*
-    document.getElementById('domain').addEventListener('input', function () {
-        chrome.storage.local.set({ domain: document.getElementById('domain').value });
-    });
-    */
-});
