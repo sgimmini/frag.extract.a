@@ -52,7 +52,7 @@ function setup() {
      * -> SO's tags for questions are matched to predefined languageList
      */
     // get all tags from SO page, remove links from name with regex, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
-    Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, '')).map(tag => {
+    Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, '')).forEach(tag => {
         if (languageList.includes(tag)) {
             scopeArray.push(tag);
         } else {
@@ -69,8 +69,7 @@ function setup() {
      */
 
     // create Add to fragment buttons on every codeblock
-    for (let codeblock of codeblocks) {
-
+    codeblocks.forEach(codeblock => {
         let button = document.createElement('button');
         // parentelement of the codeblock in order to put the button outside the grey box
         //let parent = codeblock.parentElement;
@@ -117,7 +116,7 @@ function setup() {
                 });
             }
         );
-    }
+    });
 };
 
 function detectJsHtml(codeblock) {
