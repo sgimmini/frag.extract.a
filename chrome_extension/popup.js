@@ -1,4 +1,6 @@
-function setup(instance, presetLanguage) {
+// represents the user option to preset the selected language as a tag
+var presetLanguage = false;
+function setup(tagInstance, domainInstance) {
     // get the previous state from storage
     chrome.storage.local.get({ url: "", label: "", scope: [""], body: "", description: "", tags: [["", false]], domain: [["", false]], jumpto: true, presetLanguage: false }, function (result) {
         // save wether user has selected to add the language to tags or not
@@ -26,8 +28,19 @@ function setup(instance, presetLanguage) {
                     newOption.selected = tag[1];
                     tagselect.add(newOption);
                 });
-                // update tagselect element
-                instance = M.FormSelect.init(document.getElementById('tagselect'));
+                // set the domain contents as options for domainselect element
+                let domainselect = document.getElementById('domainselect');
+                result.domain.forEach(domain => {
+                    let newOption = document.createElement('option');
+                    // domain[0] contains the string (meaning the actual tag)
+                    newOption.innerText = domain[0];
+                    // domain[1] contains wether it is selected or not
+                    newOption.selected = domain[1];
+                    domainselect.add(newOption);
+                });
+                // update tagselect and domainselect elements
+                tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
+                domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
 
                 // jump to codeblock gets greyed out if no codeblock was found on SO page or real popup is opened, because addressing the content script from there does not work
                 if (!result.jumpto || tabs[0].url == "chrome-extension://faoicolglehmgplpccapgobineahofjh/popup.html") {
@@ -66,15 +79,28 @@ function setup(instance, presetLanguage) {
                             newOption.selected = tag[1];
                             tagselect.add(newOption);
                         });
+                        // set the tags as not selected options for domainselect element
+                        // copy response.tags by value
+                        let responseDomain = [...response.tags];
+                        let domainselect = document.getElementById('domainselect');
+                        responseDomain.forEach(domain => {
+                            let newOption = document.createElement('option');
+                            // domain[0] contains the string (meaning the actual tag)
+                            newOption.innerText = domain[0];
+                            domainselect.add(newOption);
+                        });
+
                         // set the scope as option as well, if user selected that option
                         if (presetLanguage && response.scope[0]) {
+                            response.tags.push([response.scope[0], true]);
                             let newOption = document.createElement('option');
                             newOption.innerText = response.scope[0];
                             newOption.selected = true;
                             tagselect.add(newOption);
                         }
-                        // update tagselect element
-                        instance = M.FormSelect.init(document.getElementById('tagselect'));
+                        // update tagselect and domainselect elements
+                        tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
+                        domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
 
                         // if no codeblock was found, grey out jump to codeblock button
                         if (!response.body) {
@@ -87,7 +113,7 @@ function setup(instance, presetLanguage) {
                                 body: response.body,
                                 description: response.description,
                                 tags: response.tags,
-                                domain: response.tags,
+                                domain: responseDomain,
                                 // so that jump to codeblock button gets greyed out again upon reopening of the popup
                                 jumpto: false
                             });
@@ -100,7 +126,7 @@ function setup(instance, presetLanguage) {
                                 body: response.body,
                                 description: response.description,
                                 tags: response.tags,
-                                domain: response.tags
+                                domain: responseDomain
                             });
                         }
                     }
@@ -128,12 +154,14 @@ function setup(instance, presetLanguage) {
 
 document.addEventListener('DOMContentLoaded', function () {
     // initialize select element
-    let instance = M.FormSelect.init(document.getElementById('tagselect'));
-    // represents the user option to preset the selected language as a tag
-    let presetLanguage = false;
+    let tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
+    let domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
 
     // restores previous state / sets up new state
-    setup(instance, presetLanguage);
+    setup(tagInstance, domainInstance);
+    if (presetLanguage) {
+        alert(yey);
+    }
 
     // save button
     document.getElementById('form').addEventListener('submit', function () {
