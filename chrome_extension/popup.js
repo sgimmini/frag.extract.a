@@ -1,5 +1,5 @@
 // represents the user option to preset the selected language as a tag
-var presetLanguage = false;
+let presetLanguage = false;
 // initialize select elements
 let tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
 let domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
@@ -141,7 +141,7 @@ function setup() {
              */
             // if you're on a different site (not a SO question page), clear last state and load empty editor
             else {
-                chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto']);
+                chrome.storage.local.remove(['label', 'scope', 'body', 'description', 'tags', 'domain']);
                 // so that state is restored upon reopening of the popup
                 chrome.storage.local.set({ url: tabs[0].url, jumpto: false });
                 // also change title to no longer say "Suggested Fragment"
