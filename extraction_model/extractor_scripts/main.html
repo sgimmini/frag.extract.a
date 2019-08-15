@@ -1,4 +1,5 @@
 This is the example to show how the trained model can be loaded into js.
+If you want to see intersting things happen, look into the developer console.
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
 
 <script type="module">
@@ -15,20 +16,29 @@ function getTokenisedWord(seedWord) {
         return resp.json();
     })
     .then(function(data){
-     console.log(data);   
-    });
-        word2index = get_JSON_from_URL(VOCAB_URL)
-        console.log(word2index)
-        const _token = word2index[seedWord.toLowerCase()]
-        console.log(_token);
+        console.log(data)
+        console.log(seedWord)
+        var to_return = tf.zeros([1,195])
+        var length = seedWord.length;
+        for(var i = 0; i < length; i++){
+            if(data.hasOwnProperty(seedWord[i])){
+                console.log("yay")
+            }
+        }
+        console.log(to_return)
+        const _token = data[seedWord.toLowerCase()]
+        console.log(data["pythosssn"])
         return tf.tensor([_token])
+    });
     }
     
 
 
 async function get_model(){
     const model = await tf.loadLayersModel(MODEL_URL);
-    tokens = getTokenisedWord("hi there STOP how r you?")
+    var str = "How are you stop doing?"
+    var input = str.split(" ");
+    tokens = getTokenisedWord(input)
     const result = model.predict(tokens);
 }
 get_model()
