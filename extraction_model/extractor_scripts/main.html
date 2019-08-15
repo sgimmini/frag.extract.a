@@ -18,8 +18,11 @@ async function getTokenisedWord(seedWord) {
     .then(function(data){
         console.log(data)
         console.log(seedWord)
+        // tensor to return later
         var to_return = new Array(MAX_LEN).fill(0);
         var length = seedWord.length;
+        // If the word is in our dictionary we assign it it's value
+        // else it becomes zero
         for(var i = 0; i < length; i++){
             if(data.hasOwnProperty(seedWord[i])){
                 to_return[i] = data[seedWord[i]]
@@ -31,13 +34,20 @@ async function getTokenisedWord(seedWord) {
     }
     
 
-
+// this is testing the model
 async function get_model(){
+    // calling the model
     const model = await tf.loadLayersModel(MODEL_URL);
+    // test string
     var str = "How are you stop doing?"
+    // tokenization
     var input = str.split(" ");
+    // turning into tensor
     tokens = getTokenisedWord(input)
+    // prediction
     const result = model.predict(tokens);
+    // result
+    console.log(result)
 }
 get_model()
 
