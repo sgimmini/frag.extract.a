@@ -22,17 +22,21 @@ async function getTokenisedWord(seedWord) {
         var to_return = new Array(MAX_LEN).fill(0);
         var length = seedWord.length;
         // If the word is in our dictionary we assign it it's value
-        // else it becomes zero
+        // else it gets "deleted" by the offset
+        var offset = 0;
         for(var i = 0; i < length; i++){
             if(data.hasOwnProperty(seedWord[i])){
-                to_return[i] = data[seedWord[i]]
+                to_return[i-offset] = data[seedWord[i]]
+            }
+            else{
+                offset = offset +1;
             }
         }
         console.log(to_return)
-        return to_return
+        const shape = [1, 195]
+        return tf.tensor(to_return, shape)
     });
     }
-    
 
 // this is testing the model
 async function get_model(){
@@ -43,11 +47,12 @@ async function get_model(){
     // tokenization
     var input = str.split(" ");
     // turning into tensor
-    tokens = getTokenisedWord(input)
+    const tokens = await getTokenisedWord(input)
+    tokens.print()
     // prediction
     const result = model.predict(tokens);
     // result
-    console.log(result)
+    result.print()
 }
 get_model()
 
