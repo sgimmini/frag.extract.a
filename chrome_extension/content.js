@@ -1,31 +1,56 @@
 // these variables need to be accessible through the entire life of the page this script was injected in
 let scrollpos = 0;
 let label = "", scopeArray = [], body = "", description = "", tagArray = [];
+const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
+const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json"
+const MAX_LEN = 195
+const border = " stop "
 // list of all languages that can be recognized from tags
 // this list is not comprehensive, please add any further programming lanuages you may think of
 const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++', 'css', 'sql', 'c', 'r', 'objective-c', 'swift', 'ruby', 'excel', 'vba', 'vb.net', 'scala', 'typescript', 'matlab', 'bash', 'shell', 'go', 'rust', 'octave'];
+// import tensorflowjs for machine learning
+
+
+
+// this function takes a tokenized string as input and returns a probability of
+// the given intent (tokens before border - token) and
+// and codeblock being a good fit
+async function evaluate(seedWord) {
+    // get the JSON from URL
+    return fetch(VOCAB_URL)
+    .then(function(resp){
+        return resp.json();
+    })
+    .then(function(data){
+        // tensor to return later
+        var to_return = new Array(MAX_LEN).fill(0);
+        var length = seedWord.length;
+        // If the word is in our dictionary we assign it it's value
+        // else it gets "deleted" by the offset
+        var offset = 0;
+        for(var i = 0; i < length; i++){
+            if(data.hasOwnProperty(seedWord[i])){
+                to_return[i-offset] = data[seedWord[i]]
+            }
+            else{
+                offset = offset +1;
+            }
+        }
+        const shape = [1, MAX_LEN]
+        // calling the model
+        tf.loadLayersModel(MODEL_URL).then(model =>{
+            const result = model.predict(tf.tensor(to_return, shape))
+            var resultData = result.dataSync();
+            console.log(resultData[0]-1);
+            return resultData[0]-1;
+        });
+    });
+    }
 
 // run setup when content script is injected into SO page
 setup();
 
 function setup() {
-
-    /*
-     * Extract body [codeblock of the fragment]
-     * -> best codeblock in the answers is selected
-     */
-    // all codeblocks in all answers without inline code
-    const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
-    // determine which codeblock is the best for fragment in here
-    if (codeblocks.length) {
-        // for now: always use top answers first codeblock
-        // remove trailing whitespace
-        body = codeblocks[0].innerText.replace(/\s$/, '');
-        // set scrollpos
-        // does not work properly: target codeblock is just below the screen, not visible, instead of at the top of the screen
-        scrollpos = codeblocks[0].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
-    }
-
     /*
      * Extract description [description of functionality in codeblock]
      * -> question title is used
@@ -35,6 +60,36 @@ function setup() {
         // remove potential "[closed]" and "Ask Question" from question header
         description = questionHeader.innerText.replace(/(?: \[closed\]| \[duplicate\])?\sAsk Question$/, '');
     }
+    /*
+     * Extract body [codeblock of the fragment]
+     * -> best codeblock in the answers is selected
+     */
+    // all codeblocks in all answers without inline code
+    const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
+    
+    // determine which codeblock is the best for fragment in here
+    if (codeblocks.length) {
+        // for now: always use top answers first codeblock
+        // remove trailing whitespace
+        //  body = codeblocks[0].innerText.replace(/\s$/, '');
+        var ranking = []
+        for(var i = 0; i < codeblocks.length; i++){
+            var input = description.concat(border, codeblocks[i].innerText.replace(/\s$/, ''))
+            var prob = evaluate(input.split(" "))
+            console.log(prob)
+            var tupel = [prob, codeblocks[0].innerText.replace(/\s$/, '')]
+            ranking.push(tupel)
+        }
+        ranking.sort(function(a, b){
+            return a[0] > b[0] ? 1 : -1;
+        })
+
+        body = ranking[0][1];
+        // set scrollpos
+        // does not work properly: target codeblock is just below the screen, not visible, instead of at the top of the screen
+        scrollpos = codeblocks[0].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
+    }
+
 
     /*
      * Extract label [primary key in fragment database, also the name of the fragment in tree view in vsc extension]

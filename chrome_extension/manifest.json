@@ -1,4 +1,4 @@
-{
+﻿{
   // Extension ID: faoicolglehmgplpccapgobineahofjh
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwSDGgby66RB/ZxCorJgq8biwxfu9PJDeObVOmy/bc10FyTsSPhkkQq8MiV5cPV9n6G7Q3GKvYQdj49CZFhadcWn1/IShX1+mK6HYILTaO1a08YC+I/nBNvl+/3VET6sSW7/Embrt3O8G/gzqjvf56J/VLff1aJfaVgmniVhI9/KSphzQgMSdbBhPFL/XITiX3AHU8nABLQF+odcM6jiGTS8AFYcwvpcumiQiFNw9JncJfdO0u15dxtyhminr9DNqq9Lwp8ws9bLsSgArCqgucKguiqneRQ1qui0aX8d6ygMA63rwJpzig0pGCcSMaVYVM2yPZK4Hg5ejRun3wFRW3wIDAQAB",
   "manifest_version": 2,
@@ -15,7 +15,9 @@
         "https://stackoverflow.com/questions/tagged/*"
       ],
       "js": [
+	"tf.min.js",
         "content.js"
+	
       ],
       "run_at": "document_end"
     }
@@ -53,4 +55,5 @@
     "default_title": "Create VS Code Snippets from anwers in Stack Overflow",
     "default_popup": "popup.html"
   }
+
 }
