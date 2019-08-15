@@ -7,28 +7,26 @@ If you want to see intersting things happen, look into the developer console.
 
 const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
 const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json"
+const MAX_LEN = 195
 
-
-function getTokenisedWord(seedWord) {
-
-    fetch(VOCAB_URL)
+async function getTokenisedWord(seedWord) {
+    // get the JSON from URL
+    return fetch(VOCAB_URL)
     .then(function(resp){
         return resp.json();
     })
     .then(function(data){
         console.log(data)
         console.log(seedWord)
-        var to_return = tf.zeros([1,195])
+        var to_return = new Array(MAX_LEN).fill(0);
         var length = seedWord.length;
         for(var i = 0; i < length; i++){
             if(data.hasOwnProperty(seedWord[i])){
-                console.log("yay")
+                to_return[i] = data[seedWord[i]]
             }
         }
         console.log(to_return)
-        const _token = data[seedWord.toLowerCase()]
-        console.log(data["pythosssn"])
-        return tf.tensor([_token])
+        return to_return
     });
     }
     
