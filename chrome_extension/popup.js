@@ -183,6 +183,7 @@ function setChips(tags, domElement) {
     let autocompleteTags = {};
     // popuplate above data structures
     tags.forEach(entry => {
+        // if second attribute is true, the entry will be preselected
         if (entry[1]) {
             tagData.push({ tag: entry[0] });
         } else {
