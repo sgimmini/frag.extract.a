@@ -156,19 +156,6 @@ function loadState(input) {
     document.getElementById('body').value = input.body;
     document.getElementById('description').value = input.description;
 
-    // array containing all initial tags
-    let tagData = [];
-    // object containing all other tags as autocomplete options
-    let autocompleteTags = {};
-    // popuplate above data structures
-    input.tags.forEach(entry => {
-        if (entry[1]) {
-            tagData.push({ tag: entry[0] });
-        } else {
-            autocompleteTags[entry[0]] = null;
-        }
-    });
-
     // sets all initial tag chips and adds the rest as autocomplete options
     const tagchips = document.getElementById('tagchips');
     setChips(input.tags, tagchips);
@@ -185,7 +172,6 @@ function loadState(input) {
         scopeselect.add(newOption);
     }
     scopeselect.options[0].selected = true;
-
     // update scopeselect element
     scopeInstance = M.FormSelect.init(scopeselect);
 };
@@ -204,6 +190,7 @@ function setChips(tags, domElement) {
         }
     });
 
+    // initialize chips element
     M.Chips.init(domElement, {
         data: tagData,
         placeholder: '+',
@@ -211,6 +198,7 @@ function setChips(tags, domElement) {
         autocompleteOptions: {
             data: autocompleteTags,
             limit: Infinity,
+            // offers list of all autocomplete options even before one starts typing
             minLength: 0,
         }
     });
