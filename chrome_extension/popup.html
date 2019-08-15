@@ -18,32 +18,11 @@
             <form class="col s12">
                 <h5 id="title">Suggested Fragment</h5>
                 <div class="row">
+
                     <div class="input-field col s6" style="margin-bottom: 5px">
                         <input placeholder="" id="label" type="text" autofocus required class="validate"
                             style="margin-top: -10px">
                         <label for="label">LABEL</label>
-                    </div>
-
-                    <div class="input-field col s6" style="margin-bottom: 5px">
-                        <div class="select-wrapper initialized" style="margin-top: -10px; font-size: 100%">
-                            <!--
-                               <input class="select-dropdown dropdown-trigger" type="text" readonly="true" style="margin-top: -10px">
-                                <svg class="caret" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">  
-                                    <path d="M7 10l5 5 5-5z"></path>
-                                    <path d="M0 0h24v24H0z" fill="none"></path>
-                                </svg>  
-                            -->
-
-                            <select multiple id="tagselect">
-                            </select>
-                        </div>
-                        <label for="tagselect">Tag</label>
-                    </div>
-
-                    <div class="input-field col s12" style="margin-bottom: 7px">
-                        <textarea placeholder="" id="description" class="materialize-textarea" style="font-size: 140%; margin-top: -10px; height: 60pt;
-                            margin-bottom: -10px"></textarea>
-                        <label for="description">Description</label>
                     </div>
 
                     <div class="input-field col s6" style="margin-bottom: 5px">
@@ -54,22 +33,27 @@
                         <label for="scopeselect">Language</label>
                     </div>
 
-                    <div class="input-field col s6" style="margin-bottom: 5px">
+                    <div class="input-field col s12" style="margin-bottom: 5px">
                         <div class="select-wrapper initialized" style="margin-top: -10px; font-size: 100%">
-                            <select multiple id="domainselect">
-                            </select>
+                            <div class="chips chips-autocomplete" id="tagchips">
+                            </div>
                         </div>
-                        <label for="domainselect">Libraries</label>
+                        <label for="tagselect">Tag</label>
                     </div>
 
-                    <!--
-                        KEINE AHNUNG WARUM DAS NICHT GEHT
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <div class="chips chips-placeholder"></div>
-                        </div>
+                    <div class="input-field col s12" style="margin-bottom: 7px">
+                        <textarea placeholder="" id="description" class="materialize-textarea" style="font-size: 140%; margin-top: -10px; height: 40pt;
+                            margin-bottom: -10px"></textarea>
+                        <label for="description">Description</label>
                     </div>
-                    -->
+
+                    <div class="input-field col s12" style="margin-bottom: 5px">
+                        <div class="select-wrapper initialized" style="margin-top: -10px; font-size: 100%">
+                            <div class="chips chips-autocomplete" id="domainchips">
+                            </div>
+                        </div>
+                        <label for="domainselect">Libraries / Packages</label>
+                    </div>
 
                     <div class="input-field col s12" style="margin-bottom: -10px">
                         <textarea placeholder="" id="body" class="materialize-textarea" autofocus required style="font-family: monospace, monospace; font-size: 140%; height: 120pt;
