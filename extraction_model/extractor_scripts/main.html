@@ -29,10 +29,10 @@ async function getTokenisedWord(seedWord) {
             }
         }
         console.log(to_return)
-        return to_return
+        const shape = [1, 195]
+        return tf.tensor(to_return, shape)
     });
     }
-    
 
 // this is testing the model
 async function get_model(){
@@ -43,11 +43,12 @@ async function get_model(){
     // tokenization
     var input = str.split(" ");
     // turning into tensor
-    tokens = getTokenisedWord(input)
+    const tokens = await getTokenisedWord(input)
+    tokens.print()
     // prediction
     const result = model.predict(tokens);
     // result
-    console.log(result)
+    result.print()
 }
 get_model()
 
