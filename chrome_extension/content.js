@@ -10,50 +10,12 @@ const border = " stop "
 // list of all languages that can be recognized from tags
 // this list is not comprehensive, please add any further programming lanuages you may think of
 const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++', 'css', 'sql', 'c', 'r', 'objective-c', 'swift', 'ruby', 'excel', 'vba', 'vb.net', 'scala', 'typescript', 'matlab', 'bash', 'shell', 'go', 'rust', 'octave'];
-// import tensorflowjs for machine learning
-
-
-
-// this function takes a tokenized string as input and returns a probability of
-// the given intent (tokens before border - token) and
-// and codeblock being a good fit
-async function evaluate(seedWord) {
-    // get the JSON from URL
-    return fetch(VOCAB_URL)
-        .then(function (resp) {
-            return resp.json();
-        })
-        .then(function (data) {
-            // tensor to return later
-            var to_return = new Array(MAX_LEN).fill(0);
-            var length = seedWord.length;
-            // If the word is in our dictionary we assign it it's value
-            // else it gets "deleted" by the offset
-            var offset = 0;
-            for (var i = 0; i < length; i++) {
-                if (data.hasOwnProperty(seedWord[i])) {
-                    to_return[i - offset] = data[seedWord[i]]
-                }
-                else {
-                    offset = offset + 1;
-                }
-            }
-            const shape = [1, MAX_LEN]
-            // calling the model
-            tf.loadLayersModel(MODEL_URL).then(model => {
-                const result = model.predict(tf.tensor(to_return, shape))
-                var resultData = result.dataSync();
-                console.log(resultData[0])
-                var back = resultData[0]
-                return back;
-            });
-        });
-}
 
 // run setup when content script is injected into SO page
 setup();
 
 async function setup() {
+
     /*
      * Extract description [description of functionality in codeblock]
      * -> question title is used
@@ -63,6 +25,54 @@ async function setup() {
         // remove potential "[closed]" and "Ask Question" from question header
         description = questionHeader.innerText.replace(/(?: \[closed\]| \[duplicate\])?\sAsk Question$/, '');
     }
+
+    /*
+     * Extract label [primary key in fragment database, also the name of the fragment in tree view in vsc extension]
+     * -> see github issue on this topic: https://github.com/smn57/frag.extract.a/issues/6
+     */
+    /*
+     * Extract tags [used to quickly access fragments relating to something specific in tree view in vsc extension]
+     * -> SO's tags for questions are used
+     */
+    /*
+     * Extract scope [language the codeblock is written in]
+     * -> SO's tags for questions are matched to predefined languageList
+     */
+    /*
+     * Extract domain [libraries or frameworks that are used in the codeblock, use of this attribute is unclear]
+     * -> SO's tags for questions are presented as options in popup
+     */
+    // all of these require a value stored with chrome storage api, therefore, they are grouped
+    chrome.storage.local.get({ presetLabel: false, presetTabs: false }, function (result) {
+        // if user sets the option to preset the label as a copy of description
+        if (result.presetLabel) {
+            label = description;
+        }
+        // if user sets the option to preselect all tabs
+        if (result.presetTabs) {
+            // get all tags from SO page, remove links from name with regex, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
+            Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, '')).forEach(tag => {
+                if (languageList.includes(tag)) {
+                    scopeArray.push(tag);
+                } else {
+                    // second value determines wether this option is selected or not
+                    tagArray.push([tag, true]);
+                }
+            });
+        } else {
+            // get all tags from SO page, remove links from name with regex, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
+            Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, '')).forEach(tag => {
+                if (languageList.includes(tag)) {
+                    scopeArray.push(tag);
+                } else {
+                    // second value determines wether this option is selected or not
+                    tagArray.push([tag, false]);
+                }
+            });
+        }
+
+        domainArray = tagArray;
+    });
 
     /*
      * Extract body [codeblock of the fragment]
@@ -94,61 +104,14 @@ async function setup() {
         // set scrollpos
         // does not work properly: target codeblock is just below the screen, not visible, instead of at the top of the screen
         scrollpos = codeblocks[0].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
-    }
 
-    /*
-     * Extract label [primary key in fragment database, also the name of the fragment in tree view in vsc extension]
-     * -> see github issue on this topic: https://github.com/smn57/frag.extract.a/issues/6
-     */
-    /*
-     * Extract tags [used to quickly access fragments relating to something specific in tree view in vsc extension]
-     * -> SO's tags for questions are used
-     */
-    /*
-     * Extract scope [language the codeblock is written in]
-     * -> SO's tags for questions are matched to predefined languageList
-     */
-    // all of these require a value stored with chrome storage api, therefore, they are grouped
-    chrome.storage.local.get({ presetLabel: false, presetTabs: false }, function (result) {
-        // if user sets the option to preset the label as a copy of description
-        if (result.presetLabel) {
-            label = description;
-        }
-        // if user sets the option to preselect all tabs
-        if (result.presetTabs) {
-            // get all tags from SO page, remove links from name with regex, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
-            Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, '')).forEach(tag => {
-                if (languageList.includes(tag)) {
-                    scopeArray.push(tag);
-                } else {
-                    // second value determines wether this option is selected or not
-                    tagArray.push([tag, true]);
-                }
-            });
-        } else {
-            // get all tags from SO page, remove links from name with regex, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
-            Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.href.replace(/https:\/\/stackoverflow.com\/questions\/tagged\//, '')).forEach(tag => {
-                if (languageList.includes(tag)) {
-                    scopeArray.push(tag);
-                } else {
-                    // second value determines wether this option is selected or not
-                    tagArray.push([tag, false]);
-                }
-            });
-        }
         // almost all cases where multiple languages are tagged are javascript and html
         // therefore an attempt is made to determine which of these languages the selected codeblock is
+        // also sets the first language in the array as the selected one
         detectJsHtml(body);
-        if (scopeArray[0]) {
-            scope = scopeArray[0];
-        }
-    });
+    }
 
-    /*
-     * Extract domain [libraries or frameworks that are used in the codeblock, use of this attribute is unclear]
-     * -> SO's tags for questions are presented as options in popup
-     */
-    domainArray = tagArray;
+
 
     // create Add to fragment buttons on every codeblock
     codeblocks.forEach(codeblock => {
@@ -164,10 +127,7 @@ async function setup() {
                 // remove trailing whitespace
                 const newCodeblock = event.currentTarget.parentElement.firstChild.innerText.replace(/\s$/, '');
                 // check if lanuage needs to be changed
-                detectJsHtml(newCodeblock)
-                if (scopeArray[0]) {
-                    scope = scopeArray[0];
-                }
+                detectJsHtml(newCodeblock);
                 // set scrollposs
                 scrollpos = event.currentTarget.parentElement.firstChild.getBoundingClientRect().top; // - event.currentTarget.parentElement.firstChild.getBoundingClientRect().height;
 
@@ -214,6 +174,10 @@ function detectJsHtml(codeblock) {
             scopeArray = ['javascript', 'html'];
         }
     }
+    // set the first language as the selected one
+    if (scopeArray[0]) {
+        scope = scopeArray[0];
+    }
 };
 
 // this function takes a tokenized string as input and returns a probability of
@@ -245,11 +209,12 @@ async function evaluate(seedWord) {
             tf.loadLayersModel(MODEL_URL).then(model => {
                 const result = model.predict(tf.tensor(to_return, shape))
                 var resultData = result.dataSync();
-                console.log(resultData[0] - 1);
-                return resultData[0] - 1;
+                console.log(resultData[0])
+                var back = resultData[0]
+                return back;
             });
         });
-};
+}
 
 // handle requests from other parts of extension
 // only popup.js sends requests
