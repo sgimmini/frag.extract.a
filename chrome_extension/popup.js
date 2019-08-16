@@ -172,16 +172,18 @@ function loadState(input) {
 
 function setChips(tags, domElement) {
     // array containing all initial tags
+    // format: [{ tag: 'elem0' }, { tag: 'elem1' }]
     let tagData = [];
     // object containing all other tags as autocomplete options
+    // format: { 'elem0': null, 'elem1': null }
     let autocompleteTags = {};
     // popuplate above data structures
-    tags.forEach(entry => {
-        // if second attribute is true, the entry will be preselected
-        if (entry[1]) {
-            tagData.push({ tag: entry[0] });
+    tags.forEach(tag => {
+        // if second attribute is true, the tag will be preselected
+        if (tag[1]) {
+            tagData.push({ tag: tag[0] });
         } else {
-            autocompleteTags[entry[0]] = null;
+            autocompleteTags[tag[0]] = null;
         }
     });
 
