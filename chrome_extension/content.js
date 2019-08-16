@@ -1,6 +1,6 @@
 // these variables need to be accessible through the entire life of the page this script was injected in
 let scrollpos = 0;
-let label = "", scopeArray = [], body = "", description = "", tagArray = [];
+let label = "", scope = "", scopeArray = [], body = "", description = "", tagArray = [], domainArray = [];
 
 const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
 const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json"
@@ -16,6 +16,7 @@ const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++'
 setup();
 
 function setup() {
+
     /*
      * Extract description [description of functionality in codeblock]
      * -> question title is used
@@ -25,13 +26,13 @@ function setup() {
         // remove potential "[closed]" and "Ask Question" from question header
         description = questionHeader.innerText.replace(/(?: \[closed\]| \[duplicate\])?\sAsk Question$/, '');
     }
+
     /*
      * Extract body [codeblock of the fragment]
      * -> best codeblock in the answers is selected
      */
     // all codeblocks in all answers without inline code
     const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
-
     // determine which codeblock is the best for fragment in here
     if (codeblocks.length) {
         // for now: always use top answers first codeblock
@@ -56,7 +57,6 @@ function setup() {
         // does not work properly: target codeblock is just below the screen, not visible, instead of at the top of the screen
         scrollpos = codeblocks[0].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
     }
-
 
     /*
      * Extract label [primary key in fragment database, also the name of the fragment in tree view in vsc extension]
@@ -98,15 +98,19 @@ function setup() {
                 }
             });
         }
+        // almost all cases where multiple languages are tagged are javascript and html
+        // therefore an attempt is made to determine which of these languages the selected codeblock is
+        detectJsHtml(body);
+        if (scopeArray[0]) {
+            scope = scopeArray[0];
+        }
     });
-    // almost all cases where multiple languages are tagged are javascript and html
-    // therefore an attempt is made to determine which of these languages the selected codeblock is
-    detectJsHtml(body);
 
     /*
      * Extract domain [libraries or frameworks that are used in the codeblock, use of this attribute is unclear]
-     * -> SO's tags for questions are presented as options in popup, no action needed in content script
+     * -> SO's tags for questions are presented as options in popup
      */
+    domainArray = tagArray;
 
     // create Add to fragment buttons on every codeblock
     codeblocks.forEach(codeblock => {
@@ -123,6 +127,9 @@ function setup() {
                 const newCodeblock = event.currentTarget.parentElement.firstChild.innerText.replace(/\s$/, '');
                 // check if lanuage needs to be changed
                 detectJsHtml(newCodeblock)
+                if (scopeArray[0]) {
+                    scope = scopeArray[0];
+                }
                 // set scrollposs
                 scrollpos = event.currentTarget.parentElement.firstChild.getBoundingClientRect().top; // - event.currentTarget.parentElement.firstChild.getBoundingClientRect().height;
 
@@ -133,10 +140,12 @@ function setup() {
                         chrome.storage.local.set({
                             url: window.location,
                             label: label,
-                            scope: scopeArray,
+                            scope: scope,
+                            scopeArray: scopeArray,
                             body: newCodeblock,
                             description: description,
-                            tags: tagArray
+                            tags: tagArray,
+                            domain: domainArray
                         }, function () {
                             // open the popup window
                             chrome.runtime.sendMessage({ content: 'add' });
@@ -144,7 +153,7 @@ function setup() {
                     }
                     // if this is the same page, only the new, user selected codeblock and possibly changed language need to be saved
                     else {
-                        chrome.storage.local.set({ body: newCodeblock, scope: scopeArray }, function () {
+                        chrome.storage.local.set({ body: newCodeblock, scope: scope, scopeArray: scopeArray }, function () {
                             // open the popup window
                             chrome.runtime.sendMessage({ content: 'add' });
                         });
@@ -211,7 +220,7 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
     // when extension popup is opened on a site different to the last one 
     // hand over automatically extracted fragment to the popup to display and be edited by user
     if (recieved.content == 'setPopup') {
-        sendResponse({ url: window.location, label: label, scope: scopeArray, body: body, description: description, tags: tagArray });
+        sendResponse({ url: window.location, label: label, scope: scope, scopeArray: scopeArray, body: body, description: description, tags: tagArray, domain: domainArray });
     }
 
     // when jump to codeblock button is clicked
