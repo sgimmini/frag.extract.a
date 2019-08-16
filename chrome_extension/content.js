@@ -41,8 +41,9 @@ async function evaluate(seedWord) {
         tf.loadLayersModel(MODEL_URL).then(model =>{
             const result = model.predict(tf.tensor(to_return, shape))
             var resultData = result.dataSync();
-            console.log(resultData[0]-1);
-            return resultData[0]-1;
+            console.log(resultData[0])
+            var back = resultData[0]
+            return back;
         });
     });
     }
@@ -50,7 +51,7 @@ async function evaluate(seedWord) {
 // run setup when content script is injected into SO page
 setup();
 
-function setup() {
+async function setup() {
     /*
      * Extract description [description of functionality in codeblock]
      * -> question title is used
@@ -75,14 +76,15 @@ function setup() {
         var ranking = []
         for(var i = 0; i < codeblocks.length; i++){
             var input = description.concat(border, codeblocks[i].innerText.replace(/\s$/, ''))
-            var prob = evaluate(input.split(" "))
+            var prob = await evaluate(input.split(" "))
             console.log(prob)
-            var tupel = [prob, codeblocks[0].innerText.replace(/\s$/, '')]
+            var tupel = [prob, codeblocks[i].innerText.replace(/\s$/, '')]
             ranking.push(tupel)
         }
         ranking.sort(function(a, b){
-            return a[0] > b[0] ? 1 : -1;
+            return a[0] > b[0] ? -1 : 1;
         })
+        console.log(ranking)
 
         body = ranking[0][1];
         // set scrollpos
