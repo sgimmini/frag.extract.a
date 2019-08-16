@@ -203,7 +203,7 @@ function setChips(tags, domElement) {
     // initialize chips element
     M.Chips.init(domElement, {
         data: tagData,
-        placeholder: 'Press Enter after input to create a Tag',
+        placeholder: '+',
         secondaryPlaceholder: '+',
         autocompleteOptions: {
             data: autocompleteTags,
