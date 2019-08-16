@@ -12,11 +12,48 @@ const border = " stop "
 const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++', 'css', 'sql', 'c', 'r', 'objective-c', 'swift', 'ruby', 'excel', 'vba', 'vb.net', 'scala', 'typescript', 'matlab', 'bash', 'shell', 'go', 'rust', 'octave'];
 // import tensorflowjs for machine learning
 
+
+
+// this function takes a tokenized string as input and returns a probability of
+// the given intent (tokens before border - token) and
+// and codeblock being a good fit
+async function evaluate(seedWord) {
+    // get the JSON from URL
+    return fetch(VOCAB_URL)
+        .then(function (resp) {
+            return resp.json();
+        })
+        .then(function (data) {
+            // tensor to return later
+            var to_return = new Array(MAX_LEN).fill(0);
+            var length = seedWord.length;
+            // If the word is in our dictionary we assign it it's value
+            // else it gets "deleted" by the offset
+            var offset = 0;
+            for (var i = 0; i < length; i++) {
+                if (data.hasOwnProperty(seedWord[i])) {
+                    to_return[i - offset] = data[seedWord[i]]
+                }
+                else {
+                    offset = offset + 1;
+                }
+            }
+            const shape = [1, MAX_LEN]
+            // calling the model
+            tf.loadLayersModel(MODEL_URL).then(model => {
+                const result = model.predict(tf.tensor(to_return, shape))
+                var resultData = result.dataSync();
+                console.log(resultData[0])
+                var back = resultData[0]
+                return back;
+            });
+        });
+}
+
 // run setup when content script is injected into SO page
 setup();
 
-function setup() {
-
+async function setup() {
     /*
      * Extract description [description of functionality in codeblock]
      * -> question title is used
@@ -42,14 +79,15 @@ function setup() {
         var ranking = []
         for (var i = 0; i < codeblocks.length; i++) {
             var input = description.concat(border, codeblocks[i].innerText.replace(/\s$/, ''))
-            var prob = evaluate(input.split(" "))
+            var prob = await evaluate(input.split(" "))
             console.log(prob)
-            var tupel = [prob, codeblocks[0].innerText.replace(/\s$/, '')]
+            var tupel = [prob, codeblocks[i].innerText.replace(/\s$/, '')]
             ranking.push(tupel)
         }
         ranking.sort(function (a, b) {
-            return a[0] > b[0] ? 1 : -1;
+            return a[0] > b[0] ? -1 : 1;
         })
+        console.log(ranking)
 
         body = ranking[0][1];
 

@@ -33,37 +33,41 @@
                         <label for="scope">Language</label>
                     </div>
 
+                    
+
+                    <div class="input-field col s12" style="margin-bottom: 20px; margin-top: 5px">
+                        <textarea placeholder="" id="description" class="materialize-textarea" style="font-size: 140%; margin-top: -11px; height: 40pt;
+                            margin-bottom: -10px"></textarea>
+                        <label for="description">Description</label>
+                    </div>
+
+                    
+
+                    <div class="input-field col s12" style="margin-bottom: 6px; margin-top: 0px">
+                        <textarea placeholder="" id="body" class="materialize-textarea" autofocus required style="font-family: monospace, monospace; font-size: 140%; height: 120pt;
+                            margin-top: -1px"></textarea>
+                        <label for="body">Code</label>
+                        <button id="jumpto" type="button" class="waves-effect waves-light btn-small tooltipped"
+                            data-position="right" data-tooltip="s"><i class="medium material-icons">undo</i></button>
+                    </div>
+
                     <div class="input-field col s12" style="margin-bottom: 5px">
-                        <div class="select-wrapper initialized" style="margin-top: -10px; font-size: 100%">
+                        <div class="select-wrapper initialized" style="margin-top: -20px; font-size: 100%">
                             <div class="chips chips-autocomplete" id="tagchips">
                             </div>
                         </div>
                         <label for="tagselect">Tag</label>
                     </div>
 
-                    <div class="input-field col s12" style="margin-bottom: 7px">
-                        <textarea placeholder="" id="description" class="materialize-textarea" style="font-size: 140%; margin-top: -10px; height: 40pt;
-                            margin-bottom: -10px"></textarea>
-                        <label for="description">Description</label>
-                    </div>
-
-                    <div class="input-field col s12" style="margin-bottom: 5px">
-                        <div class="select-wrapper initialized" style="margin-top: -10px; font-size: 100%">
+                    <div class="input-field col s12" style="margin-bottom: 0px">
+                        <div class="select-wrapper initialized" style="margin-top: -15px; font-size: 100%">
                             <div class="chips chips-autocomplete" id="domainchips">
                             </div>
                         </div>
                         <label for="domainselect">Libraries / Packages</label>
                     </div>
 
-                    <div class="input-field col s12" style="margin-bottom: -10px">
-                        <textarea placeholder="" id="body" class="materialize-textarea" autofocus required style="font-family: monospace, monospace; font-size: 140%; height: 120pt;
-                            margin-top: -1px"></textarea>
-                        <label for="body">Code</label>
-                        <button id="jumpto" type="button" class="waves-effect waves-light btn-small tooltipped"
-                            data-position="left" data-tooltip="s"><i class="medium material-icons">undo</i></button>
-                    </div>
-
-                    <div class="input-field col s12" style="text-align: center; margin-bottom: -30px">
+                    <div class="input-field col s12" style="text-align: center; margin-bottom: -30px; margin-top: -5px">
                         <button id="save" type="submit" class="waves-effect waves-light btn-small">
                             <i class="medium material-icons right">send</i>save</button>
                         <button id="cancel" type="button" class="waves-effect waves-light btn-small">
