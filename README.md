@@ -57,11 +57,11 @@ For more information about Native Messaging see https://developer.chrome.com/app
 
 ### Fragments
 A fragment contains of a
-- label
+- label, short definite title of the useage of the fragment
 - tags
 - description, defaultly the title of the question
 - language
-- library and packages
+- library and packages -, used for the code
 - code
 
 

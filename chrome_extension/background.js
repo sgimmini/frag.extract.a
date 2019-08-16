@@ -19,7 +19,6 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
   // save button was successfully clicked in extension popup, fragment now needs to be send to external python script to be saved to database
   if (recieved.content == 'sendNativeMessage') {
     chrome.storage.local.get({ label: "", scope: [""], body: "", description: "", tags: [["", false]], domain: [["", false]] }, function (result) {
-      //let result = { label: "", body: "", scope: "", description: "", tags: "", domain: "" };
       // construct database fragment as message to be send to python script
       let message = {};
       // all trailing whitespace is trimmed

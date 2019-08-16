@@ -1,9 +1,5 @@
 // represents the user option to preset the selected language as a tag
 let presetLanguage = false;
-// initialize select elements
-let tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
-let domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
-let scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
 
 document.addEventListener('DOMContentLoaded', function () {
     // restores previous state / sets up new state
@@ -60,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.storage.local.set({ tags: document.getElementById('tags').value });
     });
     */
+
     /*
     document.getElementById('domain').addEventListener('input', function () {
         chrome.storage.local.set({ domain: document.getElementById('domain').value });
@@ -159,37 +156,51 @@ function loadState(input) {
     document.getElementById('body').value = input.body;
     document.getElementById('description').value = input.description;
 
-    // set the tags as options for tagselect element
-    let tagselect = document.getElementById('tagselect');
-    input.tags.forEach(tag => {
-        let newOption = document.createElement('option');
-        // tag[0] contains the string (meaning the actual tag)
-        newOption.innerText = tag[0];
-        // tag[1] contains wether it is selected or not
-        newOption.selected = tag[1];
-        tagselect.add(newOption);
-    });
+    // sets all initial tag chips and adds the rest as autocomplete options
+    const tagchips = document.getElementById('tagchips');
+    setChips(input.tags, tagchips);
 
-    // set the tags as not selected options for domainselect element
-    let domainselect = document.getElementById('domainselect');
-    input.domain.forEach(domain => {
-        let newOption = document.createElement('option');
-        // domain[0] contains the string (meaning the actual tag)
-        newOption.innerText = domain[0];
-        domainselect.add(newOption);
-    });
+    // sets all initial domain chips and adds the rest as autocomplete options
+    const domainchips = document.getElementById('domainchips');
+    setChips(input.domain, domainchips);
 
     // set the select options for scope and preselect the first language
-    let scopeselect = document.getElementById('scopeselect');
+    const scopeselect = document.getElementById('scopeselect');
     for (let i = 0; i < input.scope.length; i++) {
         let newOption = document.createElement('option');
         newOption.innerText = input.scope[i];
         scopeselect.add(newOption);
     }
     scopeselect.options[0].selected = true;
-
-    // update tagselect, domainselect, scopeselect elements
-    tagInstance = M.FormSelect.init(document.getElementById('tagselect'));
-    domainInstance = M.FormSelect.init(document.getElementById('domainselect'));
-    scopeInstance = M.FormSelect.init(document.getElementById('scopeselect'));
+    // update scopeselect element
+    scopeInstance = M.FormSelect.init(scopeselect);
 };
+
+function setChips(tags, domElement) {
+    // array containing all initial tags
+    let tagData = [];
+    // object containing all other tags as autocomplete options
+    let autocompleteTags = {};
+    // popuplate above data structures
+    tags.forEach(entry => {
+        // if second attribute is true, the entry will be preselected
+        if (entry[1]) {
+            tagData.push({ tag: entry[0] });
+        } else {
+            autocompleteTags[entry[0]] = null;
+        }
+    });
+
+    // initialize chips element
+    M.Chips.init(domElement, {
+        data: tagData,
+        placeholder: '+',
+        secondaryPlaceholder: '+',
+        autocompleteOptions: {
+            data: autocompleteTags,
+            limit: Infinity,
+            // offers list of all autocomplete options even before one starts typing
+            minLength: 0,
+        }
+    });
+}
