@@ -4,7 +4,7 @@ let label = "", scope = "", scopeArray = [], body = "", description = "", tagArr
 
 const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
 const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json"
-const MAX_LEN = 195
+const MAX_LEN = 125
 const border = " stop "
 
 // list of all languages that can be recognized from tags
@@ -193,7 +193,7 @@ function sortFunction(a, b) {
         return 0;
     }
     else {
-        return (a[0] < b[0]) ? -1 : 1;
+        return (a[0] > b[0]) ? -1 : 1;
     }
 }
 
