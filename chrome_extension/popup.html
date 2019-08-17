@@ -21,16 +21,16 @@
 
                     <div class="input-field col s6" style="margin-bottom: 5px">
                         <input placeholder="" id="label" type="text" autofocus required class="validate"
-                            style="margin-top: -10px">
+                            style="margin-top: -10px" />
                         <label for="label">LABEL</label>
                     </div>
 
                     <div class="input-field col s6" style="margin-bottom: 5px">
-                        <div class="select-wrapper initialized" style="margin-top: -10px; font-size: 100%">
-                            <select id="scopeselect">
-                            </select>
-                        </div>
-                        <label for="scopeselect">Language</label>
+                        <input placeholder="" list="scopelist" id="scope" type="text" class="validate"
+                            style="margin-top: -10px" />
+                        <datalist id="scopelist">
+                        </datalist>
+                        <label for="scope">Language</label>
                     </div>
 
                     <div class="input-field col s12" style="margin-bottom: 5px">

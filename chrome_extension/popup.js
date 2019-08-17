@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // cancel button
     document.getElementById('cancel').addEventListener('click', function () {
         // clears current state, when popup is reopened it will fetch automatically extracted fragment from content script
-        chrome.storage.local.remove(['url', 'label', 'scope', 'body', 'description', 'tags', 'domain', 'jumpto'], function () {
+        chrome.storage.local.remove(['url', 'label', 'scope', 'scopeArray', 'body', 'description', 'tags', 'domain', 'jumpto'], function () {
             window.close();
         });
     });
@@ -40,11 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('label').addEventListener('input', function () {
         chrome.storage.local.set({ label: document.getElementById('label').value });
     });
-    /*
     document.getElementById('scope').addEventListener('input', function () {
         chrome.storage.local.set({ scope: document.getElementById('scope').value });
     });
-    */
     document.getElementById('body').addEventListener('input', function () {
         chrome.storage.local.set({ body: document.getElementById('body').value });
     });
@@ -56,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.storage.local.set({ tags: document.getElementById('tags').value });
     });
     */
-
     /*
     document.getElementById('domain').addEventListener('input', function () {
         chrome.storage.local.set({ domain: document.getElementById('domain').value });
@@ -66,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function setup() {
     // get the previous state from storage
-    chrome.storage.local.get({ url: "", label: "", scope: [""], body: "", description: "", tags: [["", false]], domain: [["", false]], jumpto: true, presetLanguage: false }, function (result) {
+    chrome.storage.local.get({ url: "", label: "", scope: "", scopeArray: [""], body: "", description: "", tags: [["", false]], domain: [["", false]], jumpto: true, presetLanguage: false }, function (result) {
         // save wether user has selected to add the language to tags or not
         presetLanguage = result.presetLanguage;
         // returns array of length 1 with the currently viewed tab
@@ -103,11 +100,9 @@ function setup() {
                         body.appendChild(header);
                         document.body = body;
                     } else {
-                        // copy response.tags by value to domain
-                        response.domain = [...response.tags];
                         // set the scope as preselected option for tags as well, if user selected that option
-                        if (presetLanguage && response.scope[0]) {
-                            response.tags.push([response.scope[0], true]);
+                        if (presetLanguage && response.scope) {
+                            response.tags.push([response.scope, true]);
                         }
                         // load response from content script as input
                         loadState(response);
@@ -122,6 +117,7 @@ function setup() {
                             url: tabs[0].url,
                             label: response.label,
                             scope: response.scope,
+                            scopeArray: response.scopeArray,
                             body: response.body,
                             description: response.description,
                             tags: response.tags,
@@ -138,7 +134,7 @@ function setup() {
              */
             // if you're on a different site (not a SO question page), clear last state and load empty editor
             else {
-                chrome.storage.local.remove(['label', 'scope', 'body', 'description', 'tags', 'domain']);
+                chrome.storage.local.remove(['label', 'scope', 'scopeArray', 'body', 'description', 'tags', 'domain']);
                 // so that state is restored upon reopening of the popup
                 chrome.storage.local.set({ url: tabs[0].url, jumpto: false });
                 // also change title to no longer say "Suggested Fragment"
@@ -155,6 +151,7 @@ function loadState(input) {
     document.getElementById('label').value = input.label;
     document.getElementById('body').value = input.body;
     document.getElementById('description').value = input.description;
+    document.getElementById('scope').value = input.scope;
 
     // sets all initial tag chips and adds the rest as autocomplete options
     const tagchips = document.getElementById('tagchips');
@@ -164,30 +161,29 @@ function loadState(input) {
     const domainchips = document.getElementById('domainchips');
     setChips(input.domain, domainchips);
 
-    // set the select options for scope and preselect the first language
-    const scopeselect = document.getElementById('scopeselect');
-    for (let i = 0; i < input.scope.length; i++) {
+    // set the select options for scope
+    const scopelist = document.getElementById('scopelist');
+    input.scopeArray.forEach(language => {
         let newOption = document.createElement('option');
-        newOption.innerText = input.scope[i];
-        scopeselect.add(newOption);
-    }
-    scopeselect.options[0].selected = true;
-    // update scopeselect element
-    scopeInstance = M.FormSelect.init(scopeselect);
+        newOption.value = language;
+        scopelist.appendChild(newOption);
+    });
 };
 
 function setChips(tags, domElement) {
     // array containing all initial tags
+    // format: [{ tag: 'elem0' }, { tag: 'elem1' }]
     let tagData = [];
     // object containing all other tags as autocomplete options
+    // format: { 'elem0': null, 'elem1': null }
     let autocompleteTags = {};
     // popuplate above data structures
-    tags.forEach(entry => {
-        // if second attribute is true, the entry will be preselected
-        if (entry[1]) {
-            tagData.push({ tag: entry[0] });
+    tags.forEach(tag => {
+        // if second attribute is true, the tag will be preselected
+        if (tag[1]) {
+            tagData.push({ tag: tag[0] });
         } else {
-            autocompleteTags[entry[0]] = null;
+            autocompleteTags[tag[0]] = null;
         }
     });
 
