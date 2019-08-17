@@ -107,3 +107,11 @@ The Chrome Extension contains of
 
 Materialize https://materializecss.com/ was used as a design baseline. A couple of changes had to be made in
 `materialize.css` to our purpose.    
+
+### Model
+@ſłø 
+
+### Functionality
+TODO: how the best fragment is determined
+By sending a fragment there will be a connection between the NM-host and chrome established carrying the data provided by the popup
+to the database. This fragment appears no later than 5 seconds later in the interface of the fragment editor. 
