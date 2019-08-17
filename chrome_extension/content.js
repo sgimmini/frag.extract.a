@@ -11,41 +11,51 @@ const border = " stop "
 // this list is not comprehensive, please add any further programming lanuages you may think of
 const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++', 'css', 'sql', 'c', 'r', 'objective-c', 'swift', 'ruby', 'excel', 'vba', 'vb.net', 'scala', 'typescript', 'matlab', 'bash', 'shell', 'go', 'rust', 'octave'];
 
+// This function takes an URL and makes and HTTP Request
+function Get(yourUrl){
+    var Httpreq = new XMLHttpRequest(); // a new request
+    Httpreq.open("GET",yourUrl,false);
+    Httpreq.send(null);
+    return Httpreq.responseText;          
+}
 
+// This function takes an URL and returns the TensorflowLayersModel which should lie at the other side
+async function create_Model(url){
+    var back = await tf.loadLayersModel(url);
+    return back;
+}
+// This function takes an URL and returns the JSON object which should lie at the other side
+async function create_Vocab(url){
+    var back = JSON.parse(Get(url));
+    return back;
+}
 // this function takes a tokenized string as input and returns a probability of
 // the given intent (tokens before border - token) and
 // and codeblock being a good fit
-function evaluate(seedWord) {
-    // get the JSON from URL
-    return fetch(VOCAB_URL)
-        .then(function (resp) {
-            return resp.json();
-        })
-        .then(function (data) {
-            // tensor to return later
-            var to_return = new Array(MAX_LEN).fill(0);
-            var length = seedWord.length;
-            // If the word is in our dictionary we assign it it's value
-            // else it gets "deleted" by the offset
-            var offset = 0;
-            for (var i = 0; i < length; i++) {
-                if (data.hasOwnProperty(seedWord[i])) {
-                    to_return[i - offset] = data[seedWord[i]]
-                }
-                else {
-                    offset = offset + 1;
-                }
+function evaluate(seedWord, mod, voc) {
+        // tensor to return later
+        var to_return = new Array(MAX_LEN).fill(0);
+        var length = seedWord.length;
+        // If the word is in our dictionary we assign it it's value
+        // else it gets "deleted" by the offset
+        var offset = 0;
+        for (var i = 0; i < length; i++) {
+            if (voc.hasOwnProperty(seedWord[i])) {
+                to_return[i - offset] = voc[seedWord[i]]
             }
-            const shape = [1, MAX_LEN]
-            // calling the model
-            var ret = tf.loadLayersModel(MODEL_URL).then(model => {
-                const result = model.predict(tf.tensor(to_return, shape))
-                var resultData = result.dataSync();
-                var back = resultData[0]
-                return back;
-            });
-            return ret;
-        });
+            else {
+                offset = offset + 1;
+            }
+        }
+        const shape = [1, MAX_LEN]
+        // calling the model
+        // var ret = tf.loadLayersModel(MODEL_URL).then(model => {
+        const result = mod.predict(tf.tensor(to_return, shape))
+        var resultData = result.dataSync();
+        var back = resultData[0]
+        //     return back;
+        // });
+        return back;
 }
 
 
@@ -95,7 +105,6 @@ async function setup() {
                 } else {
                     // second value determines wether this option is selected or not
                     tagArray.push([tag, true]);
-                    domainArray.push([tag, false]);
                 }
             });
         } else {
@@ -106,10 +115,11 @@ async function setup() {
                 } else {
                     // second value determines wether this option is selected or not
                     tagArray.push([tag, false]);
-                    domainArray.push([tag, false]);
                 }
             });
         }
+
+        domainArray = tagArray;
     });
 
     /*
@@ -118,6 +128,8 @@ async function setup() {
      */
     // all codeblocks in all answers without inline code
     const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
+    const model = await create_Model(MODEL_URL);
+    const vocab = await create_Vocab(VOCAB_URL);
     // determine which codeblock is the best for fragment in here
     if (codeblocks.length) {
         // for now: always use top answers first codeblock
@@ -127,7 +139,7 @@ async function setup() {
         var ranking = []
         for (var i = 0; i < codeblocks.length; i++) {
             var input = description.concat(border, codeblocks[i].innerText.replace(/\s$/, ''))
-            const prob = await evaluate(input.split(" "))
+            const prob = await evaluate(input.split(" "), model, vocab)
             console.log(prob)
             const tupel = [prob, codeblocks[i].innerText.replace(/\s$/, '')]
             ranking.push(tupel)
