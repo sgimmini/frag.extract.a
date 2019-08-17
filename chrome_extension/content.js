@@ -11,6 +11,16 @@ const border = " stop "
 // this list is not comprehensive, please add any further programming lanuages you may think of
 const languageList = ['javascript', 'java', 'c#', 'php', 'python', 'html', 'c++', 'css', 'sql', 'c', 'r', 'objective-c', 'swift', 'ruby', 'excel', 'vba', 'vb.net', 'scala', 'typescript', 'matlab', 'bash', 'shell', 'go', 'rust', 'octave'];
 
+// This functions takes an 2d Array as Input and returns the array sorted by its 1st column in descending order
+function sortFunction(a, b) {
+    if (a[0] === b[0]) {
+        return 0;
+    }
+    else {
+        return (a[0] < b[0]) ? -1 : 1;
+    }
+}
+
 // This function takes an URL and makes and HTTP Request
 function Get(yourUrl){
     var Httpreq = new XMLHttpRequest(); // a new request
@@ -127,7 +137,7 @@ async function setup() {
      * -> best codeblock in the answers is selected
      */
     // all codeblocks in all answers without inline code
-    const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
+    var codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
     const model = await create_Model(MODEL_URL);
     const vocab = await create_Vocab(VOCAB_URL);
     // determine which codeblock is the best for fragment in here
@@ -135,6 +145,9 @@ async function setup() {
         // for now: always use top answers first codeblock
         // remove trailing whitespace
         // body = codeblocks[0].innerText.replace(/\s$/, '');
+        if (codeblocks.length > 7){
+            codeblocks = codeblocks.slice(0, 7);
+        }
 
         var ranking = []
         for (var i = 0; i < codeblocks.length; i++) {
@@ -145,9 +158,7 @@ async function setup() {
             ranking.push(tupel)
         }
         console.log(ranking)
-        ranking.sort(function (a, b) {
-            return a[0] > b[0] ? 1 : -1;
-        })
+        ranking.sort(sortFunction);
         console.log(ranking)
         console.log(ranking[0][1])
         body = ranking[0][1];
