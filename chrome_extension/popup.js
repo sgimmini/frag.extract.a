@@ -41,20 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.storage.local.set({ label: document.getElementById('label').value });
     });
     document.getElementById('scope').addEventListener('input', function () {
-        /*
-        // index of the selected language, is -1 if that language not yet in scopeArray
-        const index = scopeArray.indexOf(scope.value);
-        if (index > -1) {
-            // remove the selected language from it's current position
-            scopeArray.splice(index, 1);
-        }
-        // add the selected language to array position 0
-        scopeArray.unshift(scope.value);
-        // save the changed scopeArray
-        chrome.storage.local.set({ scope: scopeArray });
-        */
-        //scopeArray.pop();
-        //scopeArray.push(document.getElementById('scope').value);
         chrome.storage.local.set({ scope: document.getElementById('scope').value });
     });
     document.getElementById('body').addEventListener('input', function () {
@@ -115,9 +101,8 @@ function setup() {
                         document.body = body;
                     } else {
                         // set the scope as preselected option for tags as well, if user selected that option
-                        // the scope is always at tags[0]
                         if (presetLanguage && response.scope) {
-                            response.tags.unshift([response.scope, true]);
+                            response.tags.push([response.scope, true]);
                         }
                         // load response from content script as input
                         loadState(response);
@@ -187,16 +172,18 @@ function loadState(input) {
 
 function setChips(tags, domElement) {
     // array containing all initial tags
+    // format: [{ tag: 'elem0' }, { tag: 'elem1' }]
     let tagData = [];
     // object containing all other tags as autocomplete options
+    // format: { 'elem0': null, 'elem1': null }
     let autocompleteTags = {};
     // popuplate above data structures
-    tags.forEach(entry => {
-        // if second attribute is true, the entry will be preselected
-        if (entry[1]) {
-            tagData.push({ tag: entry[0] });
+    tags.forEach(tag => {
+        // if second attribute is true, the tag will be preselected
+        if (tag[1]) {
+            tagData.push({ tag: tag[0] });
         } else {
-            autocompleteTags[entry[0]] = null;
+            autocompleteTags[tag[0]] = null;
         }
     });
 

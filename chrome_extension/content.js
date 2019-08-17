@@ -95,6 +95,7 @@ async function setup() {
                 } else {
                     // second value determines wether this option is selected or not
                     tagArray.push([tag, true]);
+                    domainArray.push([tag, false]);
                 }
             });
         } else {
@@ -105,11 +106,10 @@ async function setup() {
                 } else {
                     // second value determines wether this option is selected or not
                     tagArray.push([tag, false]);
+                    domainArray.push([tag, false]);
                 }
             });
         }
-
-        domainArray = tagArray;
     });
 
     /*

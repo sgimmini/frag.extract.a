@@ -74,5 +74,3 @@ The Popup contains input fields for all fragment contents and three butons:
 Important to notice is:
 - when popup loses focus it closes but saves current changes in the editing process
 - when `canceling` current process on editing gets lost, `saving` clears input fields as well
-
-
