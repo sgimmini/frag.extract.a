@@ -10,6 +10,8 @@
 - change add to fragment button to look better: 
     - Not Anymore: put outside of codeblock, which looks better but still not the best way. Apparently does not open popup
     - changed string to arrow and placed button on the right inside of grey box 
+- chrome extension in marketplace?
+- licences? e.g. for materialize
 
 fragment extractor for StackOverflow.
 A tool to extract code-fragments from StackOverflow into a Visual Studio Code Extension (link to other groups project).
@@ -74,3 +76,34 @@ The Popup contains input fields for all fragment contents and three butons:
 Important to notice is:
 - when popup loses focus it closes but saves current changes in the editing process
 - when `canceling` current process on editing gets lost, `saving` clears input fields as well
+
+
+## Installation 
+There are two things need to be installed seperately: 
+- Visual Studio Code Extension
+- Chrome Extension
+The VSC Extension can be found in the Marketplace under *Fragment Editor* by *Jonas Gann*. Through this installation 
+the NM-host used for communication between Chrome and the database will be installed too.
+The Chrome Extension can be installed easily by extracting a provided .zip-file and loading this directory into
+`chrome://extensions/` (in developer mode). TODO: continue - may marketplace(?)
+
+
+## Build with
+The model to determine the best fitting fragment was ... @flo
+
+
+## Überschrift (sehr gut)
+may put build with in here?   
+
+### Chrome Extension
+The Chrome Extension contains of 
+- `manifest.json` for GRUND
+- `background.js`, a background script only allowing the popup to be opened on StackOverflow
+- `content.js` extraction of websites content for fragments (see -> Fragments) 
+- `popup.html` layout of the popup 
+- `popup.js` receiving fragment content from `content.js` and processing visible data for `popup.html`(?)
+- `opotions.html`
+- `options.js`
+
+Materialize https://materializecss.com/ was used as a design baseline. A couple of changes had to be made in
+`materialize.css` to our purpose.    
