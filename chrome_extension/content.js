@@ -84,11 +84,12 @@ async function setup() {
     const vocab = await create_Vocab(VOCAB_URL);
     // determine which codeblock is the best for fragment in here
     if (codeblocks.length) {
-        // for now: always use top answers first codeblock
+        // we evaluate each answer in concatenation with the question
+        // the codeblock with the highest prediction gets chosen
         // remove trailing whitespace
         // body = codeblocks[0].innerText.replace(/\s$/, '');
-        if (codeblocks.length > 7){
-            codeblocks = codeblocks.slice(0, 7);
+        if (codeblocks.length > 5){
+            codeblocks = codeblocks.slice(0, 5);
         }
 
         var ranking = []
