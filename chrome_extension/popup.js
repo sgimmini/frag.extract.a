@@ -196,7 +196,8 @@ function setChips(tags, domElement, name) {
             if (index != -1) {
                 tags[index] = [newChip, true];
                 // remove newChip from autocomplete
-
+                delete autocompleteTags[newChip];
+                instance.autocomplete.updateData(autocompleteTags);
             } else {
                 tags.push([newChip, true]);
             }
@@ -212,7 +213,8 @@ function setChips(tags, domElement, name) {
             if (index != -1) {
                 tags[index] = [removedChip, false];
                 // add removedChip to autocomplete
-                //instance.autocomplete.updateData();
+                autocompleteTags[removedChip] = null;
+                instance.autocomplete.updateData(autocompleteTags);
             }
             // save the modified array containing the chips and autocomplete options to storage
             const storageItem = {};
