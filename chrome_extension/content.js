@@ -26,8 +26,11 @@ async function setup() {
         description = questionHeader.innerText.replace(/(?: \[closed\]| \[duplicate\])?\sAsk Question$/, '');
     }
 
+    // all codeblocks in all answers without inline code
+    let codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
+
     // all of these require a value stored with chrome storage api, therefore, they are grouped
-    chrome.storage.local.get({ presetLabel: false, presetTabs: false, presetLanguage: false }, function (result) {
+    chrome.storage.local.get({ presetLabel: false, presetTabs: false, presetLanguage: false }, async function (result) {
 
         /*
          * Extract label [primary key in fragment database, also the name of the fragment in tree view in vsc extension]
@@ -79,8 +82,6 @@ async function setup() {
          * Extract body [codeblock of the fragment]
          * -> best codeblock in the answers is selected
          */
-        // all codeblocks in all answers without inline code
-        let codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
         const model = await create_Model(MODEL_URL);
         const vocab = await create_Vocab(VOCAB_URL);
 
