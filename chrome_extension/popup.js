@@ -1,6 +1,3 @@
-// represents the user option to preset the selected language as a tag
-let presetLanguage = false;
-
 document.addEventListener('DOMContentLoaded', function () {
     // restores previous state / sets up new state
     setup();
@@ -63,9 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function setup() {
     // get the previous state from storage
-    chrome.storage.local.get({ url: "", label: "", scope: "", scopeArray: [""], body: "", description: "", tags: [["", false]], domain: [["", false]], jumpto: true, presetLanguage: false }, function (result) {
-        // save wether user has selected to add the language to tags or not
-        presetLanguage = result.presetLanguage;
+    chrome.storage.local.get({ url: "", label: "", scope: "", scopeArray: [""], body: "", description: "", tags: [["", false]], domain: [["", false]], jumpto: true }, function (result) {
         // returns array of length 1 with the currently viewed tab
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 
@@ -100,10 +95,6 @@ function setup() {
                         body.appendChild(header);
                         document.body = body;
                     } else {
-                        // set the scope as preselected option for tags as well, if user selected that option
-                        if (presetLanguage && response.scope) {
-                            response.tags.push([response.scope, true]);
-                        }
                         // load response from content script as input
                         loadState(response);
 
