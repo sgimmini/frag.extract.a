@@ -15,9 +15,8 @@
         "https://stackoverflow.com/questions/tagged/*"
       ],
       "js": [
-	"tf.min.js",
-        "content.js"
-	
+        "tensorflow-js/tf.min.js",
+        "scripts/content.js"
       ],
       "run_at": "document_end"
     }
@@ -37,7 +36,7 @@
   ],
   "background": {
     "scripts": [
-      "background.js"
+      "scripts/background.js"
     ],
     "persistent": false
   },
@@ -55,5 +54,4 @@
     "default_title": "Create VS Code Snippets from anwers in Stack Overflow",
     "default_popup": "popup.html"
   }
-
 }
