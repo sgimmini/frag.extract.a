@@ -191,7 +191,7 @@ function setChips(tags, domElement, name) {
         },
         onChipAdd: (event, chip) => {
             const newChip = chip.childNodes[0].nodeValue;
-            const index = tags.indexOf([newChip, false]);
+            const index = tags.map(tag => tag[0]).indexOf(newChip);
             // the new chip is part of the saved tags already
             if (index != -1) {
                 tags[index] = [newChip, true];
@@ -205,10 +205,9 @@ function setChips(tags, domElement, name) {
             storageItem[name] = tags;
             chrome.storage.local.set(storageItem);
         },
-        OnChipDelete: (event, chip) => {
+        onChipDelete: (event, chip) => {
             const removedChip = chip.childNodes[0].nodeValue;
-            console.log(chip.childNodes[0].nodeValue);
-            const index = tags.indexOf([removedChip, true]);
+            const index = tags.map(tag => tag[0]).indexOf(removedChip);
             // just in case user adds and deletes a chip faster than onChipAdd was executed
             if (index != -1) {
                 tags[index] = [removedChip, false];
