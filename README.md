@@ -89,7 +89,10 @@ The Chrome Extension can be installed easily by extracting a provided .zip-file 
 
 
 ## Build with
-The model to determine the best fitting fragment was ... @flo
+The model to determine the best fitting fragment was build in Python using the Keras library (https://keras.io/) as a framework and the CoNaLa-Corpus Dataset (https://conala-corpus.github.io/) as training data.
+To capture the complex text data with it's full meaning a 2-layer LSTM was built which takes a natural language intent and a code fragment as input and outputs the probability of them fitting.
+Afterwards the model got exported into tensorflowjs-format by using the tensorflowjs-library. For further explanation read https://www.tensorflow.org/js/tutorials/conversion/import_keras.
+By using TensorFlow.js (https://www.tensorflow.org/js) the model got imported into JavaScript and can be used to make predictions.
 
 
 ## Überschrift (sehr gut)
