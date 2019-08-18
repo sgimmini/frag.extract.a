@@ -46,16 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('description').addEventListener('input', function () {
         chrome.storage.local.set({ description: document.getElementById('description').value });
     });
-    /*
-    document.getElementById('tags').addEventListener('input', function () {
-        chrome.storage.local.set({ tags: document.getElementById('tags').value });
-    });
-    */
-    /*
-    document.getElementById('domain').addEventListener('input', function () {
-        chrome.storage.local.set({ domain: document.getElementById('domain').value });
-    });
-    */
+    // state changes of tags and domain fields are saved by the onChipAdd and onChipDelete functions defined in the setChips function
 });
 
 function setup() {
@@ -133,7 +124,7 @@ function setup() {
                 // grey out jump to codeblock
                 document.getElementById('jumpto').disabled = true;
                 // to initialize the chips elements
-                loadState({});
+                loadState({ label: "", scope: "", scopeArray: [""], body: "", description: "", tags: [["", false]], domain: [["", false]] });
             }
         });
     });
