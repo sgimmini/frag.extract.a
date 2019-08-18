@@ -146,11 +146,11 @@ function loadState(input) {
 
     // sets all initial tag chips and adds the rest as autocomplete options
     const tagchips = document.getElementById('tagchips');
-    setChips(input.tags, tagchips);
+    setChips(input.tags, tagchips, "tags");
 
     // sets all initial domain chips and adds the rest as autocomplete options
     const domainchips = document.getElementById('domainchips');
-    setChips(input.domain, domainchips);
+    setChips(input.domain, domainchips, "domain");
 
     // set the select options for scope
     const scopelist = document.getElementById('scopelist');
@@ -161,7 +161,7 @@ function loadState(input) {
     });
 };
 
-function setChips(tags, domElement) {
+function setChips(tags, domElement, name) {
     // array containing all initial tags
     // format: [{ tag: 'elem0' }, { tag: 'elem1' }]
     let tagData = [];
@@ -179,7 +179,7 @@ function setChips(tags, domElement) {
     });
 
     // initialize chips element
-    M.Chips.init(domElement, {
+    let instance = M.Chips.init(domElement, {
         data: tagData,
         placeholder: '+',
         secondaryPlaceholder: '+',
@@ -188,6 +188,37 @@ function setChips(tags, domElement) {
             limit: Infinity,
             // offers list of all autocomplete options even before one starts typing
             minLength: 0,
+        },
+        onChipAdd: (event, chip) => {
+            const newChip = chip.childNodes[0].nodeValue;
+            const index = tags.indexOf([newChip, false]);
+            // the new chip is part of the saved tags already
+            if (index != -1) {
+                tags[index] = [newChip, true];
+                // remove newCHip from autocomplete
+
+            } else {
+                tags.push([newChip, true]);
+            }
+            // save the modified array containing the chips and autocomplete options to storage
+            const storageItem = {};
+            storageItem[name] = tags;
+            chrome.storage.local.set(storageItem);
+        },
+        OnChipDelete: (event, chip) => {
+            const removedChip = chip.childNodes[0].nodeValue;
+            console.log(chip.childNodes[0].nodeValue);
+            const index = tags.indexOf([removedChip, true]);
+            // just in case user adds and deletes a chip faster than onChipAdd was executed
+            if (index != -1) {
+                tags[index] = [removedChip, false];
+                // add removedChip to autocomplete
+
+            }
+            // save the modified array containing the chips and autocomplete options to storage
+            const storageItem = {};
+            storageItem[name] = tags;
+            chrome.storage.local.set(storageItem);
         }
     });
 }
