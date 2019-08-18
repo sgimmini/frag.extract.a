@@ -79,12 +79,9 @@ function setup() {
 
                     // error handling, if extension is installed and tab is not reloaded (meaning the content script has not been injected)
                     if (chrome.runtime.lastError) {
-                        // replace entire popup with message to reload tab
-                        const body = document.createElement('body');
-                        const header = document.createElement('H4');
-                        header.innerText = "Please reload this tab";
-                        body.appendChild(header);
-                        document.body = body;
+                        // the tab gets reloaded to inject the current version of the content script and popup window is immediatly closed
+                        chrome.tabs.update(tabs[0].id, { url: tabs[0].url })
+                        window.close()
                     } else {
                         // load response from content script as input
                         loadState(response);

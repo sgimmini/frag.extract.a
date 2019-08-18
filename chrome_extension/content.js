@@ -55,7 +55,7 @@ async function setup() {
          */
         // if user sets the option to preselect all tabs
         if (result.presetTabs) {
-            // get all tags from SO page, remove links from name with regex, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
+            // get all tags from SO page, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
             Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.textContent).forEach(tag => {
                 if (languageList.includes(tag)) {
                     scopeArray.push(tag);
@@ -66,7 +66,7 @@ async function setup() {
                 }
             });
         } else {
-            // get all tags from SO page, remove links from name with regex, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
+            // get all tags from SO page, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
             Array.from(document.getElementById('question').getElementsByClassName('post-tag')).map(tag => tag.textContent).forEach(tag => {
                 if (languageList.includes(tag)) {
                     scopeArray.push(tag);
