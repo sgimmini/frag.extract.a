@@ -113,12 +113,12 @@ Materialize https://materializecss.com/ was used as a design baseline. A couple 
 
 ### Model
 The extraction model contains of
-- 'train_lstm.ipynb', the jupyter notebook containing data loading, preprocessing and training
-- 'loss.pdf', which visualizes the training curve for purposes of evaluation
-- 'lstm.h5', which is the model saved as Keras Python HDF5 format
-- 'model.h5', which is the same model in a different format for faster loading when doing tests in Python
-- 'model.json' contains weights and needs to be loaded together with 'model.h5'
-- 'vocab.json', which contains the dictionary created when preprocessing in 'train_lstm.ipynb' (needed to recreate tokenization)
+- `train_lstm.ipynb`, the jupyter notebook containing data loading, preprocessing and training
+- `loss.pdf`, which visualizes the training curve for purposes of evaluation
+- `lstm.h5`, which is the model saved as Keras Python HDF5 format
+- `model.h5`, which is the same model in a different format for faster loading when doing tests in Python
+- `model.json` contains weights and needs to be loaded together with `model.h5`
+- `vocab.json`, which contains the dictionary created when preprocessing in 'train_lstm.ipynb' (needed to recreate tokenization)
 
 ### Functionality
 TODO: how the best fragment is determined
