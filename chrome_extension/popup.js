@@ -89,8 +89,8 @@ function setup() {
                     // error handling, if extension is installed and tab is not reloaded (meaning the content script has not been injected)
                     if (chrome.runtime.lastError) {
                         // replace entire popup with message to reload tab
-                        let body = document.createElement('body');
-                        let header = document.createElement('H4');
+                        const body = document.createElement('body');
+                        const header = document.createElement('H4');
                         header.innerText = "Please reload this tab";
                         body.appendChild(header);
                         document.body = body;
@@ -155,7 +155,7 @@ function loadState(input) {
     // set the select options for scope
     const scopelist = document.getElementById('scopelist');
     input.scopeArray.forEach(language => {
-        let newOption = document.createElement('option');
+        const newOption = document.createElement('option');
         newOption.value = language;
         scopelist.appendChild(newOption);
     });
@@ -164,10 +164,10 @@ function loadState(input) {
 function setChips(tags, domElement, name) {
     // array containing all initial tags
     // format: [{ tag: 'elem0' }, { tag: 'elem1' }]
-    let tagData = [];
+    const tagData = [];
     // object containing all other tags as autocomplete options
     // format: { 'elem0': null, 'elem1': null }
-    let autocompleteTags = {};
+    const autocompleteTags = {};
     // popuplate above data structures
     tags.forEach(tag => {
         // if second attribute is true, the tag will be preselected
@@ -179,7 +179,7 @@ function setChips(tags, domElement, name) {
     });
 
     // initialize chips element
-    let instance = M.Chips.init(domElement, {
+    const instance = M.Chips.init(domElement, {
         data: tagData,
         placeholder: '+',
         secondaryPlaceholder: '+',
@@ -195,7 +195,7 @@ function setChips(tags, domElement, name) {
             // the new chip is part of the saved tags already
             if (index != -1) {
                 tags[index] = [newChip, true];
-                // remove newCHip from autocomplete
+                // remove newChip from autocomplete
 
             } else {
                 tags.push([newChip, true]);
@@ -212,7 +212,7 @@ function setChips(tags, domElement, name) {
             if (index != -1) {
                 tags[index] = [removedChip, false];
                 // add removedChip to autocomplete
-
+                //instance.autocomplete.updateData();
             }
             // save the modified array containing the chips and autocomplete options to storage
             const storageItem = {};

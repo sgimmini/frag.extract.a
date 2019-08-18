@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
   if (recieved.content == 'sendNativeMessage') {
     chrome.storage.local.get({ label: "", scope: "", body: "", description: "", tags: [["", false]], domain: [["", false]] }, function (result) {
       // construct database fragment as message to be send to python script
-      let message = {};
+      const message = {};
       // all trailing whitespace is trimmed
       message.label = result.label.replace(/\s$/, '');
       // prefix is set as the first word in the codeblock: initial widespace is deleted, then everything after the next whitespace is deleted

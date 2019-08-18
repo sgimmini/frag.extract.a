@@ -139,7 +139,7 @@ async function setup() {
 
     // create Add to fragment buttons on every codeblock
     codeblocks.forEach(codeblock => {
-        let button = document.createElement('button');
+        const button = document.createElement('button');
         button.setAttribute("type", "button");
         button.setAttribute("style", "float: right; ");
 
@@ -216,7 +216,7 @@ function sortFunction(a, b) {
 
 // This function takes an URL and makes and HTTP Request
 function Get(yourUrl) {
-    let Httpreq = new XMLHttpRequest(); // a new request
+    const Httpreq = new XMLHttpRequest(); // a new request
     Httpreq.open("GET", yourUrl, false);
     Httpreq.send(null);
     return Httpreq.responseText;
@@ -224,13 +224,13 @@ function Get(yourUrl) {
 
 // This function takes an URL and returns the TensorflowLayersModel which should lie at the other side
 async function create_Model(url) {
-    let back = await tf.loadLayersModel(url);
+    const back = await tf.loadLayersModel(url);
     return back;
 }
 
 // This function takes an URL and returns the JSON object which should lie at the other side
 async function create_Vocab(url) {
-    let back = JSON.parse(Get(url));
+    const back = JSON.parse(Get(url));
     return back;
 }
 
@@ -239,8 +239,8 @@ async function create_Vocab(url) {
 // and codeblock being a good fit
 function evaluate(seedWord, mod, voc) {
     // tensor to return later
-    let to_return = new Array(MAX_LEN).fill(0);
-    let length = seedWord.length;
+    const to_return = new Array(MAX_LEN).fill(0);
+    const length = seedWord.length;
     // If the word is in our dictionary we assign it it's value
     // else it gets "deleted" by the offset
     let offset = 0;
@@ -256,8 +256,8 @@ function evaluate(seedWord, mod, voc) {
     // calling the model
     // let ret = tf.loadLayersModel(MODEL_URL).then(model => {
     const result = mod.predict(tf.tensor(to_return, shape))
-    let resultData = result.dataSync();
-    let back = resultData[0]
+    const resultData = result.dataSync();
+    const back = resultData[0]
     //     return back;
     // });
     return back;
