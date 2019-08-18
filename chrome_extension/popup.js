@@ -132,6 +132,8 @@ function setup() {
                 document.getElementById('title').innerText = "No Fragment found";
                 // grey out jump to codeblock
                 document.getElementById('jumpto').disabled = true;
+                // to initialize the chips elements
+                loadState({});
             }
         });
     });
