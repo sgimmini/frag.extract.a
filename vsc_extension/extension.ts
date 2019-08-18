@@ -58,6 +58,9 @@ export function activate(context: vscode.ExtensionContext) {
 	// refreshes the Fragmentlist everytime a change in the database is detected (5 sec intervall)
 	fs.watchFile(context.globalStoragePath + '/fragments.fragmentDatabase', (curr, prev) => {
 		// requires that loadFragments() actually loads a new in memory copy of the database to get the newly added fragments by the native messaging host
+		// loading the new in memory copy of the database in Database.loadFragments() can be done like this:
+		/* const filebuffer = fs.readFileSync(this._fragmentFile);
+		   this._fragmentDatabase = new sql.Database(filebuffer); */
 		Database.loadFragments();
 		fragmentProvider.refresh();
 	});

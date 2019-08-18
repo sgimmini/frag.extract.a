@@ -1,0 +1,106 @@
+\documentclass{report}
+\usepackage{hyperref}
+\renewcommand\labelitemi{\textbf}
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+	\vspace*{1cm}
+	\Huge
+
+	\textbf{Fragment Extraction from StackOverflow}
+
+	\vspace{0.5cm}
+	\LARGE
+
+	Beginner Practical Summer 2019
+
+	\vspace{1.5cm}
+
+	\textbf{Florian, Simon, Tobias}
+
+	\vspace{1cm}
+	Supervisor:
+	\vfill
+
+
+	\vspace{1.8cm}
+	\Large
+	IWR?\\
+	Ruprecht-Karls University\\
+	\today
+	\end{center}
+    \end{titlepage}
+
+\section*{Chrome Extension Tests}
+Precondition for all test: installed Chrome Extension and VSC Extension if not further specified.
+\subsection*{Get Question with one Tag in PopUp}
+\begin{itemize}
+	\item[Precondition] Opened question with one tag
+	\item[Test Steps] Open chrome extension by clicking on extension icon, send fragment to VSC, verify tags
+		in VSC.
+	\item[Expected Result] No Tag in VSC and closed Chrome PopUp
+	\item[Expected Exception] No codeblock on website
+\end{itemize}
+Test succeeded with this
+\href{https://stackoverflow.com/questions/6393943/convert-javascript-string-in-dot-notation-into-an-object-reference}{StackOverflow Question}
+
+\subsection*{Get Question with one Tag with Add To Fragment Button}
+\begin{itemize}
+	\item[Precondition] Opened question with one tag
+	\item[Test Steps] Open PopUp Window by clicking on any codeblocks specified button, send
+		fragment to VSC, verify tags in VSC.
+	\item[Expected Result] No Tag in VSC and closed Chrome PopUp
+	\item[Expected Exception] No codeblock on website
+\end{itemize}
+Test succeeded with this
+\href{https://stackoverflow.com/questions/6393943/convert-javascript-string-in-dot-notation-into-an-object-reference}{StackOverflow Question}
+
+\subsection*{Question with no Codeblock in any Answer}
+\begin{itemize}
+	\item[Precondition] Question with no codeblock or no answer
+	\item[Test Steps] Open Chrome Extension by clicking extension icon and send fragment to VSC
+	\item[Expected Result] Extension won't send fragment and hovertext will appear
+	\item[Expected Exception] None
+\end{itemize}
+Tested with: \href{https://stackoverflow.com/questions/21446532/jboss-and-intellij-use-jboss-plugin-to-run-and-deploy-or-use-maven}{StackOverflow Question}.
+At tested point unanswered for over 5 years. Succeeded. No differianated test neccessary as there is no Add to Fragment Button.
+
+\subsection*{Sending without VSC-Extension}
+\begin{itemize}
+	\item[Precondition] Chrome extension installed, no VSC-extension
+	\item[Test Steps] Open any thread and send fragment
+	\item[Expected Result] PopUp closes, fragment "sent" 
+	\item[Expected Exception] None
+\end{itemize}
+Fragments do not send without a designated host. Nothing changes, nothing happens.
+
+\subsection*{Add last codeblock of any page}
+\begin{itemize}
+	\item[Precondition] Question thread with at least two codeblocks  
+	\item[Test Steps] Click Add to Fragment Button of last codeblock and check whether all data is passed
+	\item[Expected Result] All data appearing in popping up window
+	\item[Expected Exception] None
+\end{itemize}
+Test succeeded with this \href{https://stackoverflow.com/questions/442404/retrieve-the-position-x-y-of-an-html-element}{StackOverflow Question}. 
+Purpose of the test was to check whether there was an out of range (of the Array of all Codeblocks) error. 
+
+\subsection*{}
+\begin{itemize}
+	\item[Precondition]
+	\item[Test Steps]
+	\item[Expected Result]
+	\item[Expected Exception]
+\end{itemize}
+
+%Dummy
+\subsection*{}
+\begin{itemize}
+	\item[Precondition]
+	\item[Test Steps]
+	\item[Expected Result]
+	\item[Expected Exception]
+\end{itemize}
+
+\end{document}

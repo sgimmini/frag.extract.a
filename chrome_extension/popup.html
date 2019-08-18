@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>frag.extractor</title>
-    <script src="materialize.js"></script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="/materialize/materialize.js"></script>
     <script src="popup.js"></script>
-    <link rel="stylesheet" href="materialize.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/materialize/materialize.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <body>
@@ -17,53 +18,61 @@
             <form class="col s12">
                 <h5 id="title">Suggested Fragment</h5>
                 <div class="row">
-                    <div class="input-field col s6">
-                        <input placeholder=" " id="label" type="text" autofocus required class="validate">
+
+                    <div class="input-field col s6" style="margin-bottom: 5px">
+                        <input placeholder="required" id="label" type="text" autofocus required class="validate"
+                            style="margin-top: -10px" />
                         <label for="label">LABEL</label>
                     </div>
 
-                    <div class="input-field col s6">
-                        <textarea placeholder=" " id="tags" class="materialize-textarea"></textarea>
-                        <label for="tags">Tags</label>
-                    </div>
-
-                    <div class="input-field col s12">
-                        <textarea placeholder=" " id="description" class="materialize-textarea"></textarea>
-                        <label for="description">Description</label>
-                    </div>
-
-                    <div class="input-field col s6">
-                        <textarea  placeholder=" " id="scope" class="materialize-textarea"></textarea>
+                    <div class="input-field col s6" style="margin-bottom: 5px">
+                        <input placeholder="+" list="scopelist" id="scope" type="text" class="validate"
+                            style="margin-top: -10px" />
+                        <datalist id="scopelist">
+                        </datalist>
                         <label for="scope">Language</label>
                     </div>
 
-                    <div class="input-field col s6">
-                        <textarea placeholder=" " id="domain" class="materialize-textarea"></textarea>
-                        <label for="domain">Lib's / Pkg's</label>
-                    </div>
-
-                    <!--
-                        KEINE AHNUNG WARUM DAS NICHT GEHT
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <div class="chips chips-placeholder"></div>
+                    <div class="input-field col s12" style="margin-bottom: 5px">
+                        <div class="select-wrapper initialized" style="margin-top: -20px; font-size: 100%">
+                            <div class="chips chips-autocomplete" id="tagchips">
+                            </div>
                         </div>
+                        <label for="tagchips">Tag</label>
                     </div>
-                    -->
 
-                    <div class="input-field col s12">
-                        <textarea placeholder=" " id="body" class="materialize-textarea"
-                            style="font-family: monospace, monospace; font-size: 140%"></textarea>
+                    <div class="input-field col s12" style="margin-bottom: 0px">
+                        <div class="select-wrapper initialized" style="margin-top: -15px; font-size: 100%">
+                            <div class="chips chips-autocomplete" id="domainchips">
+                            </div>
+                        </div>
+                        <label for="domainchips">Libraries / Packages</label>
+                    </div>
+
+
+                    <div class="input-field col s12" style="margin-bottom: 20px; margin-top: 5px">
+                        <textarea placeholder="+" id="description" class="materialize-textarea" style="font-size: 140%; margin-top: -11px; height: 40pt;
+                            margin-bottom: -10px"></textarea>
+                        <label for="description">Description</label>
+                    </div>
+
+
+
+                    <div class="input-field col s12" style="margin-bottom: 6px; margin-top: 0px">
+                        <textarea placeholder="required" id="body" class="materialize-textarea" required style="font-family: monospace, monospace; font-size: 140%; height: 120pt;
+                            margin-top: -1px"></textarea>
                         <label for="body">Code</label>
                         <button id="jumpto" type="button" class="waves-effect waves-light btn-small tooltipped"
-                            data-position="left" data-tooltip="s"><i class="medium material-icons">undo</i></button>
+                            data-position="right" data-tooltip="s"><i class="medium material-icons">undo</i></button>
                     </div>
 
-                    <div class="input-field col s12" style="text-align: center;">
-                        <button id="save" type="submit" class="waves-effect waves-light btn-small"><i
-                                class="medium material-icons right">send</i>save</button>
-                        <button id="cancel" type="button" class="waves-effect waves-light btn-small"><i
-                                class="medium material-icons right">cancel</i>Cancel</button>
+
+
+                    <div class="input-field col s12" style="text-align: center; margin-bottom: -30px; margin-top: -5px">
+                        <button id="save" type="submit" class="waves-effect waves-light btn-small">
+                            <i class="medium material-icons right">send</i>save</button>
+                        <button id="cancel" type="button" class="waves-effect waves-light btn-small">
+                            <i class="medium material-icons right">cancel</i>Cancel</button>
                     </div>
                 </div>
             </form>
@@ -71,4 +80,4 @@
 
         <!-- this might be removed entirely, if so: remove listener for links in popup.js -->
         <a href=https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets>More
-            information on creating VS Code Snippets</a> </body> </form> </html>
+            information on creating VS Code Snippets</a> </form> </body> </html>
