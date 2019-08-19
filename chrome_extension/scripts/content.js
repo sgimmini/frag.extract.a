@@ -105,14 +105,14 @@ async function setup() {
         if (ranking[0]) {
             console.log(ranking[0][1]);
             body = ranking[0][1];
+
+            // find the index of the selected codeblock, in order to get it's DOM element, so scrollpos can be set correctly
+            const index = codeblocks.map(block => block.innerText.replace(/\s$/, '')).indexOf(body);
+            if (index != -1) {
+                // position where the page scrolls to is still wrong
+                scrollpos = codeblocks[index].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
+            }
         }
-
-        /* ISSUE: searchblocks[0] is NOT the codeblock found by the model. The model uses the innerText of codeblock dom element
-        => no way to get the dom element of the selected codeblock */
-
-        // set scrollpos
-        // does not work properly: target codeblock is just below the screen, not visible, instead of at the top of the screen
-        //scrollpos = codeblocks[0].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
 
         /* ISSUE: this needs to happen after the codeblock was actually selected (not sure if thats the case currently) */
 
