@@ -1,0 +1,3 @@
+does this stop do something ?
+ [[0.04909302]]
+or does it stop do nothing ? [[0.04909346]]
