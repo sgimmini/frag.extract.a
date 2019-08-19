@@ -3,9 +3,9 @@ let scrollpos = 0;
 let label = "", scope = "", scopeArray = [], body = "", description = "", tagArray = [], domainArray = [];
 
 const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
-const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json"
-const MAX_LEN = 125
-const border = " stop "
+const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json";
+const MAX_LEN = 125;
+const border = " stop ";
 
 // list of all languages that can be recognized from tags
 // this list is not comprehensive, please add any further programming lanuages you may think of
@@ -27,7 +27,7 @@ async function setup() {
     }
 
     // all codeblocks in all answers without inline code
-    let codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
+    const codeblocks = Array.from(document.getElementById('answers').getElementsByTagName('code')).filter(codeblock => codeblock.parentElement.tagName == 'PRE');
 
     // all of these require a value stored with chrome storage api, therefore, they are grouped
     chrome.storage.local.get({ presetLabel: false, presetTabs: false, presetLanguage: false }, async function (result) {
@@ -85,47 +85,41 @@ async function setup() {
         const model = await create_Model(MODEL_URL);
         const vocab = await create_Vocab(VOCAB_URL);
 
-        /* ISSUE: is that if even needed? if the codeblocks array is empty, the for clause will not be executed and ranking.sort(sortFunction)
-        should work on an empty array, right? Maybe body = ranking[0][1] needs to be put in an if clause */
+        // we evaluate each answer in concatenation with the question
+        // the codeblock with the highest prediction gets chosen
+        const searchblocks = codeblocks.slice(0, 5).map(block => block.innerText.replace(/\s$/, ''));
 
-        // determine which codeblock is the best for fragment in here
-        if (codeblocks.length) {
-            // we evaluate each answer in concatenation with the question
-            // the codeblock with the highest prediction gets chosen
-            // remove trailing whitespace
-            // body = codeblocks[0].innerText.replace(/\s$/, '');
-            if (codeblocks.length > 5) {
-                codeblocks = codeblocks.slice(0, 5);
-            }
-
-            let ranking = []
-            for (let i = 0; i < codeblocks.length; i++) {
-                let input = description.concat(border, codeblocks[i].innerText.replace(/\s$/, ''))
-                const prob = await evaluate(input.split(" "), model, vocab)
-                console.log(prob)
-                const tupel = [prob, codeblocks[i].innerText.replace(/\s$/, '')]
-                ranking.push(tupel)
-            }
-            console.log(ranking)
-            ranking.sort(sortFunction);
-            console.log(ranking)
-            console.log(ranking[0][1])
-            body = ranking[0][1];
-
-            /* ISSUE: codeblocks[0] is NOT the codeblock found by the model. The model uses the innerText of codeblock dom element
-            => no way to get the dom element of the selected codeblock */
-
-            // set scrollpos
-            // does not work properly: target codeblock is just below the screen, not visible, instead of at the top of the screen
-            scrollpos = codeblocks[0].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
-
-            /* ISSUE: this needs to happen after the codeblock was actually selected (not sure if thats the case currently) */
-
-            // almost all cases where multiple languages are tagged are javascript and html
-            // therefore an attempt is made to determine which of these languages the selected codeblock is
-            // also sets the first language in the array as the selected one
-            detectJsHtml(body);
+        const ranking = [];
+        for (let i = 0; i < searchblocks.length; i++) {
+            const input = description.concat(border, searchblocks[i]);
+            const prob = await evaluate(input.split(" "), model, vocab);
+            console.log(prob);
+            const tupel = [prob, searchblocks[i]];
+            ranking.push(tupel);
         }
+        console.log(ranking);
+        ranking.sort(sortFunction);
+        console.log(ranking);
+
+
+        if (ranking[0]) {
+            console.log(ranking[0][1]);
+            body = ranking[0][1];
+        }
+
+        /* ISSUE: searchblocks[0] is NOT the codeblock found by the model. The model uses the innerText of codeblock dom element
+        => no way to get the dom element of the selected codeblock */
+
+        // set scrollpos
+        // does not work properly: target codeblock is just below the screen, not visible, instead of at the top of the screen
+        //scrollpos = codeblocks[0].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
+
+        /* ISSUE: this needs to happen after the codeblock was actually selected (not sure if thats the case currently) */
+
+        // almost all cases where multiple languages are tagged are javascript and html
+        // therefore an attempt is made to determine which of these languages the selected codeblock is
+        // also sets the first language in the array as the selected one
+        detectJsHtml(body);
 
         /* ISSUE: this needs to happen after the codeblock was actually selected (after detectJSHtml(body) was executed) (not sure if thats the case currently) */
 
@@ -146,45 +140,43 @@ async function setup() {
         button.innerHTML = String.fromCharCode(8631);
         // insert them after the code, but still inside grey box
         codeblock.insertAdjacentElement('afterend', button);
-        button.addEventListener(
-            'click', function (event) {
-                // remove trailing whitespace
-                const newCodeblock = event.currentTarget.parentElement.firstChild.innerText.replace(/\s$/, '');
-                // check if lanuage needs to be changed
-                detectJsHtml(newCodeblock);
-                // set scrollposs
-                scrollpos = event.currentTarget.parentElement.firstChild.getBoundingClientRect().top; // - event.currentTarget.parentElement.firstChild.getBoundingClientRect().height;
+        button.addEventListener('click', function (event) {
+            // remove trailing whitespace
+            const newCodeblock = event.currentTarget.parentElement.firstChild.innerText.replace(/\s$/, '');
+            // check if lanuage needs to be changed
+            detectJsHtml(newCodeblock);
+            // set scrollposs
+            scrollpos = event.currentTarget.parentElement.firstChild.getBoundingClientRect().top; // - event.currentTarget.parentElement.firstChild.getBoundingClientRect().height;
 
-                chrome.storage.local.get(['url'], function (result) {
-                    // check if the URL of the SO question page is the same as is saved, meaning the automatically extracted fragment was already saved in storage
-                    // if this is a different page, set the correct values for storage
-                    if (window.location != result.url) {
-                        chrome.storage.local.set({
-                            url: window.location,
-                            label: label,
-                            scope: scope,
-                            scopeArray: scopeArray,
-                            body: newCodeblock,
-                            description: description,
-                            tags: tagArray,
-                            domain: domainArray
-                        }, function () {
-                            // open the popup window
-                            chrome.runtime.sendMessage({ content: 'add' });
-                        });
-                    }
-                    // if this is the same page, only the new, user selected codeblock and possibly changed language need to be saved
-                    else {
-                        chrome.storage.local.set({ body: newCodeblock, scope: scope, scopeArray: scopeArray }, function () {
-                            // open the popup window
-                            chrome.runtime.sendMessage({ content: 'add' });
-                        });
-                    }
-                });
-            }
-        );
+            chrome.storage.local.get(['url'], function (result) {
+                // check if the URL of the SO question page is the same as is saved, meaning the automatically extracted fragment was already saved in storage
+                // if this is a different page, set the correct values for storage
+                if (window.location != result.url) {
+                    chrome.storage.local.set({
+                        url: window.location,
+                        label: label,
+                        scope: scope,
+                        scopeArray: scopeArray,
+                        body: newCodeblock,
+                        description: description,
+                        tags: tagArray,
+                        domain: domainArray
+                    }, function () {
+                        // open the popup window
+                        chrome.runtime.sendMessage({ content: 'add' });
+                    });
+                }
+                // if this is the same page, only the new, user selected codeblock and possibly changed language need to be saved
+                else {
+                    chrome.storage.local.set({ body: newCodeblock, scope: scope, scopeArray: scopeArray }, function () {
+                        // open the popup window
+                        chrome.runtime.sendMessage({ content: 'add' });
+                    });
+                }
+            });
+        });
     });
-};
+}
 
 function detectJsHtml(codeblock) {
     // only works for html and javascript
@@ -202,7 +194,7 @@ function detectJsHtml(codeblock) {
     if (scopeArray[0]) {
         scope = scopeArray[0];
     }
-};
+}
 
 // This functions takes an 2d Array as Input and returns the array sorted by its 1st column in descending order
 function sortFunction(a, b) {
@@ -246,18 +238,18 @@ function evaluate(seedWord, mod, voc) {
     let offset = 0;
     for (let i = 0; i < length; i++) {
         if (voc.hasOwnProperty(seedWord[i])) {
-            to_return[i - offset] = voc[seedWord[i]]
+            to_return[i - offset] = voc[seedWord[i]];
         }
         else {
             offset = offset + 1;
         }
     }
-    const shape = [1, MAX_LEN]
+    const shape = [1, MAX_LEN];
     // calling the model
     // let ret = tf.loadLayersModel(MODEL_URL).then(model => {
-    const result = mod.predict(tf.tensor(to_return, shape))
+    const result = mod.predict(tf.tensor(to_return, shape));
     const resultData = result.dataSync();
-    const back = resultData[0]
+    const back = resultData[0];
     //     return back;
     // });
     return back;

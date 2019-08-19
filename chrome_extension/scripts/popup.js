@@ -80,8 +80,8 @@ function setup() {
                     // error handling, if extension is installed and tab is not reloaded (meaning the content script has not been injected)
                     if (chrome.runtime.lastError) {
                         // the tab gets reloaded to inject the current version of the content script and popup window is immediatly closed
-                        chrome.tabs.update(tabs[0].id, { url: tabs[0].url })
-                        window.close()
+                        chrome.tabs.update(tabs[0].id, { url: tabs[0].url });
+                        window.close();
                     } else {
                         // load response from content script as input
                         loadState(response);
@@ -125,7 +125,7 @@ function setup() {
             }
         });
     });
-};
+}
 
 function loadState(input) {
     // input contains all the fragment attributes that were extracted from the question page by content script
@@ -149,7 +149,7 @@ function loadState(input) {
         newOption.value = language;
         scopelist.appendChild(newOption);
     });
-};
+}
 
 function setChips(tags, domElement, name) {
     // array containing all initial tags
