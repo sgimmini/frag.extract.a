@@ -107,7 +107,7 @@ async function setup() {
             body = ranking[0][1];
 
             // find the index of the selected codeblock, in order to get it's DOM element, so scrollpos can be set correctly
-            const index = codeblocks.map(block => block.innerText.replace(/\s$/, '')).indexOf(body);
+            const index = searchblocks.indexOf(body);
             if (index != -1) {
                 // position where the page scrolls to is still wrong
                 scrollpos = codeblocks[index].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
