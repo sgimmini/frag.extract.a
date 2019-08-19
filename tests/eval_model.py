@@ -3,11 +3,16 @@ import json
 import numpy as np
 
 
+# this functions emulates our tokenizer used in training
 def tokenization(input, vocab):
-    output = np.zeros(len(vocab))
+    output = np.zeros(195)
     tokens = input.split(' ')
+    offset = 0
     for i in range(0, len(tokens)):
-        output[i] = vocab[tokens[i]]
+        try:
+            output[i-offset] = vocab[tokens[i]]
+        except KeyError:
+            offset = offset+1
     return output
 
 
@@ -31,13 +36,13 @@ with open(token_dir, 'rb') as handle:
 # load test data
 f = open("test_data.txt", 'r')
 lines = f.readlines()
-print(lines)
 
 # open output file
 with open("eval_model_result.txt", "w") as file:
     # now get the predictions for every case and write them into an output file
     for line in lines:
         tok = tokenization(line, tokenizer)
+        tok = np.reshape(tok, (1, 195))
         prediction = model.predict(tok)
         to_write = line + " " + str(prediction) + "\n"
         file.write(to_write)
