@@ -5,7 +5,7 @@ let label = "", scope = "", scopeArray = [], body = "", description = "", tagArr
 const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
 const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json";
 const MAX_LEN = 125;
-const border = " stop ";
+const border = " UNIQUE_BORDER_SYMBOL ";
 
 // list of all languages that can be recognized from tags
 // this list is not comprehensive, please add any further programming lanuages you may think of
