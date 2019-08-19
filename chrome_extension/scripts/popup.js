@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function setup() {
     // get the previous state from storage
-    chrome.storage.local.get({ url: "", label: "", scope: "", scopeArray: [""], body: "", description: "", tags: [["", false]], domain: [["", false]], jumpto: true }, function (result) {
+    chrome.storage.local.get({ url: "", label: "", scope: "", scopeArray: [""], body: "", description: "", tags: [["", false]], domain: [["", false]], jumpto: false }, function (result) {
         // returns array of length 1 with the currently viewed tab
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 
@@ -87,9 +87,8 @@ function setup() {
                         loadState(response);
 
                         // if no codeblock was found, grey out jump to codeblock button
-                        if (!response.body) {
+                        if (!response.jumpto) {
                             document.getElementById('jumpto').disabled = true;
-                            result.jumpto = false;
                         }
                         // set the url, so when you reopen the popup without opening it on another site in between, your changes get restored
                         chrome.storage.local.set({
@@ -101,8 +100,7 @@ function setup() {
                             description: response.description,
                             tags: response.tags,
                             domain: response.domain,
-                            // so that jump to codeblock button gets greyed out again upon reopening of the popup
-                            jumpto: result.jumpto
+                            jumpto: response.jumpto
                         });
                     }
                 });
