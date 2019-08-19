@@ -1,6 +1,6 @@
 // these variables need to be accessible through the entire life of the page this script was injected in
-let scrollpos = 0, origScrollpos = 0;
-let label = "", scope = "", scopeArray = [], body = "", description = "", tagArray = [], domainArray = [];
+let bodyElem = "", origBodyElem = "";
+let label = "", scope = "", scopeArray = [], body = "", description = "", tagArray = [], domainArray = [], jumpto = false;
 
 const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
 const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json";
@@ -105,16 +105,13 @@ async function setup() {
             console.log(ranking[0][1]);
             body = ranking[0][1];
 
-            // find the index of the selected codeblock, in order to get it's DOM element, so scrollpos can be set correctly
+            // find the index of the selected codeblock, in order to get it's DOM element
             const index = searchblocks.indexOf(body);
             if (index != -1) {
-                // position where the page scrolls to is still wrong
-                origScrollpos = codeblocks[index].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
-                scrollpos = origScrollpos;
-            }
-            // for testing purposes:
-            else {
-                alert("body was not found in array of codeblocks");
+                // saves the dom element of the selected codeblock to scroll to it when jump to fragment button is clicked by user
+                origBodyElem = codeblocks[index];
+                // allows the jump to codeblock button in popup to not be disabled
+                jumpto = true;
             }
         }
 
@@ -151,7 +148,7 @@ async function setup() {
             // remove trailing whitespace
             const newCodeblock = codeblock.innerText.replace(/\s$/, '');
             // set scrollpos
-            scrollpos = codeblock.getBoundingClientRect().top;
+            bodyElem = codeblock;
             // check if lanuage needs to be changed
             const newScopeArray = detectJsHtml(newCodeblock);
             // set the first language as the selected one
@@ -172,7 +169,8 @@ async function setup() {
                         body: newCodeblock,
                         description: description,
                         tags: tagArray,
-                        domain: domainArray
+                        domain: domainArray,
+                        jumpto: true
                     }, function () {
                         // open the popup window
                         chrome.runtime.sendMessage({ content: 'add' });
@@ -180,7 +178,7 @@ async function setup() {
                 }
                 // if this is the same page, only the new, user selected codeblock and possibly changed language need to be saved
                 else {
-                    chrome.storage.local.set({ body: newCodeblock, scope: newScope, scopeArray: newScopeArray }, function () {
+                    chrome.storage.local.set({ body: newCodeblock, scope: newScope, scopeArray: newScopeArray, jumpto: true }, function () {
                         // open the popup window
                         chrome.runtime.sendMessage({ content: 'add' });
                     });
@@ -273,13 +271,13 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
     // hand over automatically extracted fragment to the popup to display and be edited by user
     if (recieved.content == 'setPopup') {
         // so that the scroll position is also reset when the user presses cancel in popup
-        scrollpos = origScrollpos;
-        sendResponse({ url: window.location, label: label, scope: scope, scopeArray: scopeArray, body: body, description: description, tags: tagArray, domain: domainArray });
+        bodyElem = origBodyElem;
+        sendResponse({ url: window.location, label: label, scope: scope, scopeArray: scopeArray, body: body, description: description, tags: tagArray, domain: domainArray, jumpto: jumpto });
     }
 
     // when jump to codeblock button is clicked
     // scroll page to position of codeblock that's loaded in the fragment editor
     else if (recieved.content == 'scroll') {
-        scroll(0, scrollpos);
+        bodyElem.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
     }
 });

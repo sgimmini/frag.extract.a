@@ -50,8 +50,8 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
   // an add to fragment button in SO question page was clicked
   // opens the extension popup as normal browser popup, since extension popup cannot be opened programmatically
   else if (recieved.content == 'add') {
-    // width and height need to be adapted, scrollbars=no seems to not do anything, there are still scrollbars
-    const popup = window.open("popup.html", "extension_popup", "width=370,height=566,status=no,scrollbars=no,resizable=no");
+    // width and height of poopup seems to be limited (at least in Windows) to somewhere below these values
+    const popup = window.open("popup.html", "extension_popup", "width=397,height=631");
     // set listener for when window becomes inactive, to close popup automatically when user clicks somewhere outside of popup (like extension popup behaviour)
     popup.addEventListener('blur', function () {
       popup.close();
