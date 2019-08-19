@@ -101,7 +101,6 @@ async function setup() {
         ranking.sort(sortFunction);
         console.log(ranking);
 
-
         if (ranking[0]) {
             console.log(ranking[0][1]);
             body = ranking[0][1];
@@ -112,14 +111,21 @@ async function setup() {
                 // position where the page scrolls to is still wrong
                 scrollpos = codeblocks[index].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
             }
+            // for testing purposes:
+            else {
+                alert("body was not found in array of codeblocks");
+            }
         }
 
         /* ISSUE: this needs to happen after the codeblock was actually selected (not sure if thats the case currently) */
 
         // almost all cases where multiple languages are tagged are javascript and html
         // therefore an attempt is made to determine which of these languages the selected codeblock is
-        // also sets the first language in the array as the selected one
-        detectJsHtml(body);
+        scopeArray = detectJsHtml(body);
+        // set the first language as the selected one
+        if (scopeArray[0]) {
+            scope = scopeArray[0];
+        }
 
         /* ISSUE: this needs to happen after the codeblock was actually selected (after detectJSHtml(body) was executed) (not sure if thats the case currently) */
 
@@ -142,11 +148,16 @@ async function setup() {
         codeblock.insertAdjacentElement('afterend', button);
         button.addEventListener('click', function (event) {
             // remove trailing whitespace
-            const newCodeblock = event.currentTarget.parentElement.firstChild.innerText.replace(/\s$/, '');
+            const newCodeblock = codeblock.innerText.replace(/\s$/, '');
+            // set scrollpos
+            scrollpos = codeblock.getBoundingClientRect().top;
             // check if lanuage needs to be changed
-            detectJsHtml(newCodeblock);
-            // set scrollposs
-            scrollpos = event.currentTarget.parentElement.firstChild.getBoundingClientRect().top; // - event.currentTarget.parentElement.firstChild.getBoundingClientRect().height;
+            const newScopeArray = detectJsHtml(newCodeblock);
+            // set the first language as the selected one
+            let newScope = "";
+            if (newScopeArray[0]) {
+                newScope = newScopeArray[0];
+            }
 
             chrome.storage.local.get(['url'], function (result) {
                 // check if the URL of the SO question page is the same as is saved, meaning the automatically extracted fragment was already saved in storage
@@ -155,8 +166,8 @@ async function setup() {
                     chrome.storage.local.set({
                         url: window.location,
                         label: label,
-                        scope: scope,
-                        scopeArray: scopeArray,
+                        scope: newScope,
+                        scopeArray: newScopeArray,
                         body: newCodeblock,
                         description: description,
                         tags: tagArray,
@@ -168,7 +179,7 @@ async function setup() {
                 }
                 // if this is the same page, only the new, user selected codeblock and possibly changed language need to be saved
                 else {
-                    chrome.storage.local.set({ body: newCodeblock, scope: scope, scopeArray: scopeArray }, function () {
+                    chrome.storage.local.set({ body: newCodeblock, scope: newScope, scopeArray: newScopeArray }, function () {
                         // open the popup window
                         chrome.runtime.sendMessage({ content: 'add' });
                     });
@@ -184,15 +195,13 @@ function detectJsHtml(codeblock) {
         // detect html features
         if (/<(\S+).*>.*<\/\1>/s.test(codeblock)) {
             // put html first in array so it will be shown as the language with javascript accessible in a dropdown menu
-            scopeArray = ['html', 'javascript'];
+            return ['html', 'javascript'];
         }
         else {
-            scopeArray = ['javascript', 'html'];
+            return ['javascript', 'html'];
         }
-    }
-    // set the first language as the selected one
-    if (scopeArray[0]) {
-        scope = scopeArray[0];
+    } else {
+        return scopeArray;
     }
 }
 
