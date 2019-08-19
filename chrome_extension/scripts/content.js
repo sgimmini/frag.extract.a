@@ -1,5 +1,5 @@
 // these variables need to be accessible through the entire life of the page this script was injected in
-let scrollpos = 0;
+let scrollpos = 0, origScrollpos = 0;
 let label = "", scope = "", scopeArray = [], body = "", description = "", tagArray = [], domainArray = [];
 
 const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
@@ -109,7 +109,8 @@ async function setup() {
             const index = searchblocks.indexOf(body);
             if (index != -1) {
                 // position where the page scrolls to is still wrong
-                scrollpos = codeblocks[index].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
+                origScrollpos = codeblocks[index].getBoundingClientRect().top; //window.pageYOffset - codeblocks[0].getBoundingClientRect().y;
+                scrollpos = origScrollpos;
             }
             // for testing purposes:
             else {
@@ -271,6 +272,8 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
     // when extension popup is opened on a site different to the last one 
     // hand over automatically extracted fragment to the popup to display and be edited by user
     if (recieved.content == 'setPopup') {
+        // so that the scroll position is also reset when the user presses cancel in popup
+        scrollpos = origScrollpos;
         sendResponse({ url: window.location, label: label, scope: scope, scopeArray: scopeArray, body: body, description: description, tags: tagArray, domain: domainArray });
     }
 
