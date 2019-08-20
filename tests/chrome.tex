@@ -113,11 +113,38 @@ Test succeeded with this \href{https://stackoverflow.com/questions/221294/how-do
 \subsection*{Sending with Empty Codeblock}
 \begin{itemize}
 	\item[Precondition] Any page on stackoverflow
-	\item[Test Steps] open popup, if there delete code, send fragment
+	\item[Test Steps] open popup, if there delete code, add label, send fragment
 	\item[Expected Result] hovertext over codeblock-field reminding to set code
 	\item[Expected Exception] None
 \end{itemize}
 Test succeeded.
+
+\subsection*{Sending with Empty Codeblock in PopUp Window}
+\begin{itemize}
+	\item[Precondition] any question thread with at least one codeblock
+	\item[Test Steps] click any add to fragment button, add label, delete code, send fragment
+	\item[Expected Result] hovertext over codeblock-field reminding to set code
+	\item[Expected Exception] None
+\end{itemize}
+Test succeeded with this \href{https://stackoverflow.com/questions/442404/retrieve-the-position-x-y-of-an-html-element}{StackOverflow Question}. 
+
+\subsection*{Codeblock on second Page}
+\begin{itemize}
+	\item[Precondition] Question thread with at least two pages and codeblocks
+	\item[Test Steps] go on second page, open popup
+	\item[Expected Result] by models best predicted codeblock visible in popup
+	\item[Expected Exception] None
+\end{itemize}
+Test succeeded with this \href{https://stackoverflow.com/questions/221294/how-do-you-get-a-timestamp-in-javascript?page=2}{StackOverflow Question}. 
+
+\subsection*{Jump to Fragment on second Page}
+\begin{itemize}
+	\item[Precondition] Question thread with at least two pages and codeblocks
+	\item[Test Steps] go on second page, open popup and click jump to fragment button
+	\item[Expected Result] scrolling to desired codeblock
+	\item[Expected Exception] None
+\end{itemize}
+Test succeeded with this \href{https://stackoverflow.com/questions/221294/how-do-you-get-a-timestamp-in-javascript?page=2}{StackOverflow Question}. 
 
 %Dummy
 \subsection*{}
@@ -127,5 +154,6 @@ Test succeeded.
 	\item[Expected Result]
 	\item[Expected Exception]
 \end{itemize}
+
 
 \end{document}
