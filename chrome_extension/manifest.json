@@ -46,10 +46,10 @@
   },
   "page_action": {
     "default_icon": {
-      "128": "images/icon128.png",
-      "48": "images/icon48.png",
-      "32": "images/icon32.png",
-      "16": "images/icon16.png"
+      "128": "images/puzzle128.png",
+      "48": "images/puzzle48.png",
+      "32": "images/puzzle32.png",
+      "16": "images/puzzle16.png"
     },
     "default_title": "Create VS Code Snippets from anwers in Stack Overflow",
     "default_popup": "popup.html"
