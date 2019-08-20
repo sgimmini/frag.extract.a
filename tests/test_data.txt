@@ -1,2 +1,12 @@
-does this stop do something ?
-or does it stop do nothing ?
+How do I include a JavaScript file in another JavaScript file? unique symbol border export function hello() { return "Hello"; }
+How do I include a JavaScript file in another JavaScript file? unique symbol border export function hello() { return "Hello"; }
+How do I include a JavaScript file in another JavaScript file? unique symbol border define(['lib/dependency1', 'lib/dependency2'], function (d1, d2) { return libraryObject; });
+How do I include a JavaScript file in another JavaScript file? unique symbol border import name from "module-name"; import { member } from "module-name"; import { member as alias } from "module-name"; import { member1 , member2 } from "module-name";
+How do I include a JavaScript file in another JavaScript file? unique symbol border function include(filename)  var head = document.getElementsByTagName('head')[0]; var script = document.createElement('script'); script.src = filename; script.type = 'text/javascript'; head.appendChild(script)
+
+How do I copy a file in Python? unique symbol border from shutil import copyfile copyfile(src, dst)
+How do I copy a file in Python? unique symbol border import shutil shutil.copy2('/src/dir/file.ext', '/dst/dir/newname.ext') # complete target filename given shutil.copy2('/src/file.ext', '/dst/dir')
+How do I copy a file in Python? unique symbol border import shutil shutil.copy('/etc/hostname', '/var/tmp/testhostname')
+How do I copy a file in Python? unique symbol border def copyfile_example(source, dest): with open(source, 'rb') as src, open(dest, 'wb') as dst: copyfileobj_example(src, dst)
+How do I copy a file in Python? unique symbol border os.popen(cmd[, mode[, bufsize]]) os.popen('cp source.txt destination.txt') os.popen('copy source.txt destination.txt')
+How do I copy a file in Python? unique symbol border for i in range(0, 10): print("This is not accurate and should be rated lower")
