@@ -120,6 +120,16 @@ The extraction model contains of
 - `model.json` contains weights and needs to be loaded together with `model.h5`
 - `vocab.json`, which contains the dictionary created when preprocessing in 'train_lstm.ipynb' (needed to recreate tokenization)
 
+### In case of further training:
+Following steps need to be taken to train and integrate a new model:
+- Train the new model in Python using TensorFlow or libraries using TensorFlow like Keras
+- Training in TensorFlowjs is possible but strongly disadvised because of performance issues (no GPU Training possible)
+- When using Keras: Save the model using the Keras HDF5 format 
+- Save the dictionary used for tokenization as JSON
+- Convert the HDF5 file to TensorFlowjs-format using their converter
+- Host your dictionary file and your converted model file on a server
+- Pass the new URL to `content.js`
+
 ### Functionality
 TODO: how the best fragment is determined
 By sending a fragment there will be a connection between the NM-host and chrome established carrying the data provided by the popup
