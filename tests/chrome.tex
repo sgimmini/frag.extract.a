@@ -1,7 +1,5 @@
 \documentclass{report}
 \usepackage{hyperref}
-\renewcommand\labelitemi{\textbf}
-
 \begin{document}
 
 \begin{titlepage}
@@ -103,44 +101,5 @@ Test succeeded with this \href{https://stackoverflow.com/questions/221294/how-do
 	\item[Expected Result]
 	\item[Expected Exception]
 \end{itemize}
-
-\section*{Pair Programming}
-\Large Aufgabe: Debugging install\_host.sh\\ \normalsize
-Programmierer: Simon, Supervisor: Tobias\\
-\\
-Start: 11:32
-\begin{itemize}
-	\item HOST\_NAME geaendert und ''.py'' angehangen
-	\item testen - funktioniert nicht
-	\item googlen ob Schreibweise des Manifests ausschlaggebend ist
-		\subitem manifests haben meist dreifach getrennte Schreibweise: w.x.y.z
-	\item nmhost manifest name in andere Schreibweise gebracht:
-		\subitem aus manifest\_frag\_extract\_host.json - com.frag.extract.json
-		\subitem auch in com.frag.extract.json geändert
-	\item Kommunikation funktioniert, host arbeitet nicht
-	\item neue Namen in uninstall\_host.sh angepasst
-	\item in popup.js connectNative aktualisiert
-\end{itemize}
-Ende: 11:48\\
-\\\\
-Programmierer: Tobias, Supervisor: Simon\\
-
-Start: 12:01
-\begin{itemize}
-	\item chrome extension kann auf python host nicht zugreifen
-		\subitem manuell Schreibrechte gegeben
-		\subitem funktioniert
-	\item googlen wie man Schreib- und Leserechte beim Erstellen von Datein gewährleisten kann
-	\item beim kopieren des python Skripts Schreibrechte gegeben
-	\item Kommunikation nach Installation funktioniert nun ohne manuelle Rechtevergabe oder Kopien
-
-	\item chromium support fehlt:
-		\subitem chromium hat anderen Pfad bei Linux als Chrome
-		\subitem zweiten Installationsort herausgefunden: /etc/chromium/native-messaging-host
-		\subitem diesen Pfad in die install\_host.sh hinzugefuegt
-		\subitem ebenfalls in der uninstall\_host.sh
-\end{itemize}
-Ende: 12:18
-
 
 \end{document}
