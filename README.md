@@ -115,7 +115,7 @@ The model to determine the best fitting fragment was build in Python using the [
 To capture the complex text data with it's full meaning a 2-layer LSTM was built which takes a natural language intent and a code fragment as input and outputs the probability of them fitting.
 Afterwards the model got exported into tensorflowjs-format by using the tensorflowjs-library. For further explanation read the tutorial on the [tensorflow website](https://www.tensorflow.org/js/tutorials/conversion/import_keras).
 By using [TensorFlow.js](https://www.tensorflow.org/js) the model got imported into JavaScript and can be used to make predictions.
-Currently TensorFlowjs Model and Tokenizer as hosted via GitHub Pages at following URL: <https://github.com/Flori-Boy/Hosting_Test/tree/master>
+Currently TensorFlow.js Model and Tokenizer are hosted via GitHub Pages at following URL: <https://github.com/Flori-Boy/Hosting_Test/tree/master>
 
 ### Functionality
 
