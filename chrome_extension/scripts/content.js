@@ -19,7 +19,7 @@ const MODEL_URL =
   "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
 const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json";
 const MAX_CODEBLOCKS = 5;
-const MAX_LEN = 125;
+const MAX_LEN = 30;
 const border = " UNIQUE_BORDER_SYMBOL ";
 
 // list of all languages that can be recognized from tags

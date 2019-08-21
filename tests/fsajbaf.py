@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 dirty = []
 for i in tqdm(range(0, len(data['intent'])), desc="Fucking around"):
-    if data.at[i, 'prob'] < 0.15 and i % 10 != 0:
+    if data.at[i, 'prob'] < 0.15 and i % 18 != 0:
         dirty.append(i)
 
 data.drop(inplace=True, labels=dirty, axis=0)
