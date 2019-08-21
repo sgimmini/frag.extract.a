@@ -20,7 +20,7 @@ const MODEL_URL =
 const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json";
 const MAX_CODEBLOCKS = 5;
 const MAX_LEN = 30;
-const border = " UNIQUE_BORDER_SYMBOL ";
+const border = " unique border symbol ";
 
 // list of all languages that can be recognized from tags
 // this list is not comprehensive, please add any further programming lanuages you may think of
@@ -311,9 +311,9 @@ function evaluate(seedword, model, vocab) {
       to_return[i - offset] = vocab[seedword[i]];
     } else {
       ++offset;
-      --i;
     }
   }
+  console.log(seedword)
   console.log(to_return)
   const shape = [1, MAX_LEN];
   return model.predict(tf.tensor(to_return, shape)).dataSync()[0];
