@@ -303,9 +303,6 @@ function sortFunction(a, b) {
 function evaluate(seedword, model, vocab) {
   // tensor to return later
   const to_return = new Array(MAX_LEN).fill(0);
-  console.log(vocab)
-  
-
   // If the word is in our dictionary we assign it it's value
   // else it gets "deleted" by the offset
   let offset = 0;
@@ -317,7 +314,7 @@ function evaluate(seedword, model, vocab) {
       --i;
     }
   }
-
+  console.log(to_return)
   const shape = [1, MAX_LEN];
   return model.predict(tf.tensor(to_return, shape)).dataSync()[0];
 }
