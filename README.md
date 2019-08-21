@@ -1,10 +1,5 @@
 # Frag.Extract
 
-## ToDo
-
-- continue on readme
-- grammar and spell check
-
 Fragment extractor for Stackoverflow.
 
 This is a tool to extract code fragments from answers to questions on Stackoverflow. It works in conjunction with a [Visual Studio Code Extension](https://marketplace.visualstudio.com/items?itemName=JonasGann.fragment-editor), which recieves the fragments from this Chrome Extension and saves them to a database.
