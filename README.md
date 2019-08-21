@@ -125,3 +125,5 @@ to prevent redundant fragments.
 
 For more information about Native Messaging see https://developer.chrome.com/apps/nativeMessaging
 
+## Reference
+Materialize was used for design: [materializecss.com](https://materializecss.com/)
