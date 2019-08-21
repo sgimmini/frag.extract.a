@@ -41,7 +41,7 @@ A fragment contains of a
 - tags
 - description, defaultly the title of the question
 - language
-- library and packages -, used for the code
+- library and packages, used for the code
 - code
 
 ## Popup
@@ -91,17 +91,17 @@ The Chrome Extension consists of
 The extraction model contains of
 
 - `train_lstm.ipynb`, the jupyter notebook containing data loading, preprocessing and training
-- `loss.pdf`, which visualizes the training curve for purposes of evaluation
-- `lstm.h5`, which is the model saved as Keras Python HDF5 format
-- `model.h5`, which is the same model in a different format for faster loading when doing tests in Python
+- `loss.pdf`, visualizes the training curve for purposes of evaluation
+- `lstm.h5`, is the model saved as Keras Python HDF5 format
+- `model.h5`, is the same model in a different format for faster loading when doing tests in Python
 - `model.json` contains weights and needs to be loaded together with `model.h5`
-- `vocab.json`, which contains the dictionary created when preprocessing in 'train_lstm.ipynb' (needed to recreate tokenization)
+- `vocab.json`, contains the dictionary created when preprocessing in 'train_lstm.ipynb' (needed to recreate tokenization)
 
 ### In case of further training:
 
 Following steps need to be taken to train and integrate a new model:
 
-- Train the new model in Python using TensorFlow or libraries using TensorFlow like Keras
+- Train the model in Python using TensorFlow or libraries which use TensorFlow like Keras
 - Training in TensorFlowjs is possible but strongly disadvised because of performance issues (no GPU Training possible)
 - When using Keras: Save the model using the Keras HDF5 format
 - Save the dictionary used for tokenization as JSON
@@ -124,7 +124,7 @@ To guarantee good performance only the first five codeblocks are taken into acco
 Every codeblock will be tokenized together with the question and fed into a Neural Network which assigns probabilties of the codeblock being a good fit for the question.
 The codeblock with the highest probability gets selected.
 By sending a fragment there will be a connection between the NM-host and chrome established carrying the data provided by the popup
-to the database. This fragment appears no later than 5 seconds later in the interface of the fragment editor.
+to the database. This fragment appears not later than 5 seconds after selection in the interface of the fragment editor.
 
 ### Native Messaging
 
