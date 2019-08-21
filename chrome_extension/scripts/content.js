@@ -1,9 +1,14 @@
 // these variables need to be accessible through the entire life of the page this script was injected in
+// for the jumpto button, second one is so that it can be reset to the original, if user clicks cancel
 let bodyElem = "", origBodyElem = "";
+// all the fragment elements, that get send to popup
 let label = "", scope = "", scopeArray = [], body = "", description = "", tagArray = [], domainArray = [], jumpto = false;
+// for ensuring, that setup is run (eaming the fragment gets extracted from the page) before the fragment is sent to the popup
+let setupComplete = false, callback;
 
 const MODEL_URL = "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
 const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json";
+const MAX_CODEBLOCKS = 5;
 const MAX_LEN = 125;
 const border = " UNIQUE_BORDER_SYMBOL ";
 
@@ -82,21 +87,23 @@ async function setup() {
          * Extract body [codeblock of the fragment]
          * -> best codeblock in the answers is selected
          */
-        const model = await create_Model(MODEL_URL);
-        const vocab = await create_Vocab(VOCAB_URL);
+        // load the model, hosted at url set at the top
+        const model = await tf.loadLayersModel(MODEL_URL);
+        // load the vocabulary, hosted at url set at the top
+        const vocab = fetch(VOCAB_URL).then(response => response.json());
 
-        // we evaluate each answer in concatenation with the question
+        // only the first MAX_CODEBLOCKS many codeblocks will be evaluated, otherwise evaluaten will take too long for questions with a lot of answers
+        const searchblocks = codeblocks.slice(0, MAX_CODEBLOCKS).map(block => block.innerText.replace(/\s$/, ''));
+
+        // we evaluate each answer in concatenation with the question (= description)
         // the codeblock with the highest prediction gets chosen
-        const searchblocks = codeblocks.slice(0, 5).map(block => block.innerText.replace(/\s$/, ''));
-
         const ranking = [];
-        for (let i = 0; i < searchblocks.length; i++) {
-            const input = description.concat(border, searchblocks[i]);
+        await searchblocks.forEach(async searchblock => {
+            const input = description.concat(border, searchblock);
             const prob = await evaluate(input.split(" "), model, vocab);
             console.log(prob);
-            const tupel = [prob, searchblocks[i]];
-            ranking.push(tupel);
-        }
+            ranking.push([prob, searchblock]);
+        });
         console.log(ranking);
         ranking.sort(sortFunction);
         console.log(ranking);
@@ -115,8 +122,6 @@ async function setup() {
             }
         }
 
-        /* ISSUE: this needs to happen after the codeblock was actually selected (not sure if thats the case currently) */
-
         // almost all cases where multiple languages are tagged are javascript and html
         // therefore an attempt is made to determine which of these languages the selected codeblock is
         scopeArray = detectJsHtml(body);
@@ -125,15 +130,19 @@ async function setup() {
             scope = scopeArray[0];
         }
 
-        /* ISSUE: this needs to happen after the codeblock was actually selected (after detectJSHtml(body) was executed) (not sure if thats the case currently) */
-
         // set the scope as preselected option for tags as well, if user selected that option
         if (result.presetLanguage && scope) {
             tagArray.push([scope, true]);
         }
-    });
 
-    /* ISSUE: all of the above functions need to happen before sendResponse is executed in the chrome.runtime.onMessage.addListener function down below */
+        // so that the listener for the message from the popup knows, if setup is finished
+        setupComplete = true;
+        // callback is set to the response function of the listener for messages, if the user opens the popup before setup is complete
+        if (callback) {
+            // then setup will send the response containing the fragment to popup once it is complete
+            callback({ url: window.location, label: label, scope: scope, scopeArray: scopeArray, body: body, description: description, tags: tagArray, domain: domainArray, jumpto: jumpto });
+        }
+    });
 
     // create Add to fragment buttons on every codeblock
     codeblocks.forEach(codeblock => {
@@ -214,53 +223,28 @@ function sortFunction(a, b) {
     }
 }
 
-// This function takes an URL and makes and HTTP Request
-function Get(yourUrl) {
-    const Httpreq = new XMLHttpRequest(); // a new request
-    Httpreq.open("GET", yourUrl, false);
-    Httpreq.send(null);
-    return Httpreq.responseText;
-}
-
-// This function takes an URL and returns the TensorflowLayersModel which should lie at the other side
-async function create_Model(url) {
-    const back = await tf.loadLayersModel(url);
-    return back;
-}
-
-// This function takes an URL and returns the JSON object which should lie at the other side
-async function create_Vocab(url) {
-    const back = JSON.parse(Get(url));
-    return back;
-}
-
 // this function takes a tokenized string as input and returns a probability of
 // the given intent (tokens before border - token) and
 // and codeblock being a good fit
-function evaluate(seedWord, mod, voc) {
+function evaluate(seedword, model, vocab) {
     // tensor to return later
     const to_return = new Array(MAX_LEN).fill(0);
-    const length = seedWord.length;
+
     // If the word is in our dictionary we assign it it's value
     // else it gets "deleted" by the offset
     let offset = 0;
-    for (let i = 0; i < length; i++) {
-        if (voc.hasOwnProperty(seedWord[i])) {
-            to_return[i - offset] = voc[seedWord[i]];
+    for (let i = 0; i < seedword.length; ++i) {
+        if (vocab.hasOwnProperty(seedword[i])) {
+            to_return[i - offset] = vocab[seedword[i]];
         }
         else {
-            offset = offset + 1;
+            ++offset;
         }
     }
+
     const shape = [1, MAX_LEN];
-    // calling the model
-    // let ret = tf.loadLayersModel(MODEL_URL).then(model => {
-    const result = mod.predict(tf.tensor(to_return, shape));
-    const resultData = result.dataSync();
-    const back = resultData[0];
-    //     return back;
-    // });
-    return back;
+
+    return model.predict(tf.tensor(to_return, shape)).dataSync()[0];
 }
 
 // handle requests from other parts of extension
@@ -270,9 +254,17 @@ chrome.runtime.onMessage.addListener(function (recieved, sender, sendResponse) {
     // when extension popup is opened on a site different to the last one 
     // hand over automatically extracted fragment to the popup to display and be edited by user
     if (recieved.content == 'setPopup') {
-        // so that the scroll position is also reset when the user presses cancel in popup
-        bodyElem = origBodyElem;
-        sendResponse({ url: window.location, label: label, scope: scope, scopeArray: scopeArray, body: body, description: description, tags: tagArray, domain: domainArray, jumpto: jumpto });
+        // after all the attributes of the fragment where extracted from the site
+        if (setupComplete) {
+            // so that the scroll position is also reset when the user presses cancel in popup
+            bodyElem = origBodyElem;
+            sendResponse({ url: window.location, label: label, scope: scope, scopeArray: scopeArray, body: body, description: description, tags: tagArray, domain: domainArray, jumpto: jumpto });
+        }
+        // if user opens the popup, before setup finishes, let popup.js wait, setup() will then send the response once it completes
+        else {
+            callback = sendResponse;
+            return true;
+        }
     }
 
     // when jump to codeblock button is clicked
