@@ -123,3 +123,10 @@ vs_code_extension/frag_edit/node_modules/
 
 # Node.js modules
 node_modules
+
+# ESLint config
+.eslintrc.js
+
+# NPM package stuff. Might need to change in future, if a package.json is ever need
+package.json
+package-lock.json
