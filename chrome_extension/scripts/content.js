@@ -152,15 +152,11 @@ async function setup() {
       await searchblocks.forEach(async searchblock => {
         const input = description.concat(border, searchblock);
         const prob = await evaluate(input.split(" "), model, vocab);
-        console.log(prob);
         ranking.push([prob, searchblock]);
       });
-      console.log(ranking);
       ranking.sort(sortFunction);
-      console.log(ranking);
 
       if (ranking[0]) {
-        console.log(ranking[0][1]);
         body = ranking[0][1];
 
         // find the index of the selected codeblock, in order to get it's DOM element
@@ -313,8 +309,6 @@ function evaluate(seedword, model, vocab) {
       ++offset;
     }
   }
-  console.log(seedword);
-  console.log(to_return);
   const shape = [1, MAX_LEN];
   return model.predict(tf.tensor(to_return, shape)).dataSync()[0];
 }
