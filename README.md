@@ -2,9 +2,6 @@
 
 ## ToDo
 - continue on readme
-- chrome extension in marketplace?
-- licences? e.g. for materialize
-- readme arrangement 
 - grammar and spell check
 
 fragment extractor for StackOverflow.
@@ -25,7 +22,7 @@ There are two things need to be installed seperately:
 The VSC Extension can be found in the Marketplace under *Fragment Editor* by *Jonas Gann*. Through this installation 
 the NM-host used for communication between Chrome and the database will be installed too.
 The Chrome Extension can be installed easily by extracting a provided .zip-file and loading this directory into
-`chrome://extensions/` (in developer mode). TODO: continue - may marketplace(?)
+`chrome://extensions/` (in developer mode).
 
 ## Fragments
 A fragment contains of a
@@ -65,13 +62,13 @@ Important to notice is:
 
 ### Chrome Extension
 The Chrome Extension contains of 
-- `manifest.json` for GRUND
+- `manifest.json` for GRUND @tobias
 - `background.js`, a background script only allowing the popup to be opened on StackOverflow
 - `content.js` extraction of websites content for fragments (see -> Fragments) 
 - `popup.html` layout of the popup 
 - `popup.js` receiving fragment content from `content.js` and processing visible data for `popup.html`(?)
-- `opotions.html`
-- `options.js`
+- `opotions.html` @tobias
+- `options.js` @tobias
 
 Materialize https://materializecss.com/ was used as a design baseline. A couple of changes had to be made in
 `materialize.css` to our purpose.    
@@ -112,10 +109,10 @@ Native Messaging (NM) is a function implemented by Google for communication betw
 a NM-host located on the clients file system. This host is installed automatically into
 `~/.config/chromium/NativeMessagingHosts/com.frag.extract.json`
 on Linux like Operating Systems or
-``hier für Windows``.
+``hier für Windows``. @tobias
 It also contains the path to a script located in
 `/.vscode-oss/extensions/[extension-version]/out/frag.extract.host/extract.py`, on linux and
-`again windows`, on Windows,
+`again windows`, on Windows, @tobias
 and an allowed extension origin: chrome-extension://faoicolglehmgplpccapgobineahofjh/.
 When sending a fragment a short time connection is established. The decision was against
 a long life connection as this would consume much more (mir fällt nicht ein wie man CPU usage anders nennt).
