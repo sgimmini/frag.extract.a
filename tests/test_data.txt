@@ -10,3 +10,6 @@ How do I copy a file in Python? unique symbol border import shutil shutil.copy('
 How do I copy a file in Python? unique symbol border def copyfile_example(source, dest): with open(source, 'rb') as src, open(dest, 'wb') as dst: copyfileobj_example(src, dst)
 How do I copy a file in Python? unique symbol border os.popen(cmd[, mode[, bufsize]]) os.popen('cp source.txt destination.txt') os.popen('copy source.txt destination.txt')
 How do I copy a file in Python? unique symbol border for i in range(0, 10): print("This is not accurate and should be rated lower")
+
+
+How do I revert a Git repository to a previous commit? unique symbol border # This will detach your HEAD, that is, leave you with no branch checked out: git checkout 0d1d7fc32

@@ -139,7 +139,7 @@ async function setup() {
       // load the model, hosted at url set at the top
       const model = await tf.loadLayersModel(MODEL_URL);
       // load the vocabulary, hosted at url set at the top
-      const vocab = fetch(VOCAB_URL).then(response => response.json());
+      const vocab = await fetch(VOCAB_URL).then(response => response.json());
 
       // only the first MAX_CODEBLOCKS many codeblocks will be evaluated, otherwise evaluaten will take too long for questions with a lot of answers
       const searchblocks = codeblocks
@@ -303,20 +303,22 @@ function sortFunction(a, b) {
 function evaluate(seedword, model, vocab) {
   // tensor to return later
   const to_return = new Array(MAX_LEN).fill(0);
+  console.log(vocab)
+  
 
   // If the word is in our dictionary we assign it it's value
   // else it gets "deleted" by the offset
   let offset = 0;
-  for (let i = 0; i < seedword.length; ++i) {
+  for (let i = 0; i < MAX_LEN; ++i) {
     if (vocab.hasOwnProperty(seedword[i])) {
       to_return[i - offset] = vocab[seedword[i]];
     } else {
       ++offset;
+      --i;
     }
   }
 
   const shape = [1, MAX_LEN];
-
   return model.predict(tf.tensor(to_return, shape)).dataSync()[0];
 }
 

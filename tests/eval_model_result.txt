@@ -22,3 +22,9 @@ How do I copy a file in Python? unique symbol border os.popen(cmd[, mode[, bufsi
  [[16.221226]]
 How do I copy a file in Python? unique symbol border for i in range(0, 10): print("This is not accurate and should be rated lower")
  [[15.909077]]
+
+ [[15.933709]]
+
+ [[15.933709]]
+How do I revert a Git repository to a previous commit? unique symbol border # This will detach your HEAD, that is, leave you with no branch checked out: git checkout 0d1d7fc32
+ [[16.544765]]
