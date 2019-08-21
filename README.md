@@ -97,12 +97,17 @@ The model to determine the best fitting fragment was build in Python using the K
 To capture the complex text data with it's full meaning a 2-layer LSTM was built which takes a natural language intent and a code fragment as input and outputs the probability of them fitting.
 Afterwards the model got exported into tensorflowjs-format by using the tensorflowjs-library. For further explanation read https://www.tensorflow.org/js/tutorials/conversion/import_keras.
 By using TensorFlow.js (https://www.tensorflow.org/js) the model got imported into JavaScript and can be used to make predictions.
+Currently TensorFlowjs Model and Tokenizer as hosted via GitHub Pages at following URL: https://github.com/Flori-Boy/Hosting_Test/tree/master
 
 
 ### Functionality
-TODO: how the best fragment is determined @flo
+When opening a StackOverflow page the extension parses the page title (Question/Intent) and all codeblocks on said page.
+To guarantee good performance only the first five codeblocks are taken into account.
+Every codeblock will be tokenized together with the question and fed into a Neural Network which assigns probabilties of the codeblock being a good fit for the question.
+The codeblock with the highest probability gets selected.
 By sending a fragment there will be a connection between the NM-host and chrome established carrying the data provided by the popup
 to the database. This fragment appears no later than 5 seconds later in the interface of the fragment editor. 
+
 
 ### Native Messaging
 Native Messaging (NM) is a function implemented by Google for communication between the chrome webbrowser and
