@@ -3,21 +3,14 @@
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwSDGgby66RB/ZxCorJgq8biwxfu9PJDeObVOmy/bc10FyTsSPhkkQq8MiV5cPV9n6G7Q3GKvYQdj49CZFhadcWn1/IShX1+mK6HYILTaO1a08YC+I/nBNvl+/3VET6sSW7/Embrt3O8G/gzqjvf56J/VLff1aJfaVgmniVhI9/KSphzQgMSdbBhPFL/XITiX3AHU8nABLQF+odcM6jiGTS8AFYcwvpcumiQiFNw9JncJfdO0u15dxtyhminr9DNqq9Lwp8ws9bLsSgArCqgucKguiqneRQ1qui0aX8d6ygMA63rwJpzig0pGCcSMaVYVM2yPZK4Hg5ejRun3wFRW3wIDAQAB",
   "manifest_version": 2,
   "name": "Frag Extract",
-  "version": "0.1",
+  "version": "1.0",
   "description": "Easily extract code fragments from Stack Overflow answers and add them as Snippets in Visual Studio Code.",
   "author": "Simon Gimmini, Tobias Neuschäfer, Florian Rauls",
   "content_scripts": [
     {
-      "matches": [
-        "https://stackoverflow.com/questions/*/*"
-      ],
-      "exclude_matches": [
-        "https://stackoverflow.com/questions/tagged/*"
-      ],
-      "js": [
-        "tensorflow-js/tf.min.js",
-        "scripts/content.js"
-      ],
+      "matches": ["https://stackoverflow.com/questions/*/*"],
+      "exclude_matches": ["https://stackoverflow.com/questions/tagged/*"],
+      "js": ["tensorflow-js/tf.min.js", "scripts/content.js"],
       "run_at": "document_idle"
     }
   ],
@@ -35,9 +28,7 @@
     "tabs"
   ],
   "background": {
-    "scripts": [
-      "scripts/background.js"
-    ],
+    "scripts": ["scripts/background.js"],
     "persistent": false
   },
   "options_ui": {

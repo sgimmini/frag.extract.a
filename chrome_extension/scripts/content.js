@@ -313,8 +313,8 @@ function evaluate(seedword, model, vocab) {
       ++offset;
     }
   }
-  console.log(seedword)
-  console.log(to_return)
+  console.log(seedword);
+  console.log(to_return);
   const shape = [1, MAX_LEN];
   return model.predict(tf.tensor(to_return, shape)).dataSync()[0];
 }

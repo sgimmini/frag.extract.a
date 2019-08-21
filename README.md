@@ -1,94 +1,122 @@
-# frag.extract
+# Frag.Extract
 
 ## ToDo
 
 - continue on readme
 - grammar and spell check
 
-Fragment extractor for StackOverflow.
+Fragment extractor for Stackoverflow.
 
-This is a tool to extract code fragments from answers to questions on StackOverflow. It works in conjunction with a [Visual Studio Code Extension](https://marketplace.visualstudio.com/items?itemName=JonasGann.fragment-editor), which recieves the fragments from this Chrome Extension and saves them to a database.
-This Chrome Extension, as well as the VSC Extension, was created as part of a [software practical](https://pvs.ifi.uni-heidelberg.de/fileadmin/papers/2019/SoSe_2019_Softwarepraktikum_Programming_Tools_for_Data_Science_01.pdf) at the University of Heidelberg.
+This is a tool to extract code fragments from answers to questions on Stackoverflow. It works in conjunction with a [Visual Studio Code Extension](https://marketplace.visualstudio.com/items?itemName=JonasGann.fragment-editor), which recieves the fragments from this Chrome Extension and saves them to a database.
+The Chrome Extension, as well as the VSC Extension, were created as part of a [software practical](https://pvs.ifi.uni-heidelberg.de/fileadmin/papers/2019/SoSe_2019_Softwarepraktikum_Programming_Tools_for_Data_Science_01.pdf) at the University of Heidelberg.
 
-Frag.extract is available for Google Chrome on Windows, Linux and MacOS.
-Fragments contain (was die halt brauchen) which are automatically parsed from a question thread on StackOverflow by best
-match. "Best match" is determined through a neuronal network trained to
-find the right code fragment to a so called "intention". Another way
-to get a desired fragment is to click the associated button in the code block.
-Fragments get sent to the VSC-extension by a native messenging host installed
-through installing the VSC-extension itself. The chrome-extension on its own has
-no use.
+Frag Extract is available for Google Chrome on Windows, Linux and MacOS.
+With this extension you are able to quickly create a code fragment from a question on Stackoverflow. Such a fragment has several attributes which the extension automatically extracts from
+the opened question thread. It chooses the codeblock from the answers which best matches the problem described in the question title. "Best match" is determined through a neuronal network trained to
+find the right code fragment to a so called "intention".
+You can also select the codeblock you find to best match your problem manually with a click of a button in the buttom right corner of every codeblock.
+
+After clicking "Save" the fragment is sent to a Python script, which is part of the Fragment Editor VSC Extension, that then saves the fragment to a database, as Chrome extensions themselves do not have access to
+the filesystem. Therefore, Frag Extract requires the Fragment Editor VSC Extension to be installed, however, it does not require Visual Studio Code to be actually running whilst you are saving a fragment.
+
+## Requirements
+
+- Python 3
+
+Please note, that for Windows users the command "python" needs to be in your environment variables, which happens per default for system wide installations of Python 3.3 or higher.
 
 ## Installation
 
 There are two things which need to be installed seperately:
 
-- "Fragment Editor" Visual Studio Code extension by Jonas Gann, can be found in the [VSC Marketplace](https://marketplace.visualstudio.com/items?itemName=JonasGann.fragment-editor)
-- This Chrome Extension. Use the mouse to drag the frag-extract.crx file into a Chrome window and click "continue" in the bottom left.
+- "Fragment Editor" Visual Studio Code extension by Jonas Gann, which can be found in the [VSC Marketplace](https://marketplace.visualstudio.com/items?itemName=JonasGann.fragment-editor)
+- "Frag Extract" Chrome extension
 
-MacOS users please be advised, that this extension should work fine under MacOC. It was, however, never tested on a Mac.
+Install the Chrome extension by navigating to <chrome://extensions>, activate Developer mode, click "Load unpacked" and select the "chrome_extension" directory in this repository's root folder.
+This extension might be published to the Chrome Webstore in the future, which would make the installation process much easier.
 
-The VSC Extension can be found in the Marketplace under _Fragment Editor_ by _Jonas Gann_. Through this installation
-the NM-host used for communication between Chrome and the database will be installed too.
-The Chrome Extension can be installed easily by extracting a provided .zip-file and loading this directory into
-`chrome://extensions/` (in developer mode).
+MacOS users please be advised, that this extension should work fine under MacOC. It was, however, never tested on a Mac, due to a lack of Macs available to the developers.
+
+## Usage
+
+Find a question thread on Stackoverflow (through Google for example) for a problem you're having, where you want to save the solution to that problem for future use. Once you have navigated
+to that site, the extension will, in the background, beginn to determine the best codeblock from the answers for that issue. Click on the extension icon in the top right to open a popup, which contains
+an editor for fragments and will be prefilled with the information extracted from the question thread. You can edit any of the attributes there and then choose to save this fragment by clicking "Save", you
+can also cancel the process by clicking "Cancel", which will close the popup and delete your changes.
+It is, however, not necessary the click "Cancel". If you close the popup, it will remember the changes and load them again, when you reopen it. Opening the popup on a different site will delete the saved changes and instead load the fragment extracted from this page.
+
+From the popup you can scroll the site to the selected codeblock by clicking the button with a little arrow on it. You can also manually select any codeblock in the answers by clicking a button next to it.
+After you have saved a fragment, it will appear in the Fragment Editor VSC extension within 5 seconds.
+
+## Options
+
+The extension provides three options to the user:
+
+- Automatically select all Tags, which will add all (non-language) tags from the page to the tags attribute instead of adding them as autocomplete options
+- Automatically add Language to Tags, which will create a tag out of the extracted language, so users can group fragments by langauage in the Fragment Editor VSC extension
+- Preset Label as a copy of Description, since Label is a required field, this allows the user to save fragments without having to input anything. However, both Label and Description attributes will then have the exact same value
+
+Please note, that these options only take affect on sites loaded after the respective option was set by the user!
+
+Advanced users can also modify the maximum number of codeblocks in the answers, that will be consired by the model to be selected as the codeblock for the fragment. Currently, only the first 5 codeblocks are consired, as evaluating takes time and evaluating more codeblocks might result in the user having to wait considerable time, before the fragment appears in the extension popup.
+If you wish to modify this number, got to `/chrome_extension/scripts/content.js` and change `MAX_CODEBLOCKS` to your desired value. You will have to reload the extension afterwards.
 
 ## Fragments
 
-A fragment contains of a
+A fragment consists of a
 
 - label, short definite title of the useage of the fragment
-- tags
-- description, defaultly the title of the question
-- language
-- library and packages, used for the code
+- tags (optional), these are used to create a tree structure in the Fragment Editor VSC Extension
+- description (optional), defaultly the title of the question
+- language, the programming language of the code
+- libraries / packages (optional), you can add make a note of any libraries / packages used in the codeblock
 - code
 
 ## Popup
 
-The Popup contains input fields for all fragment contents and three butons:
+The Popup contains an editor for fragments. This consists of input fields for all fragment attributes and three butons:
 
 - ''jump to fragment'': scrolls to the codes origin on the opened website
 - ''save'': saves the parameters in database and closes popup
 - ''cancel'': cancels the editing process and closes popup
 
-Important to notice is:
+Important to note is:
 
-- when popup loses focus it closes but saves current changes in the editing process
+- when popup loses focus, it closes but saves current changes in the editing process
+- opening the popup on a different site clears the unsaved changes made on the previous site
 - when `canceling` current process on editing gets lost, `saving` clears input fields as well
 
-### Two ways to get a fragment:
+### Two ways to get select a codeblock for the fragment
 
-1. Automatically while browsing on website.
-   Our model finds the right code frament
-   and parses the code fragment into the extension. To send it to the database only
+1. Automatically.
+   Our model selects the codeblock with the highest propability of being a solution to the question
+   and parses the code fragment into the extension. To save the fragment to the database only
    a label is missing, which is chosen by the user in order to prevent mislabeled fragments.
 
-2. Manually by clicking ''Add to fragment''.
-   Every answer-code block on any question thread on StackOverflow has a button to
-   send the codeblock into the chrome-extension. There will be a pop-up
-   appearing with all needed data parsed from the website. Again there will be
-   an user-interaction to set a label. The pop-up closes when leaving
-   it with the cursor, pressing the cancel-button or by sending the fragment.
+2. Manually, by clicking ''Add to fragment''.
+   Every answer-code block on any question thread on Stackoverflow has a button in the buttom right with an arrow to
+   send the codeblock into the Chrome extension. This opens a pop-up with the fragment editor and the attributes parsed from the website. Again, the user will have to set a label. The pop-up closes when clicking
+   elsewhere, pressing the cancel-button or by sending the fragment.
 
-## Überschrift die sagt, dass hier die einzelnen Dateien und Funktionen beschrieben werden
+## Contents of this repository
 
 ### Chrome Extension
 
 The Chrome Extension consists of
 
 - `manifest.json`
-- `background.js`, the background script, which handles tasks the other scripts cannot, like enabling the extension only on stackoverflow.com or opening the popup after a user manually selects a codeblock
+- `background.js`, the background script, which handles tasks the other scripts cannot, like enabling the extension only on Stackoverflow.com or opening the popup after a user manually selects a codeblock
 - `content.js`, the content script is injected into the Stackoverflow site and is the only part of the extension that has access to the site's DOM. It therefore extracts the information for a fragment from the site.
 - `popup.html` and `popup.js` make up the extention popup, which opens when the user clicks the extension icon. It recieves the fragment from the content script and provides the user with an editor for that fragment
-- `opotions.html` and `options.js` provide the extensions options menu
+- `options.html` and `options.js` provide the extensions options menu
 
-[Materialize](https://materializecss.com/) was used as a design baseline. A couple of changes had to be made in
-`materialize.css` to our purpose.
+For further information on the structure of a Chrome extension please consult Google's [documentation on Chrome extensions](https://developer.chrome.com/extensions).
+
+[Materialize](https://materializecss.com/) was used as a design baseline.
 
 ### Model
 
-The extraction model contains of
+The extraction model consists of
 
 - `train_lstm.ipynb`, the jupyter notebook containing data loading, preprocessing and training
 - `loss.pdf`, visualizes the training curve for purposes of evaluation
@@ -97,7 +125,7 @@ The extraction model contains of
 - `model.json` contains weights and needs to be loaded together with `model.h5`
 - `vocab.json`, contains the dictionary created when preprocessing in 'train_lstm.ipynb' (needed to recreate tokenization)
 
-### In case of further training:
+#### In case of further training
 
 Following steps need to be taken to train and integrate a new model:
 
@@ -107,7 +135,7 @@ Following steps need to be taken to train and integrate a new model:
 - Save the dictionary used for tokenization as JSON
 - Convert the HDF5 file to TensorFlowjs-format using their converter
 - Host your dictionary file and your converted model file on a server
-- Pass the new URL to `content.js`
+- Pass the new URL to `/chrome_extension/scripts/content.js`
 
 #### Build with
 
@@ -117,34 +145,18 @@ Afterwards the model got exported into tensorflowjs-format by using the tensorfl
 By using [TensorFlow.js](https://www.tensorflow.org/js) the model got imported into JavaScript and can be used to make predictions.
 Currently TensorFlow.js Model and Tokenizer are hosted via GitHub Pages at following URL: <https://github.com/Flori-Boy/Hosting_Test/tree/master>
 
-### Functionality
+#### Functionality
 
-When opening a StackOverflow page the extension parses the page title (Question/Intent) and all codeblocks on said page.
-To guarantee good performance only the first five codeblocks are taken into account.
+When opening a Stackoverflow page the extension parses the page title (Question/Intent) and all codeblocks on said page.
+To guarantee good performance only the first five codeblocks are taken into account, this can be changed as noted in the Options section above.
 Every codeblock will be tokenized together with the question and fed into a Neural Network which assigns probabilties of the codeblock being a good fit for the question.
 The codeblock with the highest probability gets selected.
-By sending a fragment there will be a connection between the NM-host and chrome established carrying the data provided by the popup
-to the database. This fragment appears not later than 5 seconds after selection in the interface of the fragment editor.
 
-### Native Messaging
+### Integration with Fragment Editor VSC extension
 
-Native Messaging (NM) is a function implemented by Google for communication between the chrome webbrowser and
-a NM-host located on the clients file system. This host is installed automatically into
-`~/.config/chromium/NativeMessagingHosts/com.frag.extract.json`
-on Linux like Operating Systems or
-`hier für Windows`. @tobias
-It also contains the path to a script located in
-`/.vscode-oss/extensions/[extension-version]/out/frag.extract.host/extract.py`, on linux and
-`again windows`, on Windows, @tobias
-and an allowed extension origin: chrome-extension://faoicolglehmgplpccapgobineahofjh/.
-When sending a fragment a short time connection is established. The decision was against
-a long life connection as this would consume much more (mir fällt nicht ein wie man CPU usage anders nennt).
-With this decision made it is also not possible to communicate from the database to the chrome extension
-which could have been a possibility to check whether a fragment already exists in the database, in order
-to prevent redundant fragments.
+In `/vscextension` you will find the folder `frag.extract.host`. This contains all relevant files for the connection from the Chrome extension to the VSC extension, or rather the sqlite Fragment database of the VSC extension. A python script will recieve a fragment from the Chrome extension using Chrome's [Native Messaging API](https://developer.chrome.com/extensions/nativeMessaging).
 
-For more information about Native Messaging see <https://developer.chrome.com/apps/nativeMessaging>
+`extension.ts` contains the code and comments on how to realise registering the Native Messaging host and how to clean up after deinstallation of the VSC extension.
+If you do not want to use this Chrome extension in conjunction with Visual Studio Code, you can also use the `frag.extract.host`folder by itself with minor modification (rename `raw.py` to `extract.py` and provide a database path) or write your own programm or extension for a code editor, that recieves fragments from this Chrome extension and then does with these fragments whatever you may want.
 
-## Reference
-
-Materialize was used for design: [materializecss.com](https://materializecss.com/)
+For testing purposes we also include a very old version of the Fragment Editor VSC extension, packaged as a .vsix file, which you can install in the VSC Extensions Tab in the menu. This version was extensively tested and should work, even if a newer version of the VSC extension might not work in the future.
