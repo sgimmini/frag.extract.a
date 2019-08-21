@@ -2,9 +2,6 @@
 
 ## ToDo
 - continue on readme
-- chrome extension in marketplace?
-- licences? e.g. for materialize
-- readme arrangement 
 - grammar and spell check
 
 fragment extractor for StackOverflow.
@@ -17,6 +14,36 @@ to get a desired fragment is to click the associated button in the code block.
 Fragments get sent to the VSC-extension by a native messenging host installed
 through installing the VSC-extension itself. The chrome-extension on its own has
 no use.
+
+## Installation 
+There are two things need to be installed seperately: 
+- Visual Studio Code Extension
+- Chrome Extension
+The VSC Extension can be found in the Marketplace under *Fragment Editor* by *Jonas Gann*. Through this installation 
+the NM-host used for communication between Chrome and the database will be installed too.
+The Chrome Extension can be installed easily by extracting a provided .zip-file and loading this directory into
+`chrome://extensions/` (in developer mode).
+
+## Fragments
+A fragment contains of a
+- label, short definite title of the useage of the fragment
+- tags
+- description, defaultly the title of the question
+- language
+- library and packages -, used for the code
+- code
+
+## Popup
+The Popup contains input fields for all fragment contents and three butons:
+- ''jump to fragment'': scrolls to the codes origin on the opened website
+- ''save'': saves the parameters in database and closes popup
+- ''cancel'': cancels the editing process and closes popup
+
+Important to notice is:
+- when popup loses focus it closes but saves current changes in the editing process
+- when `canceling` current process on editing gets lost, `saving` clears input fields as well
+
+
 ### Two ways to get a fragment:
 1. Automatically while browsing on website.
    Our model finds the right code frament
@@ -31,76 +58,17 @@ no use.
    it with the cursor, pressing the cancel-button or by sending the fragment.
 
 
-### Native Messaging
-Native Messaging (NM) is a function implemented by Google for communication between the chrome webbrowser and
-a NM-host located on the clients file system. This host is installed automatically into
-`~/.config/chromium/NativeMessagingHosts/com.frag.extract.json`
-on Linux like Operating Systems or
-``hier für Windows``.
-It also contains the path to a script located in
-`/.vscode-oss/extensions/[extension-version]/out/frag.extract.host/extract.py`, on linux and
-`again windows`, on Windows,
-and an allowed extension origin: chrome-extension://faoicolglehmgplpccapgobineahofjh/.
-When sending a fragment a short time connection is established. The decision was against
-a long life connection as this would consume much more (mir fällt nicht ein wie man CPU usage anders nennt).
-With this decision made it is also not possible to communicate from the database to the chrome extension
-which could have been a possibility to check whether a fragment already exists in the database, in order
-to prevent redundant fragments.
-
-For more information about Native Messaging see https://developer.chrome.com/apps/nativeMessaging
-
-
-
-### Fragments
-A fragment contains of a
-- label, short definite title of the useage of the fragment
-- tags
-- description, defaultly the title of the question
-- language
-- library and packages -, used for the code
-- code
-
-
-### Popup
-The Popup contains input fields for all fragment contents and three butons:
-- ''jump to fragment'': scrolls to the codes origin on the opened website
-- ''save'': saves the parameters in database and closes popup
-- ''cancel'': cancels the editing process and closes popup
-
-Important to notice is:
-- when popup loses focus it closes but saves current changes in the editing process
-- when `canceling` current process on editing gets lost, `saving` clears input fields as well
-
-
-## Installation 
-There are two things need to be installed seperately: 
-- Visual Studio Code Extension
-- Chrome Extension
-The VSC Extension can be found in the Marketplace under *Fragment Editor* by *Jonas Gann*. Through this installation 
-the NM-host used for communication between Chrome and the database will be installed too.
-The Chrome Extension can be installed easily by extracting a provided .zip-file and loading this directory into
-`chrome://extensions/` (in developer mode). TODO: continue - may marketplace(?)
-
-
-## Build with
-The model to determine the best fitting fragment was build in Python using the Keras library (https://keras.io/) as a framework and the CoNaLa-Corpus Dataset (https://conala-corpus.github.io/) as training data.
-To capture the complex text data with it's full meaning a 2-layer LSTM was built which takes a natural language intent and a code fragment as input and outputs the probability of them fitting.
-Afterwards the model got exported into tensorflowjs-format by using the tensorflowjs-library. For further explanation read https://www.tensorflow.org/js/tutorials/conversion/import_keras.
-By using TensorFlow.js (https://www.tensorflow.org/js) the model got imported into JavaScript and can be used to make predictions.
-
-
-## Überschrift (sehr gut)
-may put build with in here?   
+## Überschrift die sagt, dass hier die einzelnen Dateien und Funktionen beschrieben werden
 
 ### Chrome Extension
 The Chrome Extension contains of 
-- `manifest.json` for GRUND
+- `manifest.json` for GRUND @tobias
 - `background.js`, a background script only allowing the popup to be opened on StackOverflow
 - `content.js` extraction of websites content for fragments (see -> Fragments) 
 - `popup.html` layout of the popup 
 - `popup.js` receiving fragment content from `content.js` and processing visible data for `popup.html`(?)
-- `opotions.html`
-- `options.js`
+- `opotions.html` @tobias
+- `options.js` @tobias
 
 Materialize https://materializecss.com/ was used as a design baseline. A couple of changes had to be made in
 `materialize.css` to our purpose.    
@@ -124,7 +92,35 @@ Following steps need to be taken to train and integrate a new model:
 - Host your dictionary file and your converted model file on a server
 - Pass the new URL to `content.js`
 
+#### Build with
+The model to determine the best fitting fragment was build in Python using the Keras library (https://keras.io/) as a framework and the CoNaLa-Corpus Dataset (https://conala-corpus.github.io/) as training data.
+To capture the complex text data with it's full meaning a 2-layer LSTM was built which takes a natural language intent and a code fragment as input and outputs the probability of them fitting.
+Afterwards the model got exported into tensorflowjs-format by using the tensorflowjs-library. For further explanation read https://www.tensorflow.org/js/tutorials/conversion/import_keras.
+By using TensorFlow.js (https://www.tensorflow.org/js) the model got imported into JavaScript and can be used to make predictions.
+
+
 ### Functionality
-TODO: how the best fragment is determined
+TODO: how the best fragment is determined @flo
 By sending a fragment there will be a connection between the NM-host and chrome established carrying the data provided by the popup
 to the database. This fragment appears no later than 5 seconds later in the interface of the fragment editor. 
+
+### Native Messaging
+Native Messaging (NM) is a function implemented by Google for communication between the chrome webbrowser and
+a NM-host located on the clients file system. This host is installed automatically into
+`~/.config/chromium/NativeMessagingHosts/com.frag.extract.json`
+on Linux like Operating Systems or
+``hier für Windows``. @tobias
+It also contains the path to a script located in
+`/.vscode-oss/extensions/[extension-version]/out/frag.extract.host/extract.py`, on linux and
+`again windows`, on Windows, @tobias
+and an allowed extension origin: chrome-extension://faoicolglehmgplpccapgobineahofjh/.
+When sending a fragment a short time connection is established. The decision was against
+a long life connection as this would consume much more (mir fällt nicht ein wie man CPU usage anders nennt).
+With this decision made it is also not possible to communicate from the database to the chrome extension
+which could have been a possibility to check whether a fragment already exists in the database, in order
+to prevent redundant fragments.
+
+For more information about Native Messaging see https://developer.chrome.com/apps/nativeMessaging
+
+## Reference
+Materialize was used for design: [materializecss.com](https://materializecss.com/)
