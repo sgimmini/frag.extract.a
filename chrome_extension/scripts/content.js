@@ -3,6 +3,8 @@
 let bodyElem = "",
   origBodyElem = "";
 // all the fragment elements, that get send to popup
+// creating a fragment class to hold all it's attribute may have looked better but was unfeasable as the fragment needs to be send to the popup
+// using Chrome's Message Passing API which does not accept inputs of a custom class type
 let label = "",
   scope = "",
   scopeArray = [],
