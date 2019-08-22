@@ -161,6 +161,8 @@ In `/vscextension` you will find the folder `frag.extract.host`. This contains a
 `extension.ts` contains the code and comments on how to realise registering the Native Messaging host and how to clean up after deinstallation of the VSC extension.
 If you do not want to use this Chrome extension in conjunction with Visual Studio Code, you can also use the `frag.extract.host`folder by itself with minor modification (rename `raw.py` to `extract.py` and provide a database path) or write your own programm or extension for a code editor, that recieves fragments from this Chrome extension and then does with these fragments whatever you may want.
 
+Please insure, that the VSC extension or any project you create using this Native Messaging Host is packaged either directly in Linux or using WSL in Windows, so that the line endings and permissions for the files are correct for Linux. Windows does not have any problems with the VSC extension being packaged in Linux, that does not hold true the other way around.
+
 For testing purposes we also include a very old version of the Fragment Editor VSC extension, packaged as a .vsix file, which you can install in the VSC Extensions Tab in the menu. This version was extensively tested and should work, even if a newer version of the VSC extension might not work in the future.
 
 ## Proposals for future development
