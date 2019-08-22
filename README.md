@@ -20,6 +20,13 @@ the filesystem. Therefore, Frag Extract requires the Fragment Editor VSC Extensi
 
 Please note, that for Windows users the command "python" needs to be in your environment variables, which happens per default for system wide installations of Python 3.3 or higher.
 
+## Frameworks used
+
+- [Materialize](https://materializecss.com/)
+- [TensorFlow.JS](https://www.tensorflow.org/js)
+
+Both can be found in the respective folder in `/chrome_extension` and were not modified, therefore updating them in the future should not be a problem.
+
 ## Installation
 
 There are two things which need to be installed seperately:
