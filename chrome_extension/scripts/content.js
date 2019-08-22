@@ -76,7 +76,7 @@ async function setup() {
 
   // all of these require a value stored with chrome storage api, therefore, they are grouped
   chrome.storage.local.get(
-    { presetLabel: false, presetTabs: false, presetLanguage: false },
+    { presetTags: false, presetLanguage: false, presetLabel: false },
     async function(result) {
       /*
        * Extract label [primary key in fragment database, also the name of the fragment in tree view in vsc extension]
@@ -100,7 +100,7 @@ async function setup() {
        * -> SO's tags for questions are presented as options in popup
        */
       // if user sets the option to preselect all tabs
-      if (result.presetTabs) {
+      if (result.presetTags) {
         // get all tags from SO page, then for every tag found check if it's in the language list and add it to scope, or if not add it to tags
         Array.from(
           document.getElementById("question").getElementsByClassName("post-tag")

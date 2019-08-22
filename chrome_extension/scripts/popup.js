@@ -48,18 +48,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // save content of input fields
   document.getElementById("label").addEventListener("input", function() {
-    chrome.storage.local.set({ label: document.getElementById("label").value });
+    chrome.storage.local.set({ label: this.value });
   });
   document.getElementById("scope").addEventListener("input", function() {
-    chrome.storage.local.set({ scope: document.getElementById("scope").value });
+    chrome.storage.local.set({ scope: this.value });
   });
   document.getElementById("body").addEventListener("input", function() {
-    chrome.storage.local.set({ body: document.getElementById("body").value });
+    chrome.storage.local.set({ body: this.value });
   });
   document.getElementById("description").addEventListener("input", function() {
-    chrome.storage.local.set({
-      description: document.getElementById("description").value
-    });
+    chrome.storage.local.set({ description: this.value });
   });
   // state changes of tags and domain fields are saved by the onChipAdd and onChipDelete functions defined in the setChips function
 });
