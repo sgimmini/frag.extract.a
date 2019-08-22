@@ -162,3 +162,11 @@ In `/vscextension` you will find the folder `frag.extract.host`. This contains a
 If you do not want to use this Chrome extension in conjunction with Visual Studio Code, you can also use the `frag.extract.host`folder by itself with minor modification (rename `raw.py` to `extract.py` and provide a database path) or write your own programm or extension for a code editor, that recieves fragments from this Chrome extension and then does with these fragments whatever you may want.
 
 For testing purposes we also include a very old version of the Fragment Editor VSC extension, packaged as a .vsix file, which you can install in the VSC Extensions Tab in the menu. This version was extensively tested and should work, even if a newer version of the VSC extension might not work in the future.
+
+## Proposals for future development
+
+- Automatically apply Fragment Editor's parametrization algorithm for python fragments, which can easily be done
+- Adapt the Chrome extension to other Chromium based browsers, which can easily be done
+- Port the extension to Mozilla Firefox to reach a wider user base
+- Adapt the Native Messaging Host to work without the Fragment Editor VSC extension or write a similar programm to the Fragment Editor by Jonas Glenn for other IDEs
+- Mode the prediction of the codeblock to the Cloud, which can utilize a bigger vocabulary, take all codeblocks on a site into account and be faster then running the prediction locally
