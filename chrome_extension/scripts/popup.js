@@ -186,6 +186,11 @@ function loadState(input) {
   document.getElementById("description").value = input.description;
   document.getElementById("scope").value = input.scope;
 
+  // set the question title (= description) as suggestion for label
+  const labelSuggestion = document.createElement("option");
+  labelSuggestion.value = input.description;
+  document.getElementById("labellist").appendChild(labelSuggestion);
+
   // sets all initial tag chips and adds the rest as autocomplete options
   const tagchips = document.getElementById("tagchips");
   setChips(input.tags, tagchips, "tags");
