@@ -25,7 +25,8 @@ chrome.runtime.onMessage.addListener(function(recieved, sender, sendResponse) {
         body: "",
         description: "",
         tags: [["", false]],
-        domain: [["", false]]
+        domain: [["", false]],
+        parametrize: false
       },
       function(result) {
         // construct database fragment as message to be send to python script
@@ -51,6 +52,8 @@ chrome.runtime.onMessage.addListener(function(recieved, sender, sendResponse) {
           .join(", ");
         // vsc extension functionality to recognize variables writes their name and type in here,  only included here if in the future someone decides to utilize this attribute in chrome extension
         message.placeholders = "";
+        // user option: whether the vsc extension should try to automatically parametrize python fragments
+        message.parametrize = result.parametrize;
 
         // send fragment as message to python script to be added to the database
         chrome.runtime.sendNativeMessage("com.frag.extract", message);

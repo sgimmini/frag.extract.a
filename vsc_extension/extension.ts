@@ -61,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// loading the new in memory copy of the database in Database.loadFragments() can be done like this:
 		/* const filebuffer = fs.readFileSync(this._fragmentFile);
 		   this._fragmentDatabase = new sql.Database(filebuffer); */
-		Database.loadFragments();
+		Database.loadFragmentsFromExternal();
 		fragmentProvider.refresh();
 	});
 }
