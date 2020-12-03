@@ -18,8 +18,8 @@ let setupComplete = false,
   callback;
 
 const MODEL_URL =
-  "https://flori-boy.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
-const VOCAB_URL = "https://flori-boy.github.io/Hosting_Test/vocab.json";
+  "https://florianrauls.github.io/Hosting_Test/tensorflowjs_model_small/model.json";
+const VOCAB_URL = "https://florianrauls.github.io/Hosting_Test/vocab.json";
 const MAX_CODEBLOCKS = 5;
 const MAX_LEN = 30;
 const border = " unique border symbol ";
